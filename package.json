@@ -1,6 +1,8 @@
 {
   "name": "electron_managementapp",
   "version": "0.1.0",
+  "main": "public/Main.js",
+  "homepage": "./",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
@@ -10,11 +12,20 @@
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1"
   },
+  "build": {
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ]
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "electron-start": "electron .",
+    "preelectron-pack": "npm run build",
+    "electron-pack": "electron-builder -c.extraMetadata.main=build/Main.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -30,5 +41,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "electron": "^9.0.3",
+    "electron-builder": "^22.7.0",
+    "typescript": "^3.9.5"
   }
 }
