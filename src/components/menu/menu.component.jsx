@@ -62,19 +62,19 @@ const ListMenu = () => {
         <Divider />
         <List>
             <div>
-                <ListItem button>
+                <ListItem button onClick={() => history.push("/")}>
                     <ListItemIcon>
                         <BusinessIcon />
                     </ListItemIcon>
                     <ListItemText primary="Products" />
                 </ListItem>
-                <ListItem button>
+                <ListItem button onClick={() => history.push(`/categories`)}>
                     <ListItemIcon>
                         <CategoryIcon />
                     </ListItemIcon>
                     <ListItemText primary="Categories" />
                 </ListItem>
-                <ListItem button>
+                <ListItem button onClick={() => history.push("/settings")}>
                     <ListItemIcon>
                         <SettingsIcon />
                     </ListItemIcon>
@@ -85,7 +85,7 @@ const ListMenu = () => {
         <Divider />
         <List>
             <div>
-                <ListItem button>
+                <ListItem button onClick={() => history.push("/signin")}>
                     <ListItemIcon>
                         <ExitToAppIcon />
                     </ListItemIcon>
