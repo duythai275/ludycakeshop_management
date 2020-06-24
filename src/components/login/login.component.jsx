@@ -1,4 +1,4 @@
-import React from 'react';
+import React , { useContext, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -9,8 +9,33 @@ import Container from '@material-ui/core/Container';
 import { useStyles } from './login.styles';
 import logo from '../../assets/logo.jpg';
 
+import AccessContext from '../../contexts/access.context';
+
 const Login = () => {
   const classes = useStyles();
+  const { handleLogIn } = useContext(AccessContext);
+
+  const [serverAddress, setServerAddress] = useState("http://localhost:4000");
+  const [email, setEmail] = useState("duythai275@gmail.com");
+  const [password, setPassword] = useState("admin12345");
+
+  const login = () => {
+    fetch(`${serverAddress}/auth/login`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            'email': email,
+            'password': password
+        })
+    })
+    .then( res => res.json() )
+    .then( json => {
+        if ( json.hasOwnProperty("token") ) handleLogIn(serverAddress, json.token);
+        else console.log("TEST: " + json.message);
+    });
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -20,7 +45,7 @@ const Login = () => {
                 <Typography component="h1" variant="h5">
                     Hiephoa Site's Management
                 </Typography>
-                <form className={classes.form} noValidate>
+                <div className={classes.form}>
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -30,15 +55,18 @@ const Login = () => {
                         label="Server Address"
                         name="server"
                         autoFocus
+                        value={serverAddress}
+                        // onChange={() => console.log(this)}
                     />
                     <TextField
                         variant="outlined"
                         margin="normal"
                         required
                         fullWidth
-                        id="username"
-                        label="Username"
-                        name="username"
+                        id="email"
+                        label="email"
+                        name="email"
+                        value={email}
                     />
                     <TextField
                         variant="outlined"
@@ -49,6 +77,7 @@ const Login = () => {
                         label="Password"
                         type="password"
                         id="password"
+                        value={password}
                     />
                     <Button
                         type="submit"
@@ -56,10 +85,11 @@ const Login = () => {
                         variant="contained"
                         color="primary"
                         className={classes.submit}
+                        onClick={() => login()}
                     >
                         Login
                     </Button>
-                </form>
+                </div>
         </div>
     </Container>
   );

@@ -1,10 +1,9 @@
 import { createContext } from 'react';
 
 const AccessContext = createContext({
-    // open: true,
-    // toggleOpen: () => {}
-    url: null,
-    token: null
+    url: undefined,
+    token: undefined,
+    handleLogIn: (newUrl,newToken) => {}
 });
 
 export default AccessContext;

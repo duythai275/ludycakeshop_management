@@ -26,7 +26,7 @@ const Mainpage = () => {
                     <Grid item xs={12}>
                         <Paper className={classes.paper}>
                             <Switch>
-                                <Route exact path="/" component={Products} />
+                                <Route exact path="/products" component={Products} />
                                 <Route exact path="/categories" component={Categories} />
                                 <Route exact path="/settings" component={Settings} />
                             </Switch>

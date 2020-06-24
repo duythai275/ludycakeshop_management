@@ -1,21 +1,37 @@
-import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+// import { Route, Switch } from 'react-router-dom';
 
 import './App.css';
 
 import Login from './components/login/login.component';
 import Mainpage from './components/mainpage/mainpage.component';
 
+import AccessContext from './contexts/access.context';
+
 function App() {
+  const [token, setToken] = useState(undefined);
+  const [url, setUrl] = useState(undefined);
+  const handleLogIn = ( newUrl, newToken ) => {
+    setUrl(newUrl);
+    setToken(newToken);
+  };
+
   return (
     <div className="App">
-      <Switch>
-        <Route exact path="/signin" component={Login} />
-        <Route path="/" component={Mainpage} />
-      </Switch>
-      {/* <Mainpage /> */}
+      <AccessContext.Provider value={{ url, token, handleLogIn }}>
+        <Page />
+      </AccessContext.Provider>
+      {/* <Switch>
+        <Route exact path="/" component={Login} />
+        <Route path="/management" component={Mainpage} />
+      </Switch> */}
     </div>
   );
+}
+
+const Page = () => {
+  const { token } = useContext(AccessContext);
+  return ( token === undefined ) ? <Login /> : <Mainpage /> 
 }
 
 export default App;

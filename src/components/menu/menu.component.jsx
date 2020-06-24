@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { withRouter } from 'react-router-dom';
 import clsx from 'clsx';
 
 import AppBar from '@material-ui/core/AppBar';
@@ -19,6 +20,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 import DrawerContext from '../../contexts/drawer.contexts';
+import AccessContext from '../../contexts/access.context';
 import { useStyles } from './menu.styles';
 
 const BarMenu = () => {
@@ -42,9 +44,10 @@ const BarMenu = () => {
     </AppBar>
 )}
 
-const ListMenu = () => {
+const ListMenu = ({history}) => {
     const classes = useStyles();
     const { open, toggleOpen } = useContext(DrawerContext);
+    const { handleLogIn } = useContext(AccessContext);
 
     return (
     <Drawer
@@ -62,7 +65,7 @@ const ListMenu = () => {
         <Divider />
         <List>
             <div>
-                <ListItem button onClick={() => history.push("/")}>
+                <ListItem button onClick={() => history.push("/products")}>
                     <ListItemIcon>
                         <BusinessIcon />
                     </ListItemIcon>
@@ -85,7 +88,7 @@ const ListMenu = () => {
         <Divider />
         <List>
             <div>
-                <ListItem button onClick={() => history.push("/signin")}>
+                <ListItem button onClick={() => handleLogIn(undefined,undefined)}>
                     <ListItemIcon>
                         <ExitToAppIcon />
                     </ListItemIcon>
@@ -96,7 +99,7 @@ const ListMenu = () => {
     </Drawer>
 )}
 
-const Menu = () => {
+const Menu = ({history}) => {
     const [open, setOpen] = useState(true);
     const toggleOpen = () => setOpen(!open);
 
@@ -106,9 +109,9 @@ const Menu = () => {
             toggleOpen
         }}>
             <BarMenu />
-            <ListMenu />
+            <ListMenu history={history}/>
         </DrawerContext.Provider>
     )
 }
 
-export default Menu;
+export default withRouter(Menu);
