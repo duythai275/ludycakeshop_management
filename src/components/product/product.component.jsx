@@ -27,6 +27,8 @@ import StyledMenu from '../../utils/menu/menu';
 import AccessContext from '../../contexts/access.context';
 
 import { selectProducts } from '../../redux/product/product.selector';
+import  { selectCategories } from '../../redux/category/category.selector';
+import { selectProductCategories } from '../../redux/productCategory/productCategory.selector';
 
 import { useStyles } from './product.styles';
 
@@ -55,8 +57,12 @@ const Row = ({product}) => {
         <TableCell>{product.name}</TableCell>
         <TableCell>{product.code}</TableCell>
         <TableCell className={classes.chip}>
-            <Chip size="small" label="Frozen" />
-            <Chip size="small" label="Product" />
+        {
+            product.categories.map( category => 
+                <Chip size="small" label={category.name} />
+            )
+
+        }
         </TableCell>
         <TableCell>{product.price}</TableCell>
         <TableCell><Avatar src={`${url}/products/${product.image}`} className={classes.smallAvatar} /></TableCell>
@@ -68,7 +74,7 @@ const Row = ({product}) => {
     </TableRow>
 )}
 
-const Products = ({products}) => {
+const Products = ({products, categories, productCategories}) => {
     const classes = useStyles();
 
     const [items, setItems] = useState([]);
@@ -95,12 +101,31 @@ const Products = ({products}) => {
     }
 
     useEffect( () => {
+
+        products.map( product => {
+            product["categories"] = productCategories.filter(
+                productCategory => productCategory.product === product._id
+            ).map(
+                productCategory => {
+                    const cate = categories.find( category => category._id === productCategory.category );
+                    return {
+                        ...cate,
+                        mapping: productCategory._id
+                    }
+                }
+            );
+            return product;
+        })
+
         setItems(products.filter( item => 
             item["name"].toUpperCase().includes(filter.name.toUpperCase()) 
             && item["code"].toUpperCase().includes(filter.code.toUpperCase()) 
-            // && item["category"].toUpperCase().includes(filter.category.toUpperCase()) 
+            && item["categories"].find( 
+                category => category.name.toUpperCase().includes(filter.category.toUpperCase()) 
+            )
         ));
-    }, [products, filter] )
+
+    }, [products, categories, productCategories, filter] )
     
     // const handleChangeRowsPerPage = (event) => {
     //     setRowsPerPage(+event.target.value);
@@ -255,7 +280,9 @@ const Products = ({products}) => {
 )}
 
 const mapStateToProps = createStructuredSelector({
-    products: selectProducts
+    products: selectProducts,
+    categories: selectCategories,
+    productCategories: selectProductCategories
 })
 
 export default connect(mapStateToProps)(Products);
