@@ -8,12 +8,13 @@ export const useStyles = makeStyles((theme) => ({
       padding: theme.spacing(2),
       display: 'flex',
       overflow: 'auto',
-      flexDirection: 'column',
+      flexDirection: 'column'
     },
     content: {
         flexGrow: 1,
         height: '100vh',
         overflow: 'auto',
+        background: '#F3F3F3'
     },
     container: {
         paddingTop: theme.spacing(4),

@@ -1,13 +1,261 @@
-import React from 'react';
+import React, { useContext, useRef, useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
-// import { useStyles } from './product.styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import TablePagination from '@material-ui/core/TablePagination';
+import TextField from '@material-ui/core/TextField';
+import SearchIcon from '@material-ui/icons/Search';
+import IconButton from '@material-ui/core/IconButton';
+import ClearIcon from '@material-ui/icons/Clear';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import SettingsIcon from '@material-ui/icons/Settings';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Avatar from '@material-ui/core/Avatar';
+import Chip from '@material-ui/core/Chip';
 
-const Products = () => {
-    // const classes = useStyles();
+import ContextMenu from '../../utils/contextMenu/contextMenu';
+import StyledMenu from '../../utils/menu/menu';
+
+import AccessContext from '../../contexts/access.context';
+
+import { selectProducts } from '../../redux/product/product.selector';
+
+import { useStyles } from './product.styles';
+
+const Row = ({product}) => {
+    const [anchorEl, setAnchorEl] = useState(null);
+    const classes = useStyles();
+    const outerRef = useRef(null);
+    const { url } = useContext(AccessContext);
+
+    const handleEdit = () => {
+        console.log(`Edit Clicked - ${product.name}`);
+        setAnchorEl(null);
+    }
+
+    const handleDelete = () => {
+        console.log(`Delete Clicked - ${product.name}`);
+        setAnchorEl(null);
+    }
+
+    const closeMenu = () => {
+        setAnchorEl(null);
+    }
 
     return (
-        <div>Product</div>
-    )
-}
+    <TableRow hover ref={outerRef}>
+        <TableCell>{product.name}</TableCell>
+        <TableCell>{product.code}</TableCell>
+        <TableCell className={classes.chip}>
+            <Chip size="small" label="Frozen" />
+            <Chip size="small" label="Product" />
+        </TableCell>
+        <TableCell>{product.price}</TableCell>
+        <TableCell><Avatar src={`${url}/products/${product.image}`} className={classes.smallAvatar} /></TableCell>
+        <TableCell align='center'>
+            <IconButton size="small" onClick={ event => setAnchorEl(event.currentTarget)}><MoreVertIcon size="small" /></IconButton>
+        </TableCell>
+        <ContextMenu outerRef={outerRef} onEditClick={handleEdit} onDeleteClick={handleDelete} />
+        <StyledMenu anchorEl={anchorEl} handleEdit={handleEdit} handleDelete={handleDelete} handleClose={closeMenu} />
+    </TableRow>
+)}
 
-export default Products;
+const Products = ({products}) => {
+    const classes = useStyles();
+
+    const [items, setItems] = useState([]);
+
+    const [filter, setFilter] = useState({
+        name: "",
+        code: "",
+        category: ""
+    });
+
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(20);
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };  
+
+    const filterBy = (value, property) => {
+        setPage(0);
+        filter[property] = value;
+        setFilter({
+            ...filter
+        });
+    }
+
+    useEffect( () => {
+        setItems(products.filter( item => 
+            item["name"].toUpperCase().includes(filter.name.toUpperCase()) 
+            && item["code"].toUpperCase().includes(filter.code.toUpperCase()) 
+            // && item["category"].toUpperCase().includes(filter.category.toUpperCase()) 
+        ));
+    }, [products, filter] )
+    
+    // const handleChangeRowsPerPage = (event) => {
+    //     setRowsPerPage(+event.target.value);
+    //     setPage(0);
+    // };
+
+    return (
+    <React.Fragment>
+        <div className={classes.header}>
+            <div className={classes.title}>
+                <Typography component="h2" variant="h6" color="primary" gutterBottom>
+                    Products
+                </Typography>
+            </div>
+            <div className={classes.pager}>
+                <TablePagination
+                    rowsPerPageOptions={[]} // disable RowsPerPage
+                    component="div"
+                    count={items.length}
+                    page={page}
+                    onChangePage={handleChangePage}
+                    rowsPerPage={rowsPerPage}
+                    // rowsPerPage={rowsPerPage}
+                    // onChangeRowsPerPage={handleChangeRowsPerPage}
+                />
+            </div>
+        </div>
+        <Table className={classes.table}>
+            <TableHead>
+                <TableRow>
+                    <TableCell>
+                        Name <br/>
+                        <TextField 
+                            autoFocus={false}
+                            placeholder="Search by Name" 
+                            onChange={event => filterBy(event.target.value,"name")}
+                            value={filter.name}
+                            variant="standard"
+                            InputProps={
+                                {
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                                <SearchIcon fontSize="small" />
+                                        </InputAdornment>
+                                    ),
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                // disabled={!this.state.searchText}
+                                                onClick={() => filterBy("","name")}
+                                            >
+                                                <ClearIcon fontSize="small" />
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ),
+                                    inputProps: {
+                                        "aria-label": "Search",
+                                    }
+                                }
+                            }
+                        />
+                    </TableCell>
+                    <TableCell>
+                        Code <br/>
+                        <TextField 
+                            autoFocus={false}
+                            placeholder="Search by Code" 
+                            variant="standard"
+                            onChange={event => filterBy(event.target.value,"code")}
+                            value={filter.code}
+                            InputProps={
+                                {
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                                <SearchIcon fontSize="small" />
+                                        </InputAdornment>
+                                    ),
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                // disabled={!this.state.searchText}
+                                                onClick={() => filterBy("","code")}
+                                            >
+                                                <ClearIcon fontSize="small" />
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ),
+                                    inputProps: {
+                                        "aria-label": "Search",
+                                    }
+                                }
+                            }
+                        />
+                    </TableCell>
+                    <TableCell>
+                        Categories <br/>
+                        <TextField 
+                            autoFocus={false}
+                            placeholder="Search by Category" 
+                            onChange={event => filterBy(event.target.value,"category")}
+                            value={filter.category}
+                            variant="standard"
+                            InputProps={
+                                {
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                                <SearchIcon fontSize="small" />
+                                        </InputAdornment>
+                                    ),
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                // disabled={!this.state.searchText}
+                                                onClick={() => filterBy("","category")}
+                                            >
+                                                <ClearIcon fontSize="small" />
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ),
+                                    inputProps: {
+                                        "aria-label": "Search",
+                                    }
+                                }
+                            }
+                        />
+                    </TableCell>
+                    <TableCell>Price</TableCell>
+                    <TableCell>Image</TableCell>
+                    <TableCell align='center'><SettingsIcon /></TableCell>
+                </TableRow>
+            </TableHead>
+            <TableBody>
+            {
+                items.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map( product => <Row key={product._id} product={product} /> )
+            }
+            </TableBody>
+        </Table>
+        <div className={classes.pager}>
+            <TablePagination
+                rowsPerPageOptions={[]}
+                component="div"
+                count={items.length}
+                page={page}
+                onChangePage={handleChangePage}
+                rowsPerPage={rowsPerPage}
+            />
+        </div>
+        <Fab color="primary" aria-label="add" className={classes.fab}>
+            <AddIcon />
+        </Fab>
+    </React.Fragment>
+)}
+
+const mapStateToProps = createStructuredSelector({
+    products: selectProducts
+})
+
+export default connect(mapStateToProps)(Products);
