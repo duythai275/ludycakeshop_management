@@ -5,10 +5,10 @@ export const useStyles = makeStyles((theme) => ({
         display: 'flex',
     },
     paper: {
-      padding: theme.spacing(2),
-      display: 'flex',
-      overflow: 'auto',
-      flexDirection: 'column'
+        padding: theme.spacing(2),
+        display: 'flex',
+        overflow: 'auto',
+        flexDirection: 'column'
     },
     content: {
         flexGrow: 1,

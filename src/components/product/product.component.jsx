@@ -24,6 +24,9 @@ import Chip from '@material-ui/core/Chip';
 import ContextMenu from '../../utils/contextMenu/contextMenu';
 import StyledMenu from '../../utils/menu/menu';
 
+// import ProductDialog from '../productEditor/productDialog.component';
+import EditorDialog from '../../utils/editorDialog/editorDialog';
+
 import AccessContext from '../../contexts/access.context';
 
 import { selectProducts } from '../../redux/product/product.selector';
@@ -33,22 +36,22 @@ import { selectProductCategories } from '../../redux/productCategory/productCate
 import { useStyles } from './product.styles';
 
 const Row = ({product}) => {
-    const [anchorEl, setAnchorEl] = useState(null);
     const classes = useStyles();
-    const outerRef = useRef(null);
+
     const { url } = useContext(AccessContext);
 
+    const outerRef = useRef(null);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [dialog, setDialog] = useState(false);
+    
     const handleEdit = () => {
         console.log(`Edit Clicked - ${product.name}`);
         setAnchorEl(null);
+        setDialog(true);
     }
 
     const handleDelete = () => {
         console.log(`Delete Clicked - ${product.name}`);
-        setAnchorEl(null);
-    }
-
-    const closeMenu = () => {
         setAnchorEl(null);
     }
 
@@ -59,7 +62,7 @@ const Row = ({product}) => {
         <TableCell className={classes.chip}>
         {
             product.categories.map( category => 
-                <Chip size="small" label={category.name} />
+                <Chip key={category._id} size="small" label={category.name} />
             )
 
         }
@@ -70,15 +73,17 @@ const Row = ({product}) => {
             <IconButton size="small" onClick={ event => setAnchorEl(event.currentTarget)}><MoreVertIcon size="small" /></IconButton>
         </TableCell>
         <ContextMenu outerRef={outerRef} onEditClick={handleEdit} onDeleteClick={handleDelete} />
-        <StyledMenu anchorEl={anchorEl} handleEdit={handleEdit} handleDelete={handleDelete} handleClose={closeMenu} />
+        <StyledMenu anchorEl={anchorEl} handleEdit={handleEdit} handleDelete={handleDelete} handleClose={() => setAnchorEl(null)} />
+        <EditorDialog open={dialog} handleClose={() => setDialog(false)} data={product}/>
     </TableRow>
 )}
 
 const Products = ({products, categories, productCategories}) => {
     const classes = useStyles();
 
+    const outerRef = useRef(null);
     const [items, setItems] = useState([]);
-
+    const [dialog, setDialog] = useState(false);
     const [filter, setFilter] = useState({
         name: "",
         code: "",
@@ -273,9 +278,16 @@ const Products = ({products, categories, productCategories}) => {
                 rowsPerPage={rowsPerPage}
             />
         </div>
-        <Fab color="primary" aria-label="add" className={classes.fab}>
+        <Fab /* ref={outerRef} */ color="primary" aria-label="add" className={classes.fab} onClick={ () => setDialog(true)}>
             <AddIcon />
+            {/* <ProductDialog outerRef={outerRef} /> */}
         </Fab>
+        <EditorDialog open={dialog} handleClose={ () => setDialog(false) } data={
+            {
+                name: "New Product",
+                categories: []
+            }
+        }/>
     </React.Fragment>
 )}
 
