@@ -20,21 +20,22 @@ const Login = () => {
   const [password, setPassword] = useState("admin12345");
 
   const login = () => {
-    fetch(`${serverAddress}/auth/login`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            'email': email,
-            'password': password
-        })
-    })
-    .then( res => res.json() )
-    .then( json => {
-        if ( json.hasOwnProperty("token") ) handleLogIn(serverAddress, json.token);
-        else console.log("TEST: " + json.message);
-    });
+    // fetch(`${serverAddress}/auth/login`, {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({
+    //         'email': email,
+    //         'password': password
+    //     })
+    // })
+    // .then( res => res.json() )
+    // .then( json => {
+    //     if ( json.hasOwnProperty("token") ) handleLogIn(serverAddress, json.token);
+    //     else console.log("TEST: " + json.message);
+    // });
+    handleLogIn("localhost", "TESTING");
   }
 
   return (
