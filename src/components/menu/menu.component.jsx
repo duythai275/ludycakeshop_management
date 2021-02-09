@@ -17,6 +17,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import BusinessIcon from '@material-ui/icons/Business';
 import CategoryIcon from '@material-ui/icons/Category';
 import SettingsIcon from '@material-ui/icons/Settings';
+import BarChartIcon from '@material-ui/icons/BarChart';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 import DrawerContext from '../../contexts/drawer.contexts';
@@ -76,6 +77,12 @@ const ListMenu = ({history}) => {
                         <CategoryIcon />
                     </ListItemIcon>
                     <ListItemText primary="Categories" />
+                </ListItem>
+                <ListItem button onClick={() => history.push("/reports")}>
+                    <ListItemIcon>
+                        <BarChartIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Reports" />
                 </ListItem>
                 <ListItem button onClick={() => history.push("/settings")}>
                     <ListItemIcon>
