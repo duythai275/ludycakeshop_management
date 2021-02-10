@@ -20,6 +20,8 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 
 import ContextMenu from '../../utils/contextMenu/contextMenu';
 import StyledMenu from '../../utils/menu/menu';
@@ -138,157 +140,161 @@ const Products = ({products, categories, productCategories}) => {
     // };
 
     return (
-    <React.Fragment>
-        <div className={classes.header}>
-            <div className={classes.title}>
-                <Typography component="h2" variant="h6" color="primary" gutterBottom>
-                    Products
-                </Typography>
-            </div>
-            <div className={classes.pager}>
-                <TablePagination
-                    rowsPerPageOptions={[]} // disable RowsPerPage
-                    component="div"
-                    count={items.length}
-                    page={page}
-                    onChangePage={handleChangePage}
-                    rowsPerPage={rowsPerPage}
-                    // rowsPerPage={rowsPerPage}
-                    // onChangeRowsPerPage={handleChangeRowsPerPage}
-                />
-            </div>
-        </div>
-        <Table className={classes.table}>
-            <TableHead>
-                <TableRow>
-                    <TableCell>
-                        Name <br/>
-                        <TextField 
-                            autoFocus={false}
-                            placeholder="Search by Name" 
-                            onChange={event => filterBy(event.target.value,"name")}
-                            value={filter.name}
-                            variant="standard"
-                            InputProps={
-                                {
-                                    startAdornment: (
-                                        <InputAdornment position="start">
-                                                <SearchIcon fontSize="small" />
-                                        </InputAdornment>
-                                    ),
-                                    endAdornment: (
-                                        <InputAdornment position="end">
-                                            <IconButton
-                                                // disabled={!this.state.searchText}
-                                                onClick={() => filterBy("","name")}
-                                            >
-                                                <ClearIcon fontSize="small" />
-                                            </IconButton>
-                                        </InputAdornment>
-                                    ),
-                                    inputProps: {
-                                        "aria-label": "Search",
-                                    }
-                                }
-                            }
+    <Grid container spacing={2}>
+        <Grid item xs={12}>
+            <Paper className={classes.paper}>
+                <div className={classes.header}>
+                    <div className={classes.title}>
+                        <Typography component="h2" variant="h6" color="primary" gutterBottom>
+                            Products
+                        </Typography>
+                    </div>
+                    <div className={classes.pager}>
+                        <TablePagination
+                            rowsPerPageOptions={[]} // disable RowsPerPage
+                            component="div"
+                            count={items.length}
+                            page={page}
+                            onChangePage={handleChangePage}
+                            rowsPerPage={rowsPerPage}
+                            // rowsPerPage={rowsPerPage}
+                            // onChangeRowsPerPage={handleChangeRowsPerPage}
                         />
-                    </TableCell>
-                    <TableCell>
-                        Code <br/>
-                        <TextField 
-                            autoFocus={false}
-                            placeholder="Search by Code" 
-                            variant="standard"
-                            onChange={event => filterBy(event.target.value,"code")}
-                            value={filter.code}
-                            InputProps={
-                                {
-                                    startAdornment: (
-                                        <InputAdornment position="start">
-                                                <SearchIcon fontSize="small" />
-                                        </InputAdornment>
-                                    ),
-                                    endAdornment: (
-                                        <InputAdornment position="end">
-                                            <IconButton
-                                                // disabled={!this.state.searchText}
-                                                onClick={() => filterBy("","code")}
-                                            >
-                                                <ClearIcon fontSize="small" />
-                                            </IconButton>
-                                        </InputAdornment>
-                                    ),
-                                    inputProps: {
-                                        "aria-label": "Search",
+                    </div>
+                </div>
+                <Table className={classes.table}>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>
+                                Name <br/>
+                                <TextField 
+                                    autoFocus={false}
+                                    placeholder="Search by Name" 
+                                    onChange={event => filterBy(event.target.value,"name")}
+                                    value={filter.name}
+                                    variant="standard"
+                                    InputProps={
+                                        {
+                                            startAdornment: (
+                                                <InputAdornment position="start">
+                                                        <SearchIcon fontSize="small" />
+                                                </InputAdornment>
+                                            ),
+                                            endAdornment: (
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        // disabled={!this.state.searchText}
+                                                        onClick={() => filterBy("","name")}
+                                                    >
+                                                        <ClearIcon fontSize="small" />
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            ),
+                                            inputProps: {
+                                                "aria-label": "Search",
+                                            }
+                                        }
                                     }
-                                }
-                            }
-                        />
-                    </TableCell>
-                    <TableCell>
-                        Categories <br/>
-                        <TextField 
-                            autoFocus={false}
-                            placeholder="Search by Category" 
-                            onChange={event => filterBy(event.target.value,"category")}
-                            value={filter.category}
-                            variant="standard"
-                            InputProps={
-                                {
-                                    startAdornment: (
-                                        <InputAdornment position="start">
-                                                <SearchIcon fontSize="small" />
-                                        </InputAdornment>
-                                    ),
-                                    endAdornment: (
-                                        <InputAdornment position="end">
-                                            <IconButton
-                                                // disabled={!this.state.searchText}
-                                                onClick={() => filterBy("","category")}
-                                            >
-                                                <ClearIcon fontSize="small" />
-                                            </IconButton>
-                                        </InputAdornment>
-                                    ),
-                                    inputProps: {
-                                        "aria-label": "Search",
+                                />
+                            </TableCell>
+                            <TableCell>
+                                Code <br/>
+                                <TextField 
+                                    autoFocus={false}
+                                    placeholder="Search by Code" 
+                                    variant="standard"
+                                    onChange={event => filterBy(event.target.value,"code")}
+                                    value={filter.code}
+                                    InputProps={
+                                        {
+                                            startAdornment: (
+                                                <InputAdornment position="start">
+                                                        <SearchIcon fontSize="small" />
+                                                </InputAdornment>
+                                            ),
+                                            endAdornment: (
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        // disabled={!this.state.searchText}
+                                                        onClick={() => filterBy("","code")}
+                                                    >
+                                                        <ClearIcon fontSize="small" />
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            ),
+                                            inputProps: {
+                                                "aria-label": "Search",
+                                            }
+                                        }
                                     }
-                                }
-                            }
-                        />
-                    </TableCell>
-                    <TableCell>Price</TableCell>
-                    <TableCell>Image</TableCell>
-                    <TableCell align='center'><SettingsIcon /></TableCell>
-                </TableRow>
-            </TableHead>
-            <TableBody>
-            {
-                items.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map( product => <Row key={product._id} product={product} /> )
-            }
-            </TableBody>
-        </Table>
-        <div className={classes.pager}>
-            <TablePagination
-                rowsPerPageOptions={[]}
-                component="div"
-                count={items.length}
-                page={page}
-                onChangePage={handleChangePage}
-                rowsPerPage={rowsPerPage}
-            />
-        </div>
-        <Fab /* ref={outerRef} */ color="primary" aria-label="add" className={classes.fab} onClick={ () => setDialog(true)}>
-            <AddIcon />
-            {/* <ProductDialog outerRef={outerRef} /> */}
-        </Fab>
-        <EditorDialog open={dialog} handleClose={ () => setDialog(false) } data={
-            {
-                name: "New Product",
-                categories: []
-            }
-        }/>
-    </React.Fragment>
+                                />
+                            </TableCell>
+                            <TableCell>
+                                Categories <br/>
+                                <TextField 
+                                    autoFocus={false}
+                                    placeholder="Search by Category" 
+                                    onChange={event => filterBy(event.target.value,"category")}
+                                    value={filter.category}
+                                    variant="standard"
+                                    InputProps={
+                                        {
+                                            startAdornment: (
+                                                <InputAdornment position="start">
+                                                        <SearchIcon fontSize="small" />
+                                                </InputAdornment>
+                                            ),
+                                            endAdornment: (
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        // disabled={!this.state.searchText}
+                                                        onClick={() => filterBy("","category")}
+                                                    >
+                                                        <ClearIcon fontSize="small" />
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            ),
+                                            inputProps: {
+                                                "aria-label": "Search",
+                                            }
+                                        }
+                                    }
+                                />
+                            </TableCell>
+                            <TableCell>Price</TableCell>
+                            <TableCell>Image</TableCell>
+                            <TableCell align='center'><SettingsIcon /></TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                    {
+                        items.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map( product => <Row key={product._id} product={product} /> )
+                    }
+                    </TableBody>
+                </Table>
+                <div className={classes.pager}>
+                    <TablePagination
+                        rowsPerPageOptions={[]}
+                        component="div"
+                        count={items.length}
+                        page={page}
+                        onChangePage={handleChangePage}
+                        rowsPerPage={rowsPerPage}
+                    />
+                </div>
+                <Fab /* ref={outerRef} */ color="primary" aria-label="add" className={classes.fab} onClick={ () => setDialog(true)}>
+                    <AddIcon />
+                    {/* <ProductDialog outerRef={outerRef} /> */}
+                </Fab>
+                <EditorDialog open={dialog} handleClose={ () => setDialog(false) } data={
+                    {
+                        name: "New Product",
+                        categories: []
+                    }
+                }/>
+            </Paper>
+        </Grid>
+    </Grid>
 )}
 
 const mapStateToProps = createStructuredSelector({

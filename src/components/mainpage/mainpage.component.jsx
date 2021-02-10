@@ -44,18 +44,14 @@ const Mainpage = ({ setCategories, setProducts, setProductCategories }) => {
         <main className={classes.content}>
             <div className={classes.appBarSpacer}></div>
             <Container /*maxWidth="1g"*/ className={classes.container}>
-                <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                        <Paper className={classes.paper}>
+                
                             <Switch>
                                 <Route exact path="/products" component={Products} />
                                 <Route exact path="/categories" component={Categories} />
                                 <Route exact path="/reports" component={Reports} />
                                 <Route exact path="/settings" component={Settings} />
                             </Switch>
-                        </Paper>
-                    </Grid>
-                </Grid>
+                        
             </Container>
         </main>
     </div>

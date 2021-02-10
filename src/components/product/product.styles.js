@@ -53,5 +53,11 @@ export const useStyles = makeStyles((theme) => ({
     smallAvatar: {
         width: theme.spacing(5),
         height: theme.spacing(5)
+    },
+    paper: {
+        padding: theme.spacing(2),
+        display: 'flex',
+        overflow: 'auto',
+        flexDirection: 'column'
     }
 }));
