@@ -13,6 +13,17 @@ const Reports = () => {
         <Grid item xs={8} md={8} lg={8}>
             <Paper className={classes.paper}>
                 <Typography variant="subtitle1" component="h2">Data</Typography>
+                <Grid container>
+                    <Grid item>
+                        <FormControl variant="outlined">
+                            <InputLabel>Dimension</InputLabel>
+                            <Select>
+                                <MenuItem>Row</MenuItem>
+                                <MenuItem>Column</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                </Grid>
             </Paper>
         </Grid>
         <Grid item xs={4} md={4} lg={4}>
