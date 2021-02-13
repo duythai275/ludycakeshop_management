@@ -4,6 +4,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
+import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
@@ -83,25 +84,86 @@ const Reports = () => {
     
     return (
     <Grid container spacing={2}>
-        <Grid item xs={8} md={8} lg={8}>
+        <Grid item xs={12} md={8} lg={8}>
             <Paper className={classes.paper}>
                 <Typography variant="subtitle1" component="h2">Data</Typography>
                 <Grid container>
-                    <Grid item>
-                        <FormControl variant="outlined">
+                    <Grid item md={4} xs={12}>
+                        <FormControl variant="outlined" className={classes.formControl}>
                             <InputLabel>Dimension</InputLabel>
-                            <Select>
+                            <Select
+                                label="Dimension"
+                            >
                                 <MenuItem>Row</MenuItem>
                                 <MenuItem>Column</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item md={4} xs={12}>
+                        <FormControl variant="outlined" className={classes.formControl}>
+                            <InputLabel>Data</InputLabel>
+                            <Select
+                                label="Data"
+                            >
+                                <MenuItem>Departments</MenuItem>
+                                <MenuItem>Products</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item md={4} xs={12}>
+                        <FormControl variant="outlined" className={classes.formControl}>
+                            <InputLabel>Data Type</InputLabel>
+                            <Select
+                                label="Data Type"
+                            >
+                                <MenuItem>Number of Sales</MenuItem>
+                                <MenuItem>Sales Revenue</MenuItem>
                             </Select>
                         </FormControl>
                     </Grid>
                 </Grid>
             </Paper>
         </Grid>
-        <Grid item xs={4} md={4} lg={4}>
+        <Grid item xs={12} md={4} lg={4}>
             <Paper className={classes.paper}>
                 <Typography variant="subtitle1" component="h2">Period</Typography>
+                <Grid container>
+                    <Grid item xs={12}>
+                        <FormControl variant="outlined" className={classes.formControl1}>
+                            <InputLabel>Period Type</InputLabel>
+                            <Select
+                                label="Period Type"
+                            >
+                                <MenuItem>Weekly</MenuItem>
+                                <MenuItem>Monthly</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <FormControl className={classes.formControl1}>
+                            <TextField
+                                label="Start Date"
+                                variant="outlined"
+                                type="date"
+                                InputLabelProps={{
+                                    shrink: true
+                                }}
+                            />
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <FormControl className={classes.formControl1}>
+                        <TextField
+                                label="End Date"
+                                variant="outlined"
+                                type="date"
+                                InputLabelProps={{
+                                    shrink: true
+                                }}
+                            />
+                        </FormControl>
+                    </Grid>
+                </Grid>
             </Paper>
         </Grid>
         <Grid item xs={12}>

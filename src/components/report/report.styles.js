@@ -6,5 +6,13 @@ export const useStyles = makeStyles((theme) => ({
         display: 'flex',
         overflow: 'auto',
         flexDirection: 'column'
+    },
+    formControl: {
+        margin: theme.spacing(1),
+        minWidth: 240,
+    },
+    formControl1: {
+        margin: theme.spacing(1),
+        minWidth: 350,
     }
 }));
