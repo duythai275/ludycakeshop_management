@@ -15,27 +15,24 @@ const Login = () => {
   const classes = useStyles();
   const { handleLogIn } = useContext(AccessContext);
 
-  const [serverAddress, setServerAddress] = useState("http://localhost:4000");
-  const [email, setEmail] = useState("duythai275@gmail.com");
-  const [password, setPassword] = useState("admin12345");
+  const [serverAddress, setServerAddress] = useState("https://hha-capstone.herokuapp.com/api");
+  const [email, setEmail] = useState("boss@hha.com");
+  const [password, setPassword] = useState("password");
 
   const login = () => {
-    // fetch(`${serverAddress}/auth/login`, {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify({
-    //         'email': email,
-    //         'password': password
-    //     })
-    // })
-    // .then( res => res.json() )
-    // .then( json => {
-    //     if ( json.hasOwnProperty("token") ) handleLogIn(serverAddress, json.token);
-    //     else console.log("TEST: " + json.message);
-    // });
-    handleLogIn("localhost", "TESTING");
+    fetch(`${serverAddress}/admin/signin`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            'email': email,
+            'password': password
+        })
+    })
+    .then( res => res.text() )
+    .then( token => handleLogIn(serverAddress, token))
+    .catch(err => console.log('error', err));
   }
 
   return (
@@ -57,7 +54,7 @@ const Login = () => {
                         name="server"
                         autoFocus
                         value={serverAddress}
-                        // onChange={() => console.log(this)}
+                        onChange={() => setServerAddress()}
                     />
                     <TextField
                         variant="outlined"

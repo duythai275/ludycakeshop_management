@@ -33,7 +33,6 @@ import AccessContext from '../../contexts/access.context';
 
 import { selectProducts } from '../../redux/product/product.selector';
 import  { selectCategories } from '../../redux/category/category.selector';
-import { selectProductCategories } from '../../redux/productCategory/productCategory.selector';
 
 import { useStyles } from './product.styles';
 
@@ -60,17 +59,17 @@ const Row = ({product}) => {
     return (
     <TableRow hover ref={outerRef}>
         <TableCell>{product.name}</TableCell>
-        <TableCell>{product.code}</TableCell>
+        <TableCell>{product.brand}</TableCell>
         <TableCell className={classes.chip}>
         {
-            product.categories.map( category => 
+            product.category.map( category => 
                 <Chip key={category._id} size="small" label={category.name} />
             )
-
+            // product.category
         }
         </TableCell>
         <TableCell>{product.price}</TableCell>
-        <TableCell><Avatar src={`${url}/products/${product.image}`} className={classes.smallAvatar} /></TableCell>
+        {/* <TableCell><Avatar src={`${url}/products/${product.image}`} className={classes.smallAvatar} /></TableCell> */}
         <TableCell align='center'>
             <IconButton size="small" onClick={ event => setAnchorEl(event.currentTarget)}><MoreVertIcon size="small" /></IconButton>
         </TableCell>
@@ -80,7 +79,7 @@ const Row = ({product}) => {
     </TableRow>
 )}
 
-const Products = ({products, categories, productCategories}) => {
+const Products = ({products, categories}) => {
     const classes = useStyles();
 
     const outerRef = useRef(null);
@@ -88,12 +87,12 @@ const Products = ({products, categories, productCategories}) => {
     const [dialog, setDialog] = useState(false);
     const [filter, setFilter] = useState({
         name: "",
-        code: "",
+        brand: "",
         category: ""
     });
 
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(20);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -109,30 +108,41 @@ const Products = ({products, categories, productCategories}) => {
 
     useEffect( () => {
 
+        // products.map( product => {
+        //     product["categories"] = productCategories.filter(
+        //         productCategory => productCategory.product === product._id
+        //     ).map(
+        //         productCategory => {
+        //             const cate = categories.find( category => category._id === productCategory.category );
+        //             return {
+        //                 ...cate,
+        //                 mapping: productCategory._id
+        //             }
+        //         }
+        //     );
+        //     return product;
+        // })
+
         products.map( product => {
-            product["categories"] = productCategories.filter(
-                productCategory => productCategory.product === product._id
-            ).map(
-                productCategory => {
-                    const cate = categories.find( category => category._id === productCategory.category );
-                    return {
-                        ...cate,
-                        mapping: productCategory._id
-                    }
-                }
-            );
+            if( !Array.isArray(product.category) ) product.category = categories.filter( category => category.id === product.category )
+            if ( product.brand === null ) product.brand = "";
             return product;
         })
 
+        console.log(products);
+
         setItems(products.filter( item => 
             item["name"].toUpperCase().includes(filter.name.toUpperCase()) 
-            && item["code"].toUpperCase().includes(filter.code.toUpperCase()) 
-            && item["categories"].find( 
-                category => category.name.toUpperCase().includes(filter.category.toUpperCase()) 
-            )
+            && item["brand"].toUpperCase().includes(filter.brand.toUpperCase())
+            && item["category"][0].name.toUpperCase().includes(filter.category.toUpperCase())
+            // && item["categories"][0].name.toUpperCase().includes(filter.brand.toUpperCase())
+            // .find( 
+            //     category => category.name.toUpperCase().includes(filter.category.toUpperCase()) 
+            // )
         ));
+        
 
-    }, [products, categories, productCategories, filter] )
+    }, [products, categories, filter] )
     
     // const handleChangeRowsPerPage = (event) => {
     //     setRowsPerPage(+event.target.value);
@@ -198,13 +208,13 @@ const Products = ({products, categories, productCategories}) => {
                                 />
                             </TableCell>
                             <TableCell>
-                                Code <br/>
+                                Brand <br/>
                                 <TextField 
                                     autoFocus={false}
-                                    placeholder="Search by Code" 
+                                    placeholder="Search by Brand" 
                                     variant="standard"
-                                    onChange={event => filterBy(event.target.value,"code")}
-                                    value={filter.code}
+                                    onChange={event => filterBy(event.target.value,"brand")}
+                                    value={filter.brand}
                                     InputProps={
                                         {
                                             startAdornment: (
@@ -216,7 +226,7 @@ const Products = ({products, categories, productCategories}) => {
                                                 <InputAdornment position="end">
                                                     <IconButton
                                                         // disabled={!this.state.searchText}
-                                                        onClick={() => filterBy("","code")}
+                                                        onClick={() => filterBy("","brand")}
                                                     >
                                                         <ClearIcon fontSize="small" />
                                                     </IconButton>
@@ -262,7 +272,6 @@ const Products = ({products, categories, productCategories}) => {
                                 />
                             </TableCell>
                             <TableCell>Price</TableCell>
-                            <TableCell>Image</TableCell>
                             <TableCell align='center'><SettingsIcon /></TableCell>
                         </TableRow>
                     </TableHead>
@@ -299,8 +308,7 @@ const Products = ({products, categories, productCategories}) => {
 
 const mapStateToProps = createStructuredSelector({
     products: selectProducts,
-    categories: selectCategories,
-    productCategories: selectProductCategories
+    categories: selectCategories
 })
 
 export default connect(mapStateToProps)(Products);

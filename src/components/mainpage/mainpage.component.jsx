@@ -16,26 +16,27 @@ import AccessContext from '../../contexts/access.context';
 
 import { fetchAllCategories } from '../../redux/category/category.action';
 import { fetchAllProducts } from '../../redux/product/product.action';
-import { fetchAllProductCategories } from '../../redux/productCategory/productCategory.action';
 
 import { useStyles } from './mainpage.styles';
 
-const Mainpage = ({ setCategories, setProducts, setProductCategories }) => {
+const Mainpage = ({ setCategories, setProducts }) => {
     const classes = useStyles();
-    const { url } = useContext(AccessContext);
+    const { url, token } = useContext(AccessContext);
 
-    // useEffect( () => {
-    //     Promise.all([
-    //         fetch(`${url}/category`).then( res => res.json()),
-    //         fetch(`${url}/product`).then( res => res.json()),
-    //         fetch(`${url}/productCategory`).then( res => res.json())
-    //     ])
-    //     .then( arr => {
-    //         setCategories(arr[0]);
-    //         setProducts(arr[1]);
-    //         setProductCategories(arr[2]);
-    //     })
-    // } )
+    useEffect( () => {
+        Promise.all([
+            fetch(`${url}/categories`).then( res => res.json()),
+            fetch(`${url}/admin/product`, {
+                headers: {
+                    Authorization: 'Bearer ' + token
+                }
+            }).then( res => res.json())
+        ])
+        .then( arr => {
+            setCategories(arr[0]);
+            setProducts(arr[1]);
+        })
+    } )
     
 
     return (
@@ -59,8 +60,7 @@ const Mainpage = ({ setCategories, setProducts, setProductCategories }) => {
 
 const mapDispatchToProps = dispatch => ({
     setCategories: categories => dispatch(fetchAllCategories(categories)),
-    setProducts: products => dispatch(fetchAllProducts(products)),
-    setProductCategories: productCategories => dispatch(fetchAllProductCategories(productCategories))
+    setProducts: products => dispatch(fetchAllProducts(products))
 });
 
 export default connect(null, mapDispatchToProps)(Mainpage);

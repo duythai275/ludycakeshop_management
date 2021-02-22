@@ -88,22 +88,19 @@ const EditorDialog = ({ open, handleClose, data }) => {
             <main className={classes.layout}>
                 <Paper className={classes.paper}>
                     <Grid container spacing={3}>
-                        <Grid item xs={12}>
+                        <Grid item xs={6}>
                             <TextField label="Name" fullWidth value={data.name} />
                         </Grid>
-                        <Grid item xs={12}>
-                            <TextField label="Code" fullWidth value={data.code} />
+                        <Grid item xs={6}>
+                            <TextField label="Brand" fullWidth value={data.brand} />
                         </Grid>
                         <Grid item xs={12}>
+                            <TextField label="Description" fullWidth value={data.description} />
+                        </Grid>
+                        <Grid item xs={4}>
                             <TextField label="Price" fullWidth value={data.price} />
                         </Grid>
-                        <Grid item xs={12}>
-                            <FormControlLabel 
-                                control={<Checkbox checked={data.weeklySpecial} color="primary" />}
-                                label="Weekend Special"
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={4}>
                             <Typography variant="subtitle2" className={classes.subTitle}>
                                 Categories
                                 <IconButton><AddCircleIcon /></IconButton>
@@ -111,9 +108,10 @@ const EditorDialog = ({ open, handleClose, data }) => {
                             
                             <div className={classes.chip}>
                                 {
-                                    data.categories.map( category => 
-                                        <Chip key={category._id} label={category.name} onDelete={handleDelete}/>
-                                    )
+                                    ( Array.isArray(data.category) ) ?
+                                    data.category.map( cate => 
+                                        <Chip key={cate.id} label={cate.name} onDelete={handleDelete}/>
+                                    ) : ""
                                 }
                                 <Fade in={true}>
                                     <FormControl className={classes.formControl}>
@@ -124,8 +122,23 @@ const EditorDialog = ({ open, handleClose, data }) => {
                                 </Fade>
                             </div>
                         </Grid>
+                        <Grid item xs={4}>
+                            <FormControlLabel 
+                                control={<Checkbox checked={data.active} color="primary" />}
+                                label="Active"
+                            />
+                        </Grid>
                         <Grid item xs={12}>
-                            <TextField label="Image" fullWidth />
+                            <TextField label="Image" fullWidth value={data.image} />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <TextField label="Quantity" fullWidth value={data.quantity} />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <TextField label="Weight Value" fullWidth value={data.weightValue} />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <TextField label="Weight Type" fullWidth value={data.weightType} />
                         </Grid>
                     </Grid>
                 </Paper>
