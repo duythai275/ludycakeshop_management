@@ -8,6 +8,7 @@ import { editProduct } from '../../redux/product/product.action';
 import  { selectCategories } from '../../redux/category/category.selector';
 
 import AccessContext from '../../contexts/access.context';
+import AlertContext from '../../contexts/alert.context';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
@@ -79,6 +80,7 @@ const EditorDialog = ({ open, handleClose, data, categories, editProduct, addPro
     const [product, setProduct] = useState(data);
 
     const { url, token } = useContext(AccessContext);
+    const { handleAlert } = useContext(AlertContext);
 
     const updateValue = ( value, attr ) => {
         product[attr] = value;
@@ -104,6 +106,7 @@ const EditorDialog = ({ open, handleClose, data, categories, editProduct, addPro
             .then(result => {
                 console.log(result);
                 addProduct(product);
+                handleAlert(true, "Added Successfully!");
             })
             .catch(error => console.log('error', error));
 
@@ -125,6 +128,7 @@ const EditorDialog = ({ open, handleClose, data, categories, editProduct, addPro
             .then(result => {
                 console.log(result);
                 editProduct(product);
+                handleAlert(true, "Edited Successfully!");
             })
             .catch(error => console.log('error', error));
 

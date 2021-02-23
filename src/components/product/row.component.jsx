@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState, useEffect } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 
 import AccessContext from '../../contexts/access.context';
@@ -13,6 +13,7 @@ import Chip from '@material-ui/core/Chip';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 
+import AlertContext from '../../contexts/alert.context';
 
 import { deleteProduct } from '../../redux/product/product.action';
 
@@ -22,6 +23,7 @@ const Row = (props) => {
     const classes = useStyles();
 
     const { url, token } = useContext(AccessContext);
+    const { handleAlert } = useContext(AlertContext);
 
     const outerRef = useRef(null);
     const [anchorEl, setAnchorEl] = useState(null);
@@ -48,6 +50,7 @@ const Row = (props) => {
         .then(result => {
             console.log(result);
             props.deleteProduct(props.product);
+            handleAlert(true, "Deleted Successfully!");
         })
         .catch(error => console.log('error', error));
         

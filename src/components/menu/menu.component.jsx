@@ -78,6 +78,11 @@ const ListMenu = ({history}) => {
                     </ListItemIcon>
                     <ListItemText primary="Categories" />
                 </ListItem>
+            </div>
+        </List>
+        <Divider />
+        <List>
+            <div>
                 <ListItem button onClick={() => history.push("/reports")}>
                     <ListItemIcon>
                         <BarChartIcon />
