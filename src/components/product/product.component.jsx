@@ -17,72 +17,23 @@ import IconButton from '@material-ui/core/IconButton';
 import ClearIcon from '@material-ui/icons/Clear';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import SettingsIcon from '@material-ui/icons/Settings';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import Avatar from '@material-ui/core/Avatar';
-import Chip from '@material-ui/core/Chip';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-
-import ContextMenu from '../../utils/contextMenu/contextMenu';
-import StyledMenu from '../../utils/menu/menu';
 
 // import ProductDialog from '../productEditor/productDialog.component';
 import EditorDialog from '../../utils/editorDialog/editorDialog';
 
-import AccessContext from '../../contexts/access.context';
 
 import { selectProducts } from '../../redux/product/product.selector';
 import  { selectCategories } from '../../redux/category/category.selector';
 
+import Row from './row.component';
+
 import { useStyles } from './product.styles';
-
-const Row = ({product}) => {
-    const classes = useStyles();
-
-    const { url } = useContext(AccessContext);
-
-    const outerRef = useRef(null);
-    const [anchorEl, setAnchorEl] = useState(null);
-    const [dialog, setDialog] = useState(false);
-    
-    const handleEdit = () => {
-        console.log(`Edit Clicked - ${product.name}`);
-        setAnchorEl(null);
-        setDialog(true);
-    }
-
-    const handleDelete = () => {
-        console.log(`Delete Clicked - ${product.name}`);
-        setAnchorEl(null);
-    }
-
-    return (
-    <TableRow hover ref={outerRef}>
-        <TableCell>{product.name}</TableCell>
-        <TableCell>{product.brand}</TableCell>
-        <TableCell className={classes.chip}>
-        {
-            product.category.map( category => 
-                <Chip key={category._id} size="small" label={category.name} />
-            )
-            // product.category
-        }
-        </TableCell>
-        <TableCell>{product.price}</TableCell>
-        {/* <TableCell><Avatar src={`${url}/products/${product.image}`} className={classes.smallAvatar} /></TableCell> */}
-        <TableCell align='center'>
-            <IconButton size="small" onClick={ event => setAnchorEl(event.currentTarget)}><MoreVertIcon size="small" /></IconButton>
-        </TableCell>
-        <ContextMenu outerRef={outerRef} onEditClick={handleEdit} onDeleteClick={handleDelete} />
-        <StyledMenu anchorEl={anchorEl} handleEdit={handleEdit} handleDelete={handleDelete} handleClose={() => setAnchorEl(null)} />
-        <EditorDialog open={dialog} handleClose={() => setDialog(false)} data={product}/>
-    </TableRow>
-)}
 
 const Products = ({products, categories}) => {
     const classes = useStyles();
 
-    const outerRef = useRef(null);
     const [items, setItems] = useState([]);
     const [dialog, setDialog] = useState(false);
     const [filter, setFilter] = useState({
@@ -309,6 +260,6 @@ const Products = ({products, categories}) => {
 const mapStateToProps = createStructuredSelector({
     products: selectProducts,
     categories: selectCategories
-})
+});
 
 export default connect(mapStateToProps)(Products);

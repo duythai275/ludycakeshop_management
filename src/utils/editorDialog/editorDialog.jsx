@@ -1,4 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+
+import { addProduct } from '../../redux/product/product.action';
+import { editProduct } from '../../redux/product/product.action';
+
+import  { selectCategories } from '../../redux/category/category.selector';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import AppBar from '@material-ui/core/AppBar';
@@ -8,6 +16,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
+import InputLabel from '@material-ui/core/InputLabel';
 
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -20,9 +29,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 // import InputLabel from '@material-ui/core/InputLabel';
 // import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
-import Chip from '@material-ui/core/Chip';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import Fade from '@material-ui/core/Fade';
 
 const useStyles = makeStyles((theme) => ({
     appBar: {
@@ -65,10 +71,33 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const EditorDialog = ({ open, handleClose, data }) => {
+const EditorDialog = ({ open, handleClose, data, categories, editProduct, addProduct }) => {
     const classes = useStyles();
 
-    const handleDelete = () => {}
+    const [product, setProduct] = useState(data);
+
+    const updateValue = ( value, attr ) => {
+        product[attr] = value;
+        setProduct({...product});
+    }
+
+    const handleProduct = () => {
+        if ( data.name === "New Product" ) {
+            product.category = product.category[0].id;
+            product.price = parseFloat(product.price);
+            product.quantity = parseInt(product.quantity);
+            product.weightType = parseInt(product.weightType);
+            addProduct(data);
+        } else {
+            product.category = product.category[0].id;
+            product.price = parseFloat(product.price);
+            product.quantity = parseInt(product.quantity);
+            product.weightType = parseInt(product.weightType);
+            editProduct(data);
+        }
+
+        handleClose();
+    }
 
     return (
         <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
@@ -80,8 +109,8 @@ const EditorDialog = ({ open, handleClose, data }) => {
                     <Typography variant="h6" className={classes.title}>
                         {data.name}
                     </Typography>
-                    <Button autoFocus color="inherit" onClick={handleClose}>
-                        Save
+                    <Button autoFocus color="inherit" onClick={handleProduct}>
+                        { (data.name === "New Product") ? "Add" : "Save" }
                     </Button>
                 </Toolbar>
             </AppBar>
@@ -89,56 +118,45 @@ const EditorDialog = ({ open, handleClose, data }) => {
                 <Paper className={classes.paper}>
                     <Grid container spacing={3}>
                         <Grid item xs={6}>
-                            <TextField label="Name" fullWidth value={data.name} />
+                            <TextField label="Name" fullWidth value={product.name} onChange={event => updateValue(event.target.value, "name")}/>
                         </Grid>
                         <Grid item xs={6}>
-                            <TextField label="Brand" fullWidth value={data.brand} />
+                            <TextField label="Brand" fullWidth value={product.brand} onChange={event => updateValue(event.target.value, "brand")}/>
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField label="Description" fullWidth value={data.description} />
+                            <TextField label="Description" fullWidth value={product.description} onChange={event => updateValue(event.target.value, "description")} />
                         </Grid>
                         <Grid item xs={4}>
-                            <TextField label="Price" fullWidth value={data.price} />
+                            <TextField label="Price" fullWidth value={product.price} onChange={event => updateValue(event.target.value, "price")} />
                         </Grid>
                         <Grid item xs={4}>
-                            <Typography variant="subtitle2" className={classes.subTitle}>
-                                Categories
-                                <IconButton><AddCircleIcon /></IconButton>
-                            </Typography> 
-                            
-                            <div className={classes.chip}>
-                                {
-                                    ( Array.isArray(data.category) ) ?
-                                    data.category.map( cate => 
-                                        <Chip key={cate.id} label={cate.name} onDelete={handleDelete}/>
-                                    ) : ""
-                                }
-                                <Fade in={true}>
-                                    <FormControl className={classes.formControl}>
-                                        <Select>
-                                            <MenuItem value="FV">Fruits & Vegetables</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </Fade>
-                            </div>
+                            <FormControl className={classes.formControl}>
+                                <InputLabel>Category</InputLabel>
+                                <Select label="Category" value={Array.isArray(product.category) ? product.category[0].id : ""} onChange={event => updateValue([{id: event.target.value}], "category")} >
+                                    { 
+                                        categories.map( cate => <MenuItem value={cate.id}>{cate.name}</MenuItem> )
+                                    }
+                                    
+                                </Select>
+                            </FormControl>
                         </Grid>
                         <Grid item xs={4}>
                             <FormControlLabel 
-                                control={<Checkbox checked={data.active} color="primary" />}
+                                control={<Checkbox checked={product.active} color="primary" onChange={ () => updateValue(!product.active,"active") } />}
                                 label="Active"
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField label="Image" fullWidth value={data.image} />
+                            <TextField label="Image" fullWidth value={product.image} onChange={event => updateValue(event.target.value, "image")} />
                         </Grid>
                         <Grid item xs={4}>
-                            <TextField label="Quantity" fullWidth value={data.quantity} />
+                            <TextField label="Quantity" fullWidth value={product.quantity} onChange={event => updateValue(event.target.value, "quantity")} />
                         </Grid>
                         <Grid item xs={4}>
-                            <TextField label="Weight Value" fullWidth value={data.weightValue} />
+                            <TextField label="Weight Value" fullWidth value={product.weightValue} onChange={event => updateValue(event.target.value, "weightValue")} />
                         </Grid>
                         <Grid item xs={4}>
-                            <TextField label="Weight Type" fullWidth value={data.weightType} />
+                            <TextField label="Weight Type" fullWidth value={product.weightType} onChange={event => updateValue(event.target.value, "weightType")} />
                         </Grid>
                     </Grid>
                 </Paper>
@@ -147,4 +165,13 @@ const EditorDialog = ({ open, handleClose, data }) => {
     )
 }
 
-export default EditorDialog;
+const mapStateToProps = createStructuredSelector({
+    categories: selectCategories
+});
+
+const mapDispatchToProps = dispatch => ({
+    editProduct: product => dispatch(editProduct(product)),
+    addProduct: product => dispatch(addProduct(product))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditorDialog);
