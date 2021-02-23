@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
@@ -6,6 +6,8 @@ import { addProduct } from '../../redux/product/product.action';
 import { editProduct } from '../../redux/product/product.action';
 
 import  { selectCategories } from '../../redux/category/category.selector';
+
+import AccessContext from '../../contexts/access.context';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
@@ -76,6 +78,8 @@ const EditorDialog = ({ open, handleClose, data, categories, editProduct, addPro
 
     const [product, setProduct] = useState(data);
 
+    const { url, token } = useContext(AccessContext);
+
     const updateValue = ( value, attr ) => {
         product[attr] = value;
         setProduct({...product});
@@ -87,15 +91,45 @@ const EditorDialog = ({ open, handleClose, data, categories, editProduct, addPro
             product.price = parseFloat(product.price);
             product.quantity = parseInt(product.quantity);
             product.weightType = parseInt(product.weightType);
-            addProduct(data);
+
+            fetch(`${url}/admin/product`, {
+                'method': 'POST',
+                'headers': {
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                'body': JSON.stringify(product)
+            })
+            .then(response => response.text())
+            .then(result => {
+                console.log(result);
+                addProduct(product);
+            })
+            .catch(error => console.log('error', error));
+
         } else {
             product.category = product.category[0].id;
             product.price = parseFloat(product.price);
             product.quantity = parseInt(product.quantity);
             product.weightType = parseInt(product.weightType);
-            editProduct(data);
-        }
 
+            fetch(`${url}/admin/product`, {
+                'method': 'PUT',
+                'headers': {
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                'body': JSON.stringify(product)
+            })
+            .then(response => response.text())
+            .then(result => {
+                console.log(result);
+                editProduct(product);
+            })
+            .catch(error => console.log('error', error));
+
+        
+        }
         handleClose();
     }
 

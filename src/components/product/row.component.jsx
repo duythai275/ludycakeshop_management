@@ -21,7 +21,7 @@ import { useStyles } from './product.styles';
 const Row = (props) => {
     const classes = useStyles();
 
-    const { url } = useContext(AccessContext);
+    const { url, token } = useContext(AccessContext);
 
     const outerRef = useRef(null);
     const [anchorEl, setAnchorEl] = useState(null);
@@ -36,7 +36,21 @@ const Row = (props) => {
     const handleDelete = () => {
         // console.log(`Delete Clicked - ${product.name}`);
         setAnchorEl(null);
-        props.deleteProduct(props.product);
+
+        fetch(`${url}/admin/product?id=${props.product.id}`, {
+            'method': 'DELETE',
+            'headers': {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.text())
+        .then(result => {
+            console.log(result);
+            props.deleteProduct(props.product);
+        })
+        .catch(error => console.log('error', error));
+        
     }
 
     return (

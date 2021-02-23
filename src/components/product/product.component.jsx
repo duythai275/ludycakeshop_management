@@ -228,7 +228,7 @@ const Products = ({products, categories}) => {
                     </TableHead>
                     <TableBody>
                     {
-                        items.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map( product => <Row key={product._id} product={product} /> )
+                        items.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map( product => <Row key={product.id} product={product} /> )
                     }
                     </TableBody>
                 </Table>
