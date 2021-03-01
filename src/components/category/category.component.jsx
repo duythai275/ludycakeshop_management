@@ -14,6 +14,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import SettingsIcon from '@material-ui/icons/Settings';
+import TablePagination from '@material-ui/core/TablePagination';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import IconButton from '@material-ui/core/IconButton';
 
 import { selectCategories } from '../../redux/category/category.selector';
 
@@ -66,7 +69,8 @@ const Categories = ({categories}) => {
                     <TableHead>
                         <TableRow>
                             <TableCell>Name</TableCell>
-                            <TableCell align='center'><SettingsIcon /></TableCell>
+                            <TableCell>Id</TableCell>
+                            <TableCell align='right'></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -74,12 +78,25 @@ const Categories = ({categories}) => {
                         categories.map( category => 
                             <TableRow key={category.id}>
                                 <TableCell>{category.name}</TableCell>
+                                <TableCell>{category.id}</TableCell>
+                                <TableCell align='right'><IconButton size="small"><MoreVertIcon size="small" /></IconButton></TableCell>
                             </TableRow>
                         )
                     }
                     </TableBody>
                 </Table>
-                <div className={classes.pager}></div>
+                <div className={classes.pager}>
+                    <TablePagination
+                        rowsPerPageOptions={[]} // disable RowsPerPage
+                        component="div"
+                        count={categories.length}
+                        page={page}
+                        onChangePage={handleChangePage}
+                        rowsPerPage={10}
+                        // rowsPerPage={rowsPerPage}
+                        // onChangeRowsPerPage={handleChangeRowsPerPage}
+                    />
+                </div>
             </Paper>
         </Grid>
     </Grid>

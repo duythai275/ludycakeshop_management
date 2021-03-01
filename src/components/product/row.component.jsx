@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 
 import AccessContext from '../../contexts/access.context';
 
-import ContextMenu from '../../utils/contextMenu/contextMenu';
-import StyledMenu from '../../utils/menu/menu';
+import ContextMenu from '../contextMenu/contextMenu';
+import StyledMenu from '../menu/menu';
 import ProductEditorDialog from '../editorDialog/productEditorDialog';
 
 import MoreVertIcon from '@material-ui/icons/MoreVert';

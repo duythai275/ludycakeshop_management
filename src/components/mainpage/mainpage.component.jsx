@@ -8,7 +8,7 @@ import Products from '../product/product.component';
 import Categories from '../category/category.component';
 import Settings from '../intro/setting.component';
 import Reports from '../report/report.component';
-import Menu from '../menu/menu.component';
+import Menu from '../mainMenu/menu.component';
 
 import AccessContext from '../../contexts/access.context';
 
