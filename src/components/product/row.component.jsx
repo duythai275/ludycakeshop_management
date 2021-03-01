@@ -5,7 +5,7 @@ import AccessContext from '../../contexts/access.context';
 
 import ContextMenu from '../../utils/contextMenu/contextMenu';
 import StyledMenu from '../../utils/menu/menu';
-import EditorDialog from '../../utils/editorDialog/editorDialog';
+import ProductEditorDialog from '../editorDialog/productEditorDialog';
 
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import IconButton from '@material-ui/core/IconButton';
@@ -75,7 +75,7 @@ const Row = (props) => {
         </TableCell>
         <ContextMenu outerRef={outerRef} onEditClick={handleEdit} onDeleteClick={handleDelete} />
         <StyledMenu anchorEl={anchorEl} handleEdit={handleEdit} handleDelete={handleDelete} handleClose={() => setAnchorEl(null)} />
-        <EditorDialog open={dialog} handleClose={() => setDialog(false)} data={props.product}/>
+        <ProductEditorDialog open={dialog} handleClose={() => setDialog(false)} data={props.product}/>
     </TableRow>
 )}
 

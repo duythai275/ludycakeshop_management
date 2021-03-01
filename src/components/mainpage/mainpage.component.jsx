@@ -3,8 +3,6 @@ import { Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 
 import Products from '../product/product.component';
 import Categories from '../category/category.component';

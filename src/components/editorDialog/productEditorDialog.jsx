@@ -21,6 +21,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import InputLabel from '@material-ui/core/InputLabel';
 
+import FormLabel from '@material-ui/core/FormLabel';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
@@ -74,7 +75,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const EditorDialog = ({ open, handleClose, data, categories, editProduct, addProduct }) => {
+const ProductEditorDialog = ({ open, handleClose, data, categories, editProduct, addProduct }) => {
     const classes = useStyles();
 
     const [product, setProduct] = useState(data);
@@ -162,12 +163,12 @@ const EditorDialog = ({ open, handleClose, data, categories, editProduct, addPro
                             <TextField label="Brand" fullWidth value={product.brand} onChange={event => updateValue(event.target.value, "brand")}/>
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField label="Description" fullWidth value={product.description} onChange={event => updateValue(event.target.value, "description")} />
+                            <TextField label="Description" fullWidth value={product.description} multiline onChange={event => updateValue(event.target.value, "description")} />
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={6}>
                             <TextField label="Price" fullWidth value={product.price} onChange={event => updateValue(event.target.value, "price")} />
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={6}>
                             <FormControl className={classes.formControl}>
                                 <InputLabel>Category</InputLabel>
                                 <Select label="Category" value={Array.isArray(product.category) ? product.category[0].id : ""} onChange={event => updateValue([{id: event.target.value}], "category")} >
@@ -178,11 +179,14 @@ const EditorDialog = ({ open, handleClose, data, categories, editProduct, addPro
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={4}>
-                            <FormControlLabel 
-                                control={<Checkbox checked={product.active} color="primary" onChange={ () => updateValue(!product.active,"active") } />}
-                                label="Active"
-                            />
+                        <Grid item xs={12}>
+                            <FormControl>
+                                {/* <FormLabel>Active</FormLabel> */}
+                                <FormControlLabel 
+                                    control={<Checkbox checked={product.active} color="primary" onChange={ () => updateValue(!product.active,"active") } />}
+                                    label="Active"
+                                />
+                            </FormControl>
                         </Grid>
                         <Grid item xs={12}>
                             <TextField label="Image" fullWidth value={product.image} onChange={event => updateValue(event.target.value, "image")} />
@@ -212,4 +216,4 @@ const mapDispatchToProps = dispatch => ({
     addProduct: product => dispatch(addProduct(product))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditorDialog);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductEditorDialog);

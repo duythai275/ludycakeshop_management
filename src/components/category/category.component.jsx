@@ -10,16 +10,14 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
-import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import SettingsIcon from '@material-ui/icons/Settings';
 
 import { selectCategories } from '../../redux/category/category.selector';
 
-// import { useStyles } from './category.styles';
+import { useStyles } from './category.styles';
   
 const StyledMenuItem = withStyles((theme) => ({
     root: {
@@ -33,73 +31,58 @@ const StyledMenuItem = withStyles((theme) => ({
 }))(MenuItem);
 
 const Categories = ({categories}) => {
+    const classes = useStyles();
 
-    const [anchorEl, setAnchorEl] = useState(null);
-  
-    const handleClick = (event) => {
-        console.log(event);
-        setAnchorEl(event.currentTarget);
-        // setAnchorEl(event);
-    };
-  
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+    const [page, setPage] = useState(0);    
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };  
 
     return (
-    <React.Fragment>
-        <Typography component="h2" variant="h6" color="primary" gutterBottom>
-            Categories
-        </Typography>
-        <Table>
-            <TableHead>
-                <TableRow>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Code</TableCell>
-                </TableRow>
-            </TableHead>
-            <TableBody>
-            {
-                categories.map( category => 
-                    <TableRow key={category._id} onClick={handleClick}>
-                        <TableCell>{category.name}</TableCell>
-                        <TableCell>{category.code}</TableCell>
-                    </TableRow>
-                )
-            }
-                <Menu
-                    anchorEl={anchorEl}
-                    keepMounted
-                    open={Boolean(anchorEl)}
-                    onClose={handleClose}
-                    // anchorReference="anchorPosition"
-                    // anchorPosition={{ top: (anchorEl === null) ? 0 : anchorEl.clientX, left: (anchorEl === null) ? 0 : anchorEl.clientY }}
-                    anchorOrigin={{
-                        vertical: 'center',
-                        horizontal: 'center',
-                    }}
-                    transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'center',
-                    }}
-                    getContentAnchorEl={null}
-                >
-                    <StyledMenuItem onClick={handleClose}>
-                        <ListItemIcon>
-                            <EditIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Edit" />
-                    </StyledMenuItem>
-                    <StyledMenuItem onClick={handleClose}>
-                        <ListItemIcon>
-                            <DeleteIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Delete" />
-                    </StyledMenuItem>
-                </Menu>
-            </TableBody>
-        </Table>
-    </React.Fragment>
+    <Grid container spacing={2}>
+        <Grid item xs={12}>
+            <Paper className={classes.paper}>
+                <div className={classes.header}>
+                    <div className={classes.title}>
+                        <Typography component="h2" variant="h6" color="primary" gutterBottom>
+                            Categories
+                        </Typography>
+                    </div>
+                    <div className={classes.pager}>
+                        <TablePagination
+                            rowsPerPageOptions={[]} // disable RowsPerPage
+                            component="div"
+                            count={categories.length}
+                            page={page}
+                            onChangePage={handleChangePage}
+                            rowsPerPage={10}
+                            // rowsPerPage={rowsPerPage}
+                            // onChangeRowsPerPage={handleChangeRowsPerPage}
+                        />
+                    </div>
+                </div>
+                <Table className={classes.table}>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Name</TableCell>
+                            <TableCell align='center'><SettingsIcon /></TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                    {
+                        categories.map( category => 
+                            <TableRow key={category.id}>
+                                <TableCell>{category.name}</TableCell>
+                            </TableRow>
+                        )
+                    }
+                    </TableBody>
+                </Table>
+                <div className={classes.pager}></div>
+            </Paper>
+        </Grid>
+    </Grid>
 )}
 
 // const mapStateToProps = state => ({

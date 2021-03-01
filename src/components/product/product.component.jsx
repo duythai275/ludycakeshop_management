@@ -25,7 +25,7 @@ import Button from '@material-ui/core/Button';
 // import MuiAlert from '@material-ui/lab/Alert';
 
 // import ProductDialog from '../productEditor/productDialog.component';
-import EditorDialog from '../../utils/editorDialog/editorDialog';
+import ProductEditorDialog from '../editorDialog/productEditorDialog';
 
 
 import { selectProducts } from '../../redux/product/product.selector';
@@ -292,7 +292,7 @@ const Products = ({products, categories}) => {
                         <AddIcon />
                         {/* <ProductDialog outerRef={outerRef} /> */}
                     </Fab>
-                    <EditorDialog open={dialog} handleClose={ () => setDialog(false) } data={
+                    <ProductEditorDialog open={dialog} handleClose={ () => setDialog(false) } data={
                         {
                             name: "New Product",
                             categories: []
