@@ -13,10 +13,11 @@ import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import SettingsIcon from '@material-ui/icons/Settings';
 import TablePagination from '@material-ui/core/TablePagination';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import IconButton from '@material-ui/core/IconButton';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
 
 import { selectCategories } from '../../redux/category/category.selector';
 
@@ -68,8 +69,8 @@ const Categories = ({categories}) => {
                 <Table className={classes.table}>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Name</TableCell>
-                            <TableCell>Id</TableCell>
+                            <TableCell className={classes.tableHead}>Name</TableCell>
+                            <TableCell className={classes.tableHead}>Id</TableCell>
                             <TableCell align='right'></TableCell>
                         </TableRow>
                     </TableHead>
@@ -97,6 +98,9 @@ const Categories = ({categories}) => {
                         // onChangeRowsPerPage={handleChangeRowsPerPage}
                     />
                 </div>
+                <Fab color="primary" aria-label="add" className={classes.fab}>
+                    <AddIcon />
+                </Fab>
             </Paper>
         </Grid>
     </Grid>

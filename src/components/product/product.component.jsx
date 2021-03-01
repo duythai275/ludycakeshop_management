@@ -172,7 +172,7 @@ const Products = ({products, categories}) => {
                     <Table className={classes.table}>
                         <TableHead>
                             <TableRow>
-                                <TableCell>
+                                <TableCell className={classes.tableHead}>
                                     Name <br/>
                                     <TextField 
                                         autoFocus={false}
@@ -204,7 +204,7 @@ const Products = ({products, categories}) => {
                                         }
                                     />
                                 </TableCell>
-                                <TableCell>
+                                <TableCell className={classes.tableHead}>
                                     Brand <br/>
                                     <TextField 
                                         autoFocus={false}
@@ -236,7 +236,7 @@ const Products = ({products, categories}) => {
                                         }
                                     />
                                 </TableCell>
-                                <TableCell>
+                                <TableCell className={classes.tableHead}>
                                     Categories <br/>
                                     <TextField 
                                         autoFocus={false}
@@ -268,7 +268,7 @@ const Products = ({products, categories}) => {
                                         }
                                     />
                                 </TableCell>
-                                <TableCell>Price</TableCell>
+                                <TableCell className={classes.tableHead}>Price</TableCell>
                                 <TableCell align='center'><SettingsIcon /></TableCell>
                             </TableRow>
                         </TableHead>

@@ -19,5 +19,13 @@ export const useStyles = makeStyles((theme) => (
             display: 'flex',
             justifyContent: 'flex-end',
         },
+        fab: {
+            position: 'absolute',
+            bottom: theme.spacing(3),
+            right: theme.spacing(5)
+        },
+        tableHead: {
+            fontWeight: 'bold'
+        }
     }
 ));
