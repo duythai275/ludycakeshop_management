@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { withStyles } from '@material-ui/core/styles';
 
-
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -14,25 +13,25 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import TablePagination from '@material-ui/core/TablePagination';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import IconButton from '@material-ui/core/IconButton';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+
+import Row from './row.component';
 
 import { selectCategories } from '../../redux/category/category.selector';
 
 import { useStyles } from './category.styles';
   
-const StyledMenuItem = withStyles((theme) => ({
-    root: {
-      '&:focus': {
-        backgroundColor: theme.palette.primary.main,
-        '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
-          color: theme.palette.common.white,
-        },
-      },
-    },
-}))(MenuItem);
+// const StyledMenuItem = withStyles((theme) => ({
+//     root: {
+//       '&:focus': {
+//         backgroundColor: theme.palette.primary.main,
+//         '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
+//           color: theme.palette.common.white,
+//         },
+//       },
+//     },
+// }))(MenuItem);
 
 const Categories = ({categories}) => {
     const classes = useStyles();
@@ -76,12 +75,8 @@ const Categories = ({categories}) => {
                     </TableHead>
                     <TableBody>
                     {
-                        categories.map( category => 
-                            <TableRow key={category.id}>
-                                <TableCell>{category.name}</TableCell>
-                                <TableCell>{category.id}</TableCell>
-                                <TableCell align='right'><IconButton size="small"><MoreVertIcon size="small" /></IconButton></TableCell>
-                            </TableRow>
+                        categories.slice(page * 10, page * 10 + 10).map( category => 
+                            <Row key={category.id} category={category} />
                         )
                     }
                     </TableBody>
