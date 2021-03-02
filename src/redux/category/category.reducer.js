@@ -11,6 +11,21 @@ const categoryReducer = ( state = INITIAL_STATE, action ) => {
                 ...state,
                 categories: action.payload
             };
+        case CategoryActionTypes.ADD_NEW_CATEGORY:
+            return {
+                ...state,
+                categories: state.categories.concat(action.payload)
+            };
+        case CategoryActionTypes.EDIT_CATEGORY:
+            return {
+                ...state,
+                categories: state.categories.map( catgory => ( catgory.id === action.payload.id) ? action.payload : catgory )
+            };
+        case CategoryActionTypes.DELETE_CATEGORY:
+            return {
+                ...state,
+                categories: state.categories.filter( catgory => catgory.id !== action.payload.id)
+            };
         default:
             return state;
     }
