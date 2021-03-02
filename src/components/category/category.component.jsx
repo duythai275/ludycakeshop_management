@@ -17,6 +17,7 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 
 import Row from './row.component';
+import CategoryEditorDialog from '../editorDialog/categoryEditorDialog';
 
 import { selectCategories } from '../../redux/category/category.selector';
 
@@ -36,7 +37,8 @@ import { useStyles } from './category.styles';
 const Categories = ({categories}) => {
     const classes = useStyles();
 
-    const [page, setPage] = useState(0);    
+    const [page, setPage] = useState(0); 
+    const [dialog, setDialog] = useState(false);   
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -93,9 +95,16 @@ const Categories = ({categories}) => {
                         // onChangeRowsPerPage={handleChangeRowsPerPage}
                     />
                 </div>
-                <Fab color="primary" aria-label="add" className={classes.fab}>
+                <Fab color="primary" aria-label="add" className={classes.fab} onClick={ () => setDialog(true)}>
                     <AddIcon />
                 </Fab>
+                <CategoryEditorDialog 
+                    category={{
+                        name: ""
+                    }} 
+                    open={dialog} 
+                    handleClose={() => setDialog(false)} 
+                />
             </Paper>
         </Grid>
     </Grid>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -9,50 +9,44 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import Button from '@material-ui/core/Button';
-import FormControl from '@material-ui/core/FormControl';
-
-const useStyles = makeStyles((theme) => ({
-    form: {
-        display: 'flex',
-        flexDirection: 'column',
-        margin: 'auto',
-        width: 'fit-content'
-    },
-        formControl: {
-        marginTop: theme.spacing(2),
-        minWidth: 120
-    },
-    formControlLabel: {
-        marginTop: theme.spacing(1)
-    }
-}));
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
 const CategoryEditorDialog = (props) => {
-    const classes = useStyles();
+    const [category, setCategory] = useState(props.category);
+
     return (
-        <Dialog open={props.open} onClose={props.handleClose} TransitionComponent={Transition}>
-            <DialogTitle>Add / Update Category</DialogTitle>
+        <Dialog 
+            fullWidth={true}
+            maxWidth={'xs'}
+            open={props.open} 
+            onClose={props.handleClose} 
+            TransitionComponent={Transition}
+        >
+            <DialogTitle>{(props.category.name === "") ? "Add Category" : "Update Category" }</DialogTitle>
             <DialogContent>
-                <DialogContentText>Category Name</DialogContentText>
+                <TextField
+                    label="Category Name"
+                    fullWidth
+                    value={category.name}
+                    onChange={event => setCategory(event.target.value)}
+                />
             </DialogContent>
-            <form className={classes.form} noValidate>
-                <FormControl className={classes.formControl}>
-                    <TextField
-                        label="Category Name"
-                        fullWidth
-                    />
-                </FormControl>
-            </form>
             <DialogActions>
-                <Button onClick={props.handleClose} color="primary">
+                {
+                    (props.category.name === "") ? 
+                        <Button variant="contained" color="primary" onClick={props.handleClose} color="primary">
+                            Add
+                        </Button>
+                    :
+                    <Button variant="contained" color="primary" onClick={props.handleClose} color="primary">
+                        Update
+                    </Button>
+                }
+                <Button variant="contained" onClick={props.handleClose}>
                     Cancel
-                </Button>
-                <Button onClick={props.handleClose} color="primary">
-                    Update
                 </Button>
             </DialogActions>
         </Dialog>

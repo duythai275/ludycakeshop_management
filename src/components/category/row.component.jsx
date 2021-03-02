@@ -31,7 +31,7 @@ const Row = (props) => {
             <TableCell align='right'><IconButton size="small" onClick={ event => setAnchorEl(event.currentTarget)}><MoreVertIcon size="small" /></IconButton></TableCell>
             <ContextMenu outerRef={outerRef} onEditClick={handleEdit} onDeleteClick={handleDelete} />
             <StyledMenu anchorEl={anchorEl} handleEdit={handleEdit} handleDelete={handleDelete} handleClose={() => setAnchorEl(null)} />
-            <CategoryEditorDialog open={dialog} handleClose={() => setDialog(false)} />
+            <CategoryEditorDialog category={props.category} open={dialog} handleClose={() => setDialog(false)} />
         </TableRow>
     )
 }
