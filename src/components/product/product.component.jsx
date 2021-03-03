@@ -21,7 +21,6 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Snackbar from '@material-ui/core/Snackbar';
 import CloseIcon from '@material-ui/icons/Close';
-import Button from '@material-ui/core/Button';
 // import MuiAlert from '@material-ui/lab/Alert';
 
 // import ProductDialog from '../productEditor/productDialog.component';
@@ -123,9 +122,7 @@ const Products = ({products, categories}) => {
             if( !Array.isArray(product.category) ) product.category = categories.filter( category => category.id === product.category )
             if ( product.brand === null ) product.brand = "";
             return product;
-        })
-
-        console.log(products);
+        });
 
         setItems(products.filter( item => 
             item["name"].toUpperCase().includes(filter.name.toUpperCase()) 

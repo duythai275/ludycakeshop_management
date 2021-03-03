@@ -21,8 +21,6 @@ import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import InputLabel from '@material-ui/core/InputLabel';
-
-import FormLabel from '@material-ui/core/FormLabel';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
@@ -174,7 +172,7 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes,
                                 <InputLabel>Category</InputLabel>
                                 <Select label="Category" value={Array.isArray(product.category) ? product.category[0].id : ""} onChange={event => updateValue([{id: event.target.value}], "category")} >
                                     { 
-                                        categories.map( cate => <MenuItem value={cate.id}>{cate.name}</MenuItem> )
+                                        categories.map( cate => <MenuItem key={cate.id} value={cate.id}>{cate.name}</MenuItem> )
                                     }
                                     
                                 </Select>
@@ -202,9 +200,9 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes,
                             {/* <TextField label="Weight Type" fullWidth value={product.weightType} onChange={event => updateValue(event.target.value, "weightType")} /> */}
                             <FormControl className={classes.formControl}>
                                 <InputLabel>Weight Type</InputLabel>
-                                <Select label="Weight Type" value={product.weightType} onChange={event => updateValue(event.target.value, "weightType")}>
+                                <Select label="Weight Type" value={(product.weightType === undefined ) ? "" : product.weightType} onChange={event => updateValue(event.target.value, "weightType")}>
                                     {
-                                        weightTypes.map( weightType => <MenuItem value={weightType.id}>{weightType.name}</MenuItem> )
+                                        weightTypes.map( weightType => <MenuItem key={weightType.id} value={weightType.id}>{weightType.name}</MenuItem> )
                                     }
                                 </Select>
                             </FormControl>

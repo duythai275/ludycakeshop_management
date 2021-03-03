@@ -63,7 +63,7 @@ const Row = (props) => {
         <TableCell className={classes.chip}>
         {
             props.product.category.map( category => 
-                <Chip key={category._id} size="small" label={category.name} />
+                <Chip key={category.id} size="small" label={category.name} />
             )
             // product.category
         }

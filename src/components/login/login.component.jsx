@@ -54,7 +54,7 @@ const Login = () => {
                         name="server"
                         autoFocus
                         value={serverAddress}
-                        onChange={() => setServerAddress()}
+                        onChange={event => setServerAddress(event.target.value)}
                     />
                     <TextField
                         variant="outlined"
@@ -65,6 +65,7 @@ const Login = () => {
                         label="email"
                         name="email"
                         value={email}
+                        onChange={event => setEmail(event.target.value)}
                     />
                     <TextField
                         variant="outlined"
@@ -76,6 +77,7 @@ const Login = () => {
                         type="password"
                         id="password"
                         value={password}
+                        onChange={event => setPassword(event.target.value)}
                     />
                     <Button
                         type="submit"
