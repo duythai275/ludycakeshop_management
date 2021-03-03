@@ -98,7 +98,7 @@ const Categories = ({categories}) => {
                     <AddIcon />
                 </Fab>
                 <CategoryEditorDialog 
-                    category={{
+                    data={{
                         name: ""
                     }} 
                     open={dialog} 

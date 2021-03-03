@@ -10,9 +10,13 @@ import ContextMenu from '../contextMenu/contextMenu';
 import StyledMenu from '../menu/menu';
 import CategoryEditorDialog from '../editorDialog/categoryEditorDialog';
 
+import AccessContext from '../../contexts/access.context';
+
 import { deleteCategory } from '../../redux/category/category.action';
 
 const Row = (props) => {
+    const { url, token } = useContext(AccessContext);
+
     const outerRef = useRef(null);
     const [anchorEl, setAnchorEl] = useState(null);
     const [dialog, setDialog] = useState(false);
@@ -25,18 +29,37 @@ const Row = (props) => {
 
     const handleDelete = () => {
         setAnchorEl(null);
+
+        fetch(`${url}/categories/${props.category.id}`, {
+            'method': 'DELETE',
+            'headers': {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.text())
+        .then(result => {
+            console.log(result);
+            props.deleteCategory(props.category);
+            // handleAlert(true, "Deleted Successfully!");
+        })
+        .catch(error => console.log('error', error));
     }
     
     return (
         <TableRow  hover ref={outerRef}>
             <TableCell>{props.category.name}</TableCell>
-            <TableCell>{props.category.id}</TableCell>
+            <TableCell>{ (props.category.hasOwnProperty("id")) ? props.category.id : "" }</TableCell>
             <TableCell align='right'><IconButton size="small" onClick={ event => setAnchorEl(event.currentTarget)}><MoreVertIcon size="small" /></IconButton></TableCell>
             <ContextMenu outerRef={outerRef} onEditClick={handleEdit} onDeleteClick={handleDelete} />
             <StyledMenu anchorEl={anchorEl} handleEdit={handleEdit} handleDelete={handleDelete} handleClose={() => setAnchorEl(null)} />
-            <CategoryEditorDialog category={props.category} open={dialog} handleClose={() => setDialog(false)} />
+            <CategoryEditorDialog data={props.category} open={dialog} handleClose={() => setDialog(false)} />
         </TableRow>
     )
 }
 
-export default Row;
+const mapDispatchToProps = dispatch => ({
+    deleteCategory: category => dispatch(deleteCategory(category))
+});
+
+export default connect(mapDispatchToProps)(Row);

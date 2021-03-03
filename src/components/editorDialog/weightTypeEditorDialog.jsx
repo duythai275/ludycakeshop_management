@@ -35,11 +35,11 @@ const WeightTypeEditorDialog = (props) => {
             <DialogActions>
                 {
                     (props.weightType.name === "") ? 
-                        <Button variant="contained" color="primary" onClick={props.handleClose} color="primary">
+                        <Button variant="contained" color="primary" onClick={props.handleClose}>
                             Add
                         </Button>
                     :
-                    <Button variant="contained" color="primary" onClick={props.handleClose} color="primary">
+                    <Button variant="contained" color="primary" onClick={props.handleClose}>
                         Update
                     </Button>
                 }

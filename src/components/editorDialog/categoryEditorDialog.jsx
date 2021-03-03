@@ -1,4 +1,7 @@
-import React, {useState} from 'react';
+import React, { useState, useContext } from 'react';
+import { connect } from 'react-redux';
+
+import { addCategory, editCategory } from '../../redux/category/category.action';
 
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -8,12 +11,58 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import Button from '@material-ui/core/Button';
 
+import AccessContext from '../../contexts/access.context';
+
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
 const CategoryEditorDialog = (props) => {
-    const [category, setCategory] = useState(props.category);
+    const { url, token } = useContext(AccessContext);
+    const [category, setCategory] = useState(props.data);
+
+    const handleAddCategory = () => {
+        fetch(`${url}/categories`, {
+            'method': 'POST',
+            'headers': {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            },
+            'body': JSON.stringify(category)
+        })
+        .then(response => response.text())
+        .then(result => {
+            console.log(result);
+            props.addCategory(category);
+            // handleAlert(true, "Edited Successfully!");
+        })
+        .catch(error => console.log('error', error));
+        props.handleClose();
+    }
+
+    const handleUpdateCategory = () => {
+        fetch(`${url}/categories/${props.data.id}`, {
+            'method': 'PUT',
+            'headers': {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            },
+            'body': JSON.stringify(category)
+        })
+        .then(response => response.text())
+        .then(result => {
+            console.log(result);
+            props.editCategory(category);
+            // handleAlert(true, "Edited Successfully!");
+        })
+        .catch(error => console.log('error', error));
+        props.handleClose();
+    }
+
+    const updateValue = ( value ) => {
+        category["name"] = value;
+        setCategory({...category});
+    }
 
     return (
         <Dialog 
@@ -23,23 +72,23 @@ const CategoryEditorDialog = (props) => {
             onClose={props.handleClose} 
             TransitionComponent={Transition}
         >
-            <DialogTitle>{(props.category.name === "") ? "Add Category" : "Update Category" }</DialogTitle>
+            <DialogTitle>{(props.data.name === "") ? "Add Category" : "Update Category" }</DialogTitle>
             <DialogContent>
                 <TextField
                     label="Category Name"
                     fullWidth
                     value={category.name}
-                    onChange={event => setCategory(event.target.value)}
+                    onChange={event => updateValue(event.target.value)}
                 />
             </DialogContent>
             <DialogActions>
                 {
-                    (props.category.name === "") ? 
-                        <Button variant="contained" color="primary" onClick={props.handleClose} color="primary">
+                    (props.data.name === "") ? 
+                        <Button variant="contained" color="primary" onClick={handleAddCategory}>
                             Add
                         </Button>
                     :
-                    <Button variant="contained" color="primary" onClick={props.handleClose} color="primary">
+                    <Button variant="contained" color="primary" onClick={handleUpdateCategory}>
                         Update
                     </Button>
                 }
@@ -51,4 +100,9 @@ const CategoryEditorDialog = (props) => {
     )
 }
 
-export default CategoryEditorDialog;
+const mapDispatchToProps = dispatch => ({
+    editCategory: category => dispatch(editCategory(category)),
+    addCategory: category => dispatch(addCategory(category))
+});
+
+export default connect(null,mapDispatchToProps)(CategoryEditorDialog);
