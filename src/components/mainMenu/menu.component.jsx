@@ -14,11 +14,15 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import BusinessIcon from '@material-ui/icons/Business';
+// import BusinessIcon from '@material-ui/icons/Business';
 import CategoryIcon from '@material-ui/icons/Category';
 import SettingsIcon from '@material-ui/icons/Settings';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+// import ListIcon from '@material-ui/icons/List';
+import LocalMallIcon from '@material-ui/icons/LocalMall';
+import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
+// import GraphicEqIcon from '@material-ui/icons/GraphicEq';
 
 import DrawerContext from '../../contexts/drawer.contexts';
 import AccessContext from '../../contexts/access.context';
@@ -68,15 +72,21 @@ const ListMenu = ({history}) => {
             <div>
                 <ListItem button onClick={() => history.push("/products")}>
                     <ListItemIcon>
-                        <BusinessIcon />
+                        <LocalMallIcon />
                     </ListItemIcon>
                     <ListItemText primary="Products" />
                 </ListItem>
                 <ListItem button onClick={() => history.push(`/categories`)}>
                     <ListItemIcon>
-                        <CategoryIcon />
+                        <LibraryBooksIcon />
                     </ListItemIcon>
                     <ListItemText primary="Categories" />
+                </ListItem>
+                <ListItem button onClick={() => history.push(`/weightTypes`)}>
+                    <ListItemIcon>
+                        <CategoryIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Weight Types" />
                 </ListItem>
             </div>
         </List>

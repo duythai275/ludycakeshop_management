@@ -6,6 +6,7 @@ import Container from '@material-ui/core/Container';
 
 import Products from '../product/product.component';
 import Categories from '../category/category.component';
+import WeightTypes from '../weightType/weightType.component';
 import Settings from '../intro/setting.component';
 import Reports from '../report/report.component';
 import Menu from '../mainMenu/menu.component';
@@ -14,10 +15,11 @@ import AccessContext from '../../contexts/access.context';
 
 import { fetchAllCategories } from '../../redux/category/category.action';
 import { fetchAllProducts } from '../../redux/product/product.action';
+import { fetchAllWeightTypes } from '../../redux/weightType/weightType.action';
 
 import { useStyles } from './mainpage.styles';
 
-const Mainpage = ({ setCategories, setProducts }) => {
+const Mainpage = ({ setCategories, setProducts, setWeightType }) => {
     const classes = useStyles();
     const { url, token } = useContext(AccessContext);
 
@@ -28,11 +30,13 @@ const Mainpage = ({ setCategories, setProducts }) => {
                 headers: {
                     Authorization: 'Bearer ' + token
                 }
-            }).then( res => res.json())
+            }).then( res => res.json()),
+            fetch(`${url}/weighttype`).then( res => res.json())
         ])
         .then( arr => {
             setCategories(arr[0]);
             setProducts(arr[1]);
+            setWeightType(arr[2]);
         })
     } )
     
@@ -47,6 +51,7 @@ const Mainpage = ({ setCategories, setProducts }) => {
                             <Switch>
                                 <Route exact path="/products" component={Products} />
                                 <Route exact path="/categories" component={Categories} />
+                                <Route exact path="/weightTypes" component={WeightTypes} />
                                 <Route exact path="/reports" component={Reports} />
                                 <Route exact path="/settings" component={Settings} />
                             </Switch>
@@ -58,7 +63,8 @@ const Mainpage = ({ setCategories, setProducts }) => {
 
 const mapDispatchToProps = dispatch => ({
     setCategories: categories => dispatch(fetchAllCategories(categories)),
-    setProducts: products => dispatch(fetchAllProducts(products))
+    setProducts: products => dispatch(fetchAllProducts(products)),
+    setWeightType: weightTypes => dispatch(fetchAllWeightTypes(weightTypes))
 });
 
 export default connect(null, mapDispatchToProps)(Mainpage);
