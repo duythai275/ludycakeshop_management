@@ -1,4 +1,5 @@
 import React, { useContext, useRef, useState } from 'react';
+import { connect } from 'react-redux';
 
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
@@ -8,6 +9,8 @@ import IconButton from '@material-ui/core/IconButton';
 import ContextMenu from '../contextMenu/contextMenu';
 import StyledMenu from '../menu/menu';
 import CategoryEditorDialog from '../editorDialog/categoryEditorDialog';
+
+import { deleteCategory } from '../../redux/category/category.action';
 
 const Row = (props) => {
     const outerRef = useRef(null);

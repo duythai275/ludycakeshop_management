@@ -6,6 +6,7 @@ import { addProduct } from '../../redux/product/product.action';
 import { editProduct } from '../../redux/product/product.action';
 
 import  { selectCategories } from '../../redux/category/category.selector';
+import { selectWeightTypes } from '../../redux/weightType/weightType.selector';
 
 import AccessContext from '../../contexts/access.context';
 import AlertContext from '../../contexts/alert.context';
@@ -75,7 +76,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const ProductEditorDialog = ({ open, handleClose, data, categories, editProduct, addProduct }) => {
+const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes, editProduct, addProduct }) => {
     const classes = useStyles();
 
     const [product, setProduct] = useState(data);
@@ -198,7 +199,15 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, editProduct,
                             <TextField label="Weight Value" fullWidth value={product.weightValue} onChange={event => updateValue(event.target.value, "weightValue")} />
                         </Grid>
                         <Grid item xs={4}>
-                            <TextField label="Weight Type" fullWidth value={product.weightType} onChange={event => updateValue(event.target.value, "weightType")} />
+                            {/* <TextField label="Weight Type" fullWidth value={product.weightType} onChange={event => updateValue(event.target.value, "weightType")} /> */}
+                            <FormControl className={classes.formControl}>
+                                <InputLabel>Weight Type</InputLabel>
+                                <Select label="Weight Type" value={product.weightType} onChange={event => updateValue(event.target.value, "weightType")}>
+                                    {
+                                        weightTypes.map( weightType => <MenuItem value={weightType.id}>{weightType.name}</MenuItem> )
+                                    }
+                                </Select>
+                            </FormControl>
                         </Grid>
                     </Grid>
                 </Paper>
@@ -208,7 +217,8 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, editProduct,
 }
 
 const mapStateToProps = createStructuredSelector({
-    categories: selectCategories
+    categories: selectCategories,
+    weightTypes: selectWeightTypes
 });
 
 const mapDispatchToProps = dispatch => ({
