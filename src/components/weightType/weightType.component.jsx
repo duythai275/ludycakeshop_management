@@ -27,6 +27,10 @@ const WeightTypes = (props) => {
     const [page, setPage] = useState(0);
     const [dialog, setDialog] = useState(false);
 
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };  
+
     return (
         <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -43,7 +47,7 @@ const WeightTypes = (props) => {
                                 component="div"
                                 count={props.weightTypes.length}
                                 page={page}
-                                // onChangePage={handleChangePage}
+                                onChangePage={handleChangePage}
                                 rowsPerPage={10}
                                 // rowsPerPage={rowsPerPage}
                                 // onChangeRowsPerPage={handleChangeRowsPerPage}
@@ -72,7 +76,7 @@ const WeightTypes = (props) => {
                             component="div"
                             count={props.weightTypes.length}
                             page={page}
-                            // onChangePage={handleChangePage}
+                            onChangePage={handleChangePage}
                             rowsPerPage={10}
                             // rowsPerPage={rowsPerPage}
                             // onChangeRowsPerPage={handleChangeRowsPerPage}

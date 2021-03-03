@@ -1,4 +1,5 @@
 import React, { useContext, useRef, useState } from 'react';
+import { connect } from 'react-redux';
 
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
@@ -9,7 +10,13 @@ import ContextMenu from '../contextMenu/contextMenu';
 import StyledMenu from '../menu/menu';
 import WeightTypeEditorDialog from '../editorDialog/weightTypeEditorDialog';
 
+import AccessContext from '../../contexts/access.context';
+
+import { deleteWeightType } from '../../redux/weightType/weightType.action';
+
 const Row = (props) => {
+    const { url, token } = useContext(AccessContext);
+
     const outerRef = useRef(null);
     const [anchorEl, setAnchorEl] = useState(null);
     const [dialog, setDialog] = useState(false);
@@ -22,6 +29,21 @@ const Row = (props) => {
 
     const handleDelete = () => {
         setAnchorEl(null);
+
+        fetch(`${url}/weighttype/${props.weightType.id}`, {
+            'method': 'DELETE',
+            'headers': {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.text())
+        .then(result => {
+            console.log(result);
+            props.deleteWeightType(props.weightType);
+            // handleAlert(true, "Deleted Successfully!");
+        })
+        .catch(error => console.log('error', error));
     }
     
     return (
@@ -36,4 +58,8 @@ const Row = (props) => {
     )
 }
 
-export default Row;
+const mapDispatchToProps = dispatch => ({
+    deleteWeightType: weightType => dispatch(deleteWeightType(weightType))
+});
+
+export default connect(null,mapDispatchToProps)(Row);
