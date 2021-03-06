@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { connect } from 'react-redux';
 
 import { addWeightType, editWeightType } from '../../redux/weightType/weightType.action';
+import { adding, deleting, updating } from '../../utils/fetching';
 
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -22,6 +23,7 @@ const WeightTypeEditorDialog = (props) => {
     const [weightType, setWeightType] = useState(props.weightType);
 
     const handleAddWeightType = () => {
+        // adding(`${url}/weighttype`, token, weightType);
         fetch(`${url}/weighttype`, {
             'method': 'POST',
             'headers': {
@@ -41,6 +43,7 @@ const WeightTypeEditorDialog = (props) => {
     }
 
     const handleEditWeightType = () => {
+        // updating(`${url}/weighttype/${props.weightType.id}`, token, weightType)
         fetch(`${url}/weighttype/${props.weightType.id}`, {
             'method': 'PUT',
             'headers': {

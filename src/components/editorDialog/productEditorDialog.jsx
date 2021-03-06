@@ -2,8 +2,8 @@ import React, { useState, useContext } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import { addProduct } from '../../redux/product/product.action';
-import { editProduct } from '../../redux/product/product.action';
+import { addProduct, editProduct } from '../../redux/product/product.action';
+import { adding, deleting, updating } from '../../utils/fetching';
 
 import  { selectCategories } from '../../redux/category/category.selector';
 import { selectWeightTypes } from '../../redux/weightType/weightType.selector';
@@ -94,6 +94,7 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes,
             product.quantity = parseInt(product.quantity);
             product.weightType = parseInt(product.weightType);
 
+            // adding(`${url}/admin/product`, token, product)
             fetch(`${url}/admin/product`, {
                 'method': 'POST',
                 'headers': {
@@ -116,6 +117,7 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes,
             product.quantity = parseInt(product.quantity);
             product.weightType = parseInt(product.weightType);
 
+            // updating(`${url}/admin/product`, token, product)
             fetch(`${url}/admin/product`, {
                 'method': 'PUT',
                 'headers': {

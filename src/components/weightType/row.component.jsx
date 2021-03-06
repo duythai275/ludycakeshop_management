@@ -13,6 +13,7 @@ import WeightTypeEditorDialog from '../editorDialog/weightTypeEditorDialog';
 import AccessContext from '../../contexts/access.context';
 
 import { deleteWeightType } from '../../redux/weightType/weightType.action';
+import { deleting } from '../../utils/fetching';
 
 const Row = (props) => {
     const { url, token } = useContext(AccessContext);
@@ -30,6 +31,7 @@ const Row = (props) => {
     const handleDelete = () => {
         setAnchorEl(null);
 
+        // deleting(`${url}/weighttype/${props.weightType.id}`, token)
         fetch(`${url}/weighttype/${props.weightType.id}`, {
             'method': 'DELETE',
             'headers': {
@@ -39,7 +41,7 @@ const Row = (props) => {
         })
         .then(response => response.text())
         .then(result => {
-            console.log(result);
+            // console.log(result);
             props.deleteWeightType(props.weightType);
             // handleAlert(true, "Deleted Successfully!");
         })

@@ -13,6 +13,7 @@ import CategoryEditorDialog from '../editorDialog/categoryEditorDialog';
 import AccessContext from '../../contexts/access.context';
 
 import { deleteCategory } from '../../redux/category/category.action';
+import { deleting } from '../../utils/fetching';
 
 const Row = (props) => {
     const { url, token } = useContext(AccessContext);
@@ -30,6 +31,7 @@ const Row = (props) => {
     const handleDelete = () => {
         setAnchorEl(null);
 
+        // deleting(`${url}/categories/${props.category.id}`,token)
         fetch(`${url}/categories/${props.category.id}`, {
             'method': 'DELETE',
             'headers': {
@@ -62,4 +64,4 @@ const mapDispatchToProps = dispatch => ({
     deleteCategory: category => dispatch(deleteCategory(category))
 });
 
-export default connect(mapDispatchToProps)(Row);
+export default connect(null,mapDispatchToProps)(Row);

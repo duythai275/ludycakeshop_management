@@ -16,6 +16,7 @@ import AccessContext from '../../contexts/access.context';
 import { fetchAllCategories } from '../../redux/category/category.action';
 import { fetchAllProducts } from '../../redux/product/product.action';
 import { fetchAllWeightTypes } from '../../redux/weightType/weightType.action';
+import { getAll, getAllWithAuth } from '../../utils/fetching';
 
 import { useStyles } from './mainpage.styles';
 
@@ -25,13 +26,9 @@ const Mainpage = ({ setCategories, setProducts, setWeightType }) => {
 
     useEffect( () => {
         Promise.all([
-            fetch(`${url}/categories`).then( res => res.json()),
-            fetch(`${url}/admin/product`, {
-                headers: {
-                    Authorization: 'Bearer ' + token
-                }
-            }).then( res => res.json()),
-            fetch(`${url}/weighttype`).then( res => res.json())
+            getAll(`${url}/categories`),
+            getAllWithAuth(`${url}/admin/product`, token),
+            getAll(`${url}/weighttype`)
         ])
         .then( arr => {
             setCategories(arr[0]);

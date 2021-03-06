@@ -16,6 +16,7 @@ import TableRow from '@material-ui/core/TableRow';
 import AlertContext from '../../contexts/alert.context';
 
 import { deleteProduct } from '../../redux/product/product.action';
+import { deleting } from '../../utils/fetching';
 
 import { useStyles } from './product.styles';
 
@@ -39,6 +40,7 @@ const Row = (props) => {
         // console.log(`Delete Clicked - ${product.name}`);
         setAnchorEl(null);
 
+        // deleting(`${url}/admin/product?id=${props.product.id}`, token)
         fetch(`${url}/admin/product?id=${props.product.id}`, {
             'method': 'DELETE',
             'headers': {

@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { connect } from 'react-redux';
 
 import { addCategory, editCategory } from '../../redux/category/category.action';
+import { adding, deleting, updating } from '../../utils/fetching';
 
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -22,6 +23,7 @@ const CategoryEditorDialog = (props) => {
     const [category, setCategory] = useState(props.data);
 
     const handleAddCategory = () => {
+        // adding(`${url}/categories`, token, category)
         fetch(`${url}/categories`, {
             'method': 'POST',
             'headers': {
@@ -41,6 +43,7 @@ const CategoryEditorDialog = (props) => {
     }
 
     const handleUpdateCategory = () => {
+        // updating(`${url}/categories/${props.data.id}`, token, category)
         fetch(`${url}/categories/${props.data.id}`, {
             'method': 'PUT',
             'headers': {
