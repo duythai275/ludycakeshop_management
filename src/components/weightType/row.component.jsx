@@ -11,12 +11,14 @@ import StyledMenu from '../menu/menu';
 import WeightTypeEditorDialog from '../editorDialog/weightTypeEditorDialog';
 
 import AccessContext from '../../contexts/access.context';
+import AlertContext from '../../contexts/alert.context';
 
 import { deleteWeightType } from '../../redux/weightType/weightType.action';
 import { deleting } from '../../utils/fetching';
 
 const Row = (props) => {
     const { url, token } = useContext(AccessContext);
+    const { handleAlert } = useContext(AlertContext);
 
     const outerRef = useRef(null);
     const [anchorEl, setAnchorEl] = useState(null);
@@ -43,7 +45,7 @@ const Row = (props) => {
         .then(result => {
             // console.log(result);
             props.deleteWeightType(props.weightType);
-            // handleAlert(true, "Deleted Successfully!");
+            handleAlert(true, "Deleted Successfully!");
         })
         .catch(error => console.log('error', error));
     }

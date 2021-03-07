@@ -32,6 +32,16 @@ export const useStyles = makeStyles((theme) => ({
     table: {
     //   background: '#F3F3F3'
     },
+    fab1: {
+        // position: 'absolute',
+        position: 'absolute',
+        // top: theme.spacing(1),
+        bottom: theme.spacing(12),
+        right: theme.spacing(5),
+        // float: "right"
+        // display: 'flex',
+        // justifyContent: 'flex-end',
+    },
     fab: {
         // position: 'absolute',
         position: 'absolute',

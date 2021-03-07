@@ -11,12 +11,14 @@ import StyledMenu from '../menu/menu';
 import CategoryEditorDialog from '../editorDialog/categoryEditorDialog';
 
 import AccessContext from '../../contexts/access.context';
+import AlertContext from '../../contexts/alert.context';
 
 import { deleteCategory } from '../../redux/category/category.action';
 import { deleting } from '../../utils/fetching';
 
 const Row = (props) => {
     const { url, token } = useContext(AccessContext);
+    const { handleAlert } = useContext(AlertContext);
 
     const outerRef = useRef(null);
     const [anchorEl, setAnchorEl] = useState(null);
@@ -41,9 +43,9 @@ const Row = (props) => {
         })
         .then(response => response.text())
         .then(result => {
-            console.log(result);
+            // console.log(result);
             props.deleteCategory(props.category);
-            // handleAlert(true, "Deleted Successfully!");
+            handleAlert(true, "Deleted Successfully!");
         })
         .catch(error => console.log('error', error));
     }

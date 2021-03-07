@@ -13,6 +13,7 @@ import Slide from '@material-ui/core/Slide';
 import Button from '@material-ui/core/Button';
 
 import AccessContext from '../../contexts/access.context';
+import AlertContext from '../../contexts/alert.context';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -20,6 +21,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const WeightTypeEditorDialog = (props) => {
     const { url, token } = useContext(AccessContext);
+    const { handleAlert } = useContext(AlertContext);
+
     const [weightType, setWeightType] = useState(props.weightType);
 
     const handleAddWeightType = () => {
@@ -34,9 +37,9 @@ const WeightTypeEditorDialog = (props) => {
         })
         .then(response => response.text())
         .then(result => {
-            console.log(result);
+            // console.log(result);
             props.addWeightType(weightType);
-            // handleAlert(true, "Edited Successfully!");
+            handleAlert(true, "Added Successfully!");
         })
         .catch(error => console.log('error', error));
         props.handleClose();
@@ -54,9 +57,9 @@ const WeightTypeEditorDialog = (props) => {
         })
         .then(response => response.text())
         .then(result => {
-            console.log(result);
+            // console.log(result);
             props.editWeightType(weightType);
-            // handleAlert(true, "Edited Successfully!");
+            handleAlert(true, "Edited Successfully!");
         })
         .catch(error => console.log('error', error));
         props.handleClose();

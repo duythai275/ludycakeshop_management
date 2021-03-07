@@ -1,18 +1,17 @@
 import React, { useContext, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 
-import AccessContext from '../../contexts/access.context';
-
-import ContextMenu from '../contextMenu/contextMenu';
-import StyledMenu from '../menu/menu';
-import ProductEditorDialog from '../editorDialog/productEditorDialog';
-
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import IconButton from '@material-ui/core/IconButton';
 import Chip from '@material-ui/core/Chip';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 
+import ContextMenu from '../contextMenu/contextMenu';
+import StyledMenu from '../menu/menu';
+import ProductEditorDialog from '../editorDialog/productEditorDialog';
+
+import AccessContext from '../../contexts/access.context';
 import AlertContext from '../../contexts/alert.context';
 
 import { deleteProduct } from '../../redux/product/product.action';
@@ -50,7 +49,7 @@ const Row = (props) => {
         })
         .then(response => response.text())
         .then(result => {
-            console.log(result);
+            // console.log(result);
             props.deleteProduct(props.product);
             handleAlert(true, "Deleted Successfully!");
         })

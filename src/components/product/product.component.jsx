@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
@@ -10,6 +10,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+import ImportExportIcon from '@material-ui/icons/ImportExport';
 import TablePagination from '@material-ui/core/TablePagination';
 import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
@@ -19,53 +20,17 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import SettingsIcon from '@material-ui/icons/Settings';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import Snackbar from '@material-ui/core/Snackbar';
-import CloseIcon from '@material-ui/icons/Close';
 // import MuiAlert from '@material-ui/lab/Alert';
 
 // import ProductDialog from '../productEditor/productDialog.component';
 import ProductEditorDialog from '../editorDialog/productEditorDialog';
-
 
 import { selectProducts } from '../../redux/product/product.selector';
 import  { selectCategories } from '../../redux/category/category.selector';
 
 import Row from './row.component';
 
-import AlertContext from '../../contexts/alert.context';
-
 import { useStyles } from './product.styles';
-
-const Alert = () => {
-    const { alert, alertMsg, handleAlert } = useContext(AlertContext);
-
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        handleAlert(false, "");
-    }
-
-    return (
-    <Snackbar
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        open={alert}
-        autoHideDuration={6000}
-        onClose={handleClose}
-        message={alertMsg}
-        action={
-          <React.Fragment>
-            <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
-              <CloseIcon fontSize="small" />
-            </IconButton>
-          </React.Fragment>
-        }
-    />
-)}
 
 const Products = ({products, categories}) => {
     const classes = useStyles();
@@ -80,14 +45,6 @@ const Products = ({products, categories}) => {
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-    const [alert, setAlert] = useState(false);
-    const [alertMsg, setAlertMsg] = useState("");
-
-    const handleAlert = ( isOpen, msg ) => {
-        setAlert(isOpen);
-        setAlertMsg(msg);
-    }
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -143,7 +100,6 @@ const Products = ({products, categories}) => {
     // };
 
     return (
-    <AlertContext.Provider value={{ alert, alertMsg, handleAlert }}>
         <Grid container spacing={2}>
             <Grid item xs={12}>
                 <Paper className={classes.paper}>
@@ -285,6 +241,10 @@ const Products = ({products, categories}) => {
                             rowsPerPage={rowsPerPage}
                         />
                     </div>
+                    <Fab /* ref={outerRef} */ aria-label="add" className={classes.fab1}>
+                        <ImportExportIcon />
+                        {/* <ProductDialog outerRef={outerRef} /> */}
+                    </Fab>
                     <Fab /* ref={outerRef} */ color="primary" aria-label="add" className={classes.fab} onClick={ () => setDialog(true)}>
                         <AddIcon />
                         {/* <ProductDialog outerRef={outerRef} /> */}
@@ -298,8 +258,6 @@ const Products = ({products, categories}) => {
                 </Paper>
             </Grid>
         </Grid>
-        <Alert />
-    </AlertContext.Provider>
 )}
 
 const mapStateToProps = createStructuredSelector({
