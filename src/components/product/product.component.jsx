@@ -24,6 +24,7 @@ import Paper from '@material-ui/core/Paper';
 
 // import ProductDialog from '../productEditor/productDialog.component';
 import ProductEditorDialog from '../editorDialog/productEditorDialog';
+import ImportExportDialog from '../editorDialog/importExportDialog';
 
 import { selectProducts } from '../../redux/product/product.selector';
 import  { selectCategories } from '../../redux/category/category.selector';
@@ -37,6 +38,7 @@ const Products = ({products, categories}) => {
 
     const [items, setItems] = useState([]);
     const [dialog, setDialog] = useState(false);
+    const [syncDialog, setSyncDialog] = useState(false);
     const [filter, setFilter] = useState({
         name: "",
         brand: "",
@@ -241,7 +243,7 @@ const Products = ({products, categories}) => {
                             rowsPerPage={rowsPerPage}
                         />
                     </div>
-                    <Fab /* ref={outerRef} */ aria-label="add" className={classes.fab1}>
+                    <Fab /* ref={outerRef} */ aria-label="add" className={classes.fab1} onClick={ () => setSyncDialog(true)}>
                         <ImportExportIcon />
                         {/* <ProductDialog outerRef={outerRef} /> */}
                     </Fab>
@@ -255,6 +257,7 @@ const Products = ({products, categories}) => {
                             categories: []
                         }
                     }/>
+                    <ImportExportDialog open={syncDialog} handleClose={ () => setSyncDialog(false) } />
                 </Paper>
             </Grid>
         </Grid>

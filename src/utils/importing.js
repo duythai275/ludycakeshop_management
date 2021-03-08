@@ -12,7 +12,7 @@ const importing = (filePath, url, token) => {
         products.push(product);
     });
 
-    adding(`${url}/api/admin/product/bulk`, token, products)
+    adding(`${url}/admin/product/bulk`, token, products)
     .then(json => console.log(json.length));
 }
 

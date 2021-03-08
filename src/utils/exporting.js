@@ -1,16 +1,15 @@
 import * as XLSX from 'xlsx';
 import { getAllWithAuth } from './fetching';
 
-const exporting = (filePath, url, token) => {
+const exporting = (url, token) => getAllWithAuth(`${url}/admin/product`, token).then(arr => {
     let workbook = {
-        Sheets: {},
+        Sheets: {
+            products: null
+        },
         SheetNames: ["products"]
-    }
-
-    getAllWithAuth(`${url}/api/admin/product`, token).then(arr => {
-        workbook.Sheets["products"] = XLSX.utils.json_to_sheet(arr);
-        XLSX.writeFile(workbook, filePath);
-    });
-}
+    };
+    workbook.Sheets["products"] = XLSX.utils.json_to_sheet(arr);
+    XLSX.writeFile(workbook, "products.xlsx");
+})
 
 export default exporting;
