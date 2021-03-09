@@ -1,19 +1,21 @@
 import * as XLSX from 'xlsx';
 import { adding } from './fetching';
 
-const importing = (filePath, url, token) => {
-    let products = []
-    const workbook = XLSX.readFile(filePath);
+// const transform = products => products.map( product => product);
 
-    XLSX.utils.sheet_to_json(workbook.Sheets["Products"], {raw: true}).forEach( product => {
-        // Check validation
-        // Code here
+const importing = (fileTarget, url, token, loadAllProducts) => {
+
+    const files = fileTarget.files, f = files[0];
+    const reader = new FileReader();
+    reader.onload = e => {
+        let workbook = XLSX.read(e.target.result, {type: 'binary'});
+        const products = XLSX.utils.sheet_to_json(workbook.Sheets["products"]);
         
-        products.push(product);
-    });
+        // console.log(products);
+        adding(`${url}/admin/product/bulk`, token, products).then(json => loadAllProducts(json));
+    }
+    reader.readAsBinaryString(f);
 
-    adding(`${url}/admin/product/bulk`, token, products)
-    .then(json => console.log(json.length));
 }
 
 export default importing;

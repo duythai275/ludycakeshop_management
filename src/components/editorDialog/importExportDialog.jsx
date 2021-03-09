@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { connect } from 'react-redux';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -10,9 +11,12 @@ import PublishIcon from '@material-ui/icons/Publish';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import CancelIcon from '@material-ui/icons/Cancel';
 
+import { fetchAllProducts } from '../../redux/product/product.action';
+
 import AccessContext from '../../contexts/access.context';
 
 import exporting from '../../utils/exporting';
+import importing from '../../utils/importing';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -21,7 +25,15 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const ImportExportDialog = props => {
     const { url, token } = useContext(AccessContext);
 
-    const handleUpload = () => {}
+    const handleImporting = e => {
+        importing(e.target, url, token, props.setProducts);
+        props.handleClose();
+    }
+
+    const handleExporting = () => {
+        exporting(url, token);
+        props.handleClose();
+    }
 
     return (
     <Dialog
@@ -56,7 +68,7 @@ const ImportExportDialog = props => {
                 accept=".xls,.xlsx,.csv"
                 id="importing-button"
                 type="file"
-                onChange={handleUpload}
+                onChange={e => handleImporting(e)}
             />
             <label htmlFor="importing-button">
                 <Button variant="contained" color="primary" startIcon={<PublishIcon />} component="span">
@@ -64,20 +76,7 @@ const ImportExportDialog = props => {
                 </Button>
             </label>
 
-            {/* <input 
-                style={{ display: "none" }}
-                accept=".xls,.xlsx,.csv"
-                id="exporting-button"
-                type="file"
-                onChange={handleDownload}
-            />
-            <label htmlFor="exporting-button">
-                <Button variant="contained" color="primary" startIcon={<GetAppIcon />} component="span">
-                    Export
-                </Button>
-            </label> */}
-
-            <Button variant="contained" color="primary" startIcon={<GetAppIcon />} onClick={e => exporting(url,token)}>
+            <Button variant="contained" color="primary" startIcon={<GetAppIcon />} onClick={e => handleExporting()}>
                 Export
             </Button>
 
@@ -88,4 +87,8 @@ const ImportExportDialog = props => {
     </Dialog>
 )}
 
-export default ImportExportDialog;
+const mapDispatchToProps = dispatch => ({
+    setProducts: products => dispatch(fetchAllProducts(products))
+});
+
+export default connect(null, mapDispatchToProps)(ImportExportDialog);

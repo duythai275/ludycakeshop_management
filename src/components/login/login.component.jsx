@@ -30,8 +30,8 @@ const Login = () => {
             'password': password
         })
     })
-    .then( res => res.text() )
-    .then( token => handleLogIn(serverAddress, token))
+    .then( res => res.json() )
+    .then( json => handleLogIn(serverAddress, json.message))
     .catch(err => console.log('error', err));
   }
 
