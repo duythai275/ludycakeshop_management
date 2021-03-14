@@ -1,8 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { connect } from 'react-redux';
 
-import { addWeightType, editWeightType } from '../../redux/weightType/weightType.action';
-import { adding, deleting, updating } from '../../utils/fetching';
+import { fetchAllWeightTypes, editWeightType } from '../../redux/weightType/weightType.action';
+import { adding, updating } from '../../utils/fetching';
 
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -26,42 +26,20 @@ const WeightTypeEditorDialog = (props) => {
     const [weightType, setWeightType] = useState(props.weightType);
 
     const handleAddWeightType = () => {
-        // adding(`${url}/weighttype`, token, weightType);
-        fetch(`${url}/weighttype`, {
-            'method': 'POST',
-            'headers': {
-                'Authorization': 'Bearer ' + token,
-                'Content-Type': 'application/json'
-            },
-            'body': JSON.stringify(weightType)
-        })
-        .then(response => response.text())
+        adding(`${url}/weighttype`, token, weightType)
         .then(result => {
-            // console.log(result);
-            props.addWeightType(weightType);
+            props.addWeightType(result);
             handleAlert(true, "Added Successfully!");
-        })
-        .catch(error => console.log('error', error));
+        });
         props.handleClose();
     }
 
     const handleEditWeightType = () => {
-        // updating(`${url}/weighttype/${props.weightType.id}`, token, weightType)
-        fetch(`${url}/weighttype/${props.weightType.id}`, {
-            'method': 'PUT',
-            'headers': {
-                'Authorization': 'Bearer ' + token,
-                'Content-Type': 'application/json'
-            },
-            'body': JSON.stringify(weightType)
-        })
-        .then(response => response.text())
+        updating(`${url}/weighttype/${props.weightType.id}`, token, weightType)
         .then(result => {
-            // console.log(result);
             props.editWeightType(weightType);
             handleAlert(true, "Edited Successfully!");
-        })
-        .catch(error => console.log('error', error));
+        });
         props.handleClose();
     }
 
@@ -107,7 +85,7 @@ const WeightTypeEditorDialog = (props) => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    addWeightType: weightType => dispatch(addWeightType(weightType)),
+    addWeightType: weightTypes => dispatch(fetchAllWeightTypes(weightTypes)),
     editWeightType: weightType => dispatch(editWeightType(weightType))
 });
 

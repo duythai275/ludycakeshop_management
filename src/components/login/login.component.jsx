@@ -5,6 +5,9 @@ import TextField from '@material-ui/core/TextField';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Alert from '@material-ui/lab/Alert';
 
 import { useStyles } from './login.styles';
 import logo from '../../assets/logo.jpg';
@@ -18,8 +21,12 @@ const Login = () => {
   const [serverAddress, setServerAddress] = useState("https://hha-capstone.herokuapp.com/api");
   const [email, setEmail] = useState("boss@hha.com");
   const [password, setPassword] = useState("password");
+  
+  const [backdrop, setBackdrop] = useState(false);
+  const [errMsg, setErrMsg] = useState(null);
 
   const login = () => {
+    setBackdrop(true);
     fetch(`${serverAddress}/admin/signin`, {
         method: 'POST',
         headers: {
@@ -31,8 +38,16 @@ const Login = () => {
         })
     })
     .then( res => res.json() )
-    .then( json => handleLogIn(serverAddress, json.message))
-    .catch(err => console.log('error', err));
+    .then( json => {
+        if ( json.status === "ok" ) {
+            handleLogIn(serverAddress, json.message);
+            setBackdrop(false);
+        } else {
+            setBackdrop(false);
+            setErrMsg(json.message);
+        }
+        
+    });
   }
 
   return (
@@ -91,6 +106,16 @@ const Login = () => {
                     </Button>
                 </div>
         </div>
+        { 
+        ( errMsg !== null ) ? 
+            <Alert severity="error">
+                Error - {errMsg}
+            </Alert> 
+            : null 
+        }
+        <Backdrop className={classes.backdrop} open={backdrop}>
+            <CircularProgress color="inherit" />
+        </Backdrop>
     </Container>
   );
 }

@@ -39,21 +39,11 @@ const Row = (props) => {
         // console.log(`Delete Clicked - ${product.name}`);
         setAnchorEl(null);
 
-        // deleting(`${url}/admin/product?id=${props.product.id}`, token)
-        fetch(`${url}/admin/product?id=${props.product.id}`, {
-            'method': 'DELETE',
-            'headers': {
-                'Authorization': 'Bearer ' + token,
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.text())
-        .then(result => {
-            // console.log(result);
+        deleting(`${url}/admin/product?id=${props.product.id}`, token)
+        .then( res => {
             props.deleteProduct(props.product);
             handleAlert(true, "Deleted Successfully!");
-        })
-        .catch(error => console.log('error', error));
+        });
         
     }
 

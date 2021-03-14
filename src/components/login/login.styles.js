@@ -17,5 +17,9 @@ export const useStyles = makeStyles((theme) => ({
     avatar: {
         width: theme.spacing(7),
         height: theme.spacing(7),
+    },
+    backdrop: {
+        zIndex: theme.zIndex.drawer + 1,
+        color: '#fff',
     }
 }));

@@ -22,6 +22,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 // import ListIcon from '@material-ui/icons/List';
 import LocalMallIcon from '@material-ui/icons/LocalMall';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
+import PaymentIcon from '@material-ui/icons/Payment';
 // import GraphicEqIcon from '@material-ui/icons/GraphicEq';
 
 import DrawerContext from '../../contexts/drawer.contexts';
@@ -70,6 +71,12 @@ const ListMenu = ({history}) => {
         <Divider />
         <List>
             <div>
+                <ListItem button>
+                    <ListItemIcon>
+                        <PaymentIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Orders" />
+                </ListItem>
                 <ListItem button onClick={() => history.push("/products")}>
                     <ListItemIcon>
                         <LocalMallIcon />
@@ -97,13 +104,13 @@ const ListMenu = ({history}) => {
                     <ListItemIcon>
                         <BarChartIcon />
                     </ListItemIcon>
-                    <ListItemText primary="Reports" />
+                    <ListItemText primary="Report" />
                 </ListItem>
                 <ListItem button onClick={() => history.push("/settings")}>
                     <ListItemIcon>
                         <SettingsIcon />
                     </ListItemIcon>
-                    <ListItemText primary="Settings" />
+                    <ListItemText primary="Setting" />
                 </ListItem>
             </div>
         </List>

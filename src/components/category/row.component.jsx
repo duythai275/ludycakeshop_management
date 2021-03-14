@@ -33,21 +33,11 @@ const Row = (props) => {
     const handleDelete = () => {
         setAnchorEl(null);
 
-        // deleting(`${url}/categories/${props.category.id}`,token)
-        fetch(`${url}/categories/${props.category.id}`, {
-            'method': 'DELETE',
-            'headers': {
-                'Authorization': 'Bearer ' + token,
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.text())
+        deleting(`${url}/categories/${props.category.id}`,token)
         .then(result => {
-            // console.log(result);
             props.deleteCategory(props.category);
             handleAlert(true, "Deleted Successfully!");
-        })
-        .catch(error => console.log('error', error));
+        });
     }
     
     return (

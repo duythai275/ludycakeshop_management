@@ -2,8 +2,8 @@ import React, { useState, useContext } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import { addProduct, editProduct } from '../../redux/product/product.action';
-import { adding, deleting, updating } from '../../utils/fetching';
+import { editProduct, fetchAllProducts } from '../../redux/product/product.action';
+import { adding, updating } from '../../utils/fetching';
 
 import  { selectCategories } from '../../redux/category/category.selector';
 import { selectWeightTypes } from '../../redux/weightType/weightType.selector';
@@ -65,8 +65,7 @@ const useStyles = makeStyles((theme) => ({
     chip: {
         '& > *': {
             margin: theme.spacing(0.5),
-        },
-        // paddingTop: theme.spacing(2)
+        }
     }
 }));
 
@@ -94,22 +93,11 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes,
             product.quantity = parseInt(product.quantity);
             product.weightType = parseInt(product.weightType);
 
-            // adding(`${url}/admin/product`, token, product)
-            fetch(`${url}/admin/product`, {
-                'method': 'POST',
-                'headers': {
-                    'Authorization': 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                },
-                'body': JSON.stringify(product)
-            })
-            .then(response => response.text())
+            adding(`${url}/admin/product`, token, product)
             .then(result => {
-                console.log(result);
-                addProduct(product);
+                addProduct(result);
                 handleAlert(true, "Added Successfully!");
-            })
-            .catch(error => console.log('error', error));
+            });
 
         } else {
             product.category = product.category[0].id;
@@ -117,24 +105,12 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes,
             product.quantity = parseInt(product.quantity);
             product.weightType = parseInt(product.weightType);
 
-            // updating(`${url}/admin/product`, token, product)
-            fetch(`${url}/admin/product`, {
-                'method': 'PUT',
-                'headers': {
-                    'Authorization': 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                },
-                'body': JSON.stringify(product)
-            })
-            .then(response => response.text())
+            updating(`${url}/admin/product`, token, product)
             .then(result => {
                 console.log(result);
                 editProduct(product);
                 handleAlert(true, "Edited Successfully!");
-            })
-            .catch(error => console.log('error', error));
-
-        
+            });
         }
         handleClose();
     }
@@ -223,7 +199,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = dispatch => ({
     editProduct: product => dispatch(editProduct(product)),
-    addProduct: product => dispatch(addProduct(product))
+    addProduct: products => dispatch(fetchAllProducts(products))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductEditorDialog);
