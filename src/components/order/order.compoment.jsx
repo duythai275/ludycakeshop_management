@@ -255,7 +255,7 @@ const Orders = () => {
                         </TableHead>
                         <TableBody>
                             {
-                                orders.map( order => <Row key={order.id} order={order}/>)
+                                orders.map( order => <Row key={order.id} order={order} updateOrders={loadOrders}/>)
                             }
                         </TableBody>
                     </Table>

@@ -81,7 +81,7 @@ const ImportExportDialog = props => {
             </Button>
 
             <Button variant="contained" startIcon={<CancelIcon />} onClick={props.handleClose}>
-                Cancel
+                Close
             </Button>
         </DialogActions>
     </Dialog>

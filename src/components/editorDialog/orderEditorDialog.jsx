@@ -17,7 +17,7 @@ import Grid from '@material-ui/core/Grid';
 
 import AccessContext from '../../contexts/access.context';
 
-import { getAllWithAuth } from '../../utils/fetching';
+import { getAllWithAuth, updating } from '../../utils/fetching';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -67,6 +67,45 @@ const OrderEditorDialog = props => {
             console.log("TEST edit");
         });
     }, [activeStep]);
+
+    const changeStatusBack = () => {
+        const obj = {
+            "id": order.id,
+            "orderDate": order.orderDate,
+            "paidDate": order.paidDate,
+            "priceSum": order.priceSum,
+            "status": "confirmed",
+            "email": order.email,
+            "phone": order.phone,
+            "orderName": order.orderName
+        };
+
+        updating(`${url}/admin/order`, token, obj)
+        .then(res => {
+            setActiveStep(1);
+            props.updateOrders();
+        });
+    }
+
+    const changeStatus = () => {
+        const obj = {
+            "id": order.id,
+            "orderDate": order.orderDate,
+            "paidDate": order.paidDate,
+            "priceSum": order.priceSum,
+            "status": (activeStep === 0) ? "confirmed" : (activeStep === 1) ? "ready" : "paid",
+            "email": order.email,
+            "phone": order.phone,
+            "orderName": order.orderName
+        };
+
+        updating(`${url}/admin/order`, token, obj)
+        .then(res => {
+            setActiveStep(activeStep + 1);
+            props.updateOrders();
+        });
+        
+    }
 
     return (
     <Dialog
@@ -129,14 +168,14 @@ const OrderEditorDialog = props => {
             </Grid>
         </DialogContent>
         <DialogActions>
-            <Button disabled={activeStep !== 2} onClick={() => setActiveStep(1)}>
+            <Button disabled={activeStep !== 2} onClick={changeStatusBack}>
                 Back
             </Button>
-            <Button variant="contained" color="primary" disabled={activeStep === 3} onClick={() => setActiveStep(activeStep + 1)}>
+            <Button variant="contained" color="primary" disabled={activeStep === 3} onClick={changeStatus}>
                 Next
             </Button>
             <Button variant="contained" onClick={props.handleClose}>
-                Cancel
+                Close
             </Button>
         </DialogActions>
     </Dialog>
