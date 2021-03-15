@@ -1,0 +1,6 @@
+export const OrderActionTypes = {
+    GET_ORDERS: "GET_ORDERS",
+    GET_AN_ORDER: "GET_AN_ORDER",
+    UPDATE_ORDER_STATUS: "UPDATE_ORDER_STATUS",
+    DELETE_ORDER: "DELETE_ORDER"
+}

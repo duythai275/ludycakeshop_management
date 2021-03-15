@@ -71,7 +71,7 @@ const ListMenu = ({history}) => {
         <Divider />
         <List>
             <div>
-                <ListItem button>
+                <ListItem button onClick={() => history.push("/orders")}>
                     <ListItemIcon>
                         <PaymentIcon />
                     </ListItemIcon>

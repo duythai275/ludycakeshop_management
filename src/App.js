@@ -19,7 +19,9 @@ function App() {
   return (
     <div className="App">
       <AccessContext.Provider value={{ url, token, handleLogIn }}>
-        <Page />
+        {
+          ( token === undefined ) ? <Login /> : <Mainpage /> 
+        }
       </AccessContext.Provider>
       {/* <Switch>
         <Route exact path="/" component={Login} />
@@ -27,11 +29,6 @@ function App() {
       </Switch> */}
     </div>
   );
-}
-
-const Page = () => {
-  const { token } = useContext(AccessContext);
-  return ( token === undefined ) ? <Login /> : <Mainpage /> 
 }
 
 export default App;

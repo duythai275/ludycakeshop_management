@@ -6,6 +6,7 @@ import Container from '@material-ui/core/Container';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 
+import Orders from '../order/order.compoment';
 import Products from '../product/product.component';
 import Categories from '../category/category.component';
 import WeightTypes from '../weightType/weightType.component';
@@ -74,7 +75,7 @@ const Mainpage = ({ setCategories, setProducts, setWeightType }) => {
             setProducts(arr[1]);
             setWeightType(arr[2]);
         })
-    } )
+    }, []);
 
     const handleAlert = ( isOpen, msg ) => {
         setAlert(isOpen);
@@ -90,6 +91,7 @@ const Mainpage = ({ setCategories, setProducts, setWeightType }) => {
                     <div className={classes.appBarSpacer}></div>
                     <Container /*maxWidth="1g"*/ className={classes.container}>
                         <Switch>
+                            <Route exact path="/orders" component={Orders} />
                             <Route exact path="/products" component={Products} />
                             <Route exact path="/categories" component={Categories} />
                             <Route exact path="/weightTypes" component={WeightTypes} />
