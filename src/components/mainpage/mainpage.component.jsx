@@ -13,6 +13,7 @@ import WeightTypes from '../weightType/weightType.component';
 import Settings from '../intro/setting.component';
 import Reports from '../report/report.component';
 import Menu from '../mainMenu/menu.component';
+import Users from '../user/user.component';
 
 import AccessContext from '../../contexts/access.context';
 import AlertContext from '../../contexts/alert.context';
@@ -96,6 +97,7 @@ const Mainpage = ({ setCategories, setProducts, setWeightType }) => {
                             <Route exact path="/categories" component={Categories} />
                             <Route exact path="/weightTypes" component={WeightTypes} />
                             <Route exact path="/reports" component={Reports} />
+                            <Route exact path="/users" component={Users} />
                             <Route exact path="/settings" component={Settings} />
                         </Switch>
                     </Container>

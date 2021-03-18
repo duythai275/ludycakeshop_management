@@ -121,6 +121,19 @@ const Reports = () => {
                             </Select>
                         </FormControl>
                     </Grid>
+                    <Grid item xs={12}>
+                        <List dense component="div" role="list">
+                            <ListItem role="listitem" button>
+                                <ListItemIcon>
+                                    <Checkbox
+                                        disableRipple
+                                        inputProps={{ 'aria-labelledby': labelId }}
+                                    />
+                                </ListItemIcon>
+                                <ListItemText primary={`Test 1`} />
+                            </ListItem>
+                        </List>
+                    </Grid>
                 </Grid>
             </Paper>
         </Grid>
