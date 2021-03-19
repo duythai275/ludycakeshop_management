@@ -14,6 +14,7 @@ import Settings from '../intro/setting.component';
 import Reports from '../report/report.component';
 import Menu from '../mainMenu/menu.component';
 import Users from '../user/user.component';
+import Events from '../event/event.component';
 
 import AccessContext from '../../contexts/access.context';
 import AlertContext from '../../contexts/alert.context';
@@ -93,6 +94,7 @@ const Mainpage = ({ setCategories, setProducts, setWeightType }) => {
                     <Container /*maxWidth="1g"*/ className={classes.container}>
                         <Switch>
                             <Route exact path="/orders" component={Orders} />
+                            <Route exact path="/events" component={Events} />
                             <Route exact path="/products" component={Products} />
                             <Route exact path="/categories" component={Categories} />
                             <Route exact path="/weightTypes" component={WeightTypes} />

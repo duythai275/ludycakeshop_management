@@ -66,7 +66,6 @@ const Orders = () => {
 
         getAllWithAuth(`${url}/admin/order?${filter}page=${(page + 1)}`, token)
         .then(json => {
-            console.log("test");
             setTotalOrders(json.totalElements);
             setOrders(json.content);
         });

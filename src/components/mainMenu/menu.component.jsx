@@ -25,6 +25,7 @@ import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import PaymentIcon from '@material-ui/icons/Payment';
 // import GraphicEqIcon from '@material-ui/icons/GraphicEq';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
+import LoyaltyIcon from '@material-ui/icons/Loyalty';
 
 import DrawerContext from '../../contexts/drawer.contexts';
 import AccessContext from '../../contexts/access.context';
@@ -77,6 +78,12 @@ const ListMenu = ({history}) => {
                         <PaymentIcon />
                     </ListItemIcon>
                     <ListItemText primary="Orders" />
+                </ListItem>
+                <ListItem button onClick={() => history.push("/events")}>
+                    <ListItemIcon>
+                        <LoyaltyIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Events" />
                 </ListItem>
                 <ListItem button onClick={() => history.push("/products")}>
                     <ListItemIcon>

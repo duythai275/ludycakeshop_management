@@ -63,8 +63,9 @@ const OrderEditorDialog = props => {
         getAllWithAuth(`${url}/admin/order/${props.order.id}`, token)
         .then(json => {
             order["itemList"] = json.itemList;
+            order["status"] = json.status;
+            order["paidDate"] = json.paidDate;
             setOrder({...order});
-            console.log("TEST edit");
         });
     }, [activeStep]);
 
@@ -88,10 +89,14 @@ const OrderEditorDialog = props => {
     }
 
     const changeStatus = () => {
+        const d = new Date();
+        const currentDate = `${d.getFullYear()}-${((d.getMonth()+1)<10) ? `0${d.getMonth()+1}` : (d.getMonth()+1)}-${(d.getDate() < 10) ? `0${d.getDate()}` : d.getDate()}`;
+        console.log(currentDate);
+        
         const obj = {
             "id": order.id,
             "orderDate": order.orderDate,
-            "paidDate": order.paidDate,
+            "paidDate": (activeStep === 2) ? currentDate : order.paidDate,
             "priceSum": order.priceSum,
             "status": (activeStep === 0) ? "confirmed" : (activeStep === 1) ? "ready" : "paid",
             "email": order.email,

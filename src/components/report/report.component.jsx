@@ -7,6 +7,12 @@ import InputLabel from '@material-ui/core/InputLabel';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Checkbox from '@material-ui/core/Checkbox';
+import Button from '@material-ui/core/Button';
 
 import Highcharts from 'highcharts';
 import HighchartsExporting from 'highcharts/modules/exporting';
@@ -15,6 +21,163 @@ import HighchartsReact from 'highcharts-react-official';
 import { useStyles } from './report.styles.js';
 
 HighchartsExporting(Highcharts);
+
+const TransferList = () => {
+    const classes = useStyles();
+    return (
+        // <Paper className={classes.paper}>
+            <Grid container spacing={2} justify="center" alignItems="center">
+                <Grid item>
+                    <Paper className={classes.paper}>
+                        <List dense component="div" role="list">
+                            <ListItem role="listitem" button>
+                                <ListItemIcon>
+                                    <Checkbox
+                                        disableRipple
+                                        // inputProps={{ 'aria-labelledby': labelId }}
+                                    />
+                                </ListItemIcon>
+                                <ListItemText primary={`Test 1`} />
+                            </ListItem>
+                        </List>
+                    </Paper>
+                </Grid>
+                <Grid item>
+                    <Grid container direction="column" alignItems="center">
+                        <Button
+                            variant="outlined"
+                            size="small"
+                            // className={classes.button}
+                            // onClick={handleCheckedRight}
+                            // disabled={leftChecked.length === 0}
+                            aria-label="move selected right"
+                        >
+                            &gt;
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            size="small"
+                            // className={classes.button}
+                            // onClick={handleCheckedLeft}
+                            // disabled={rightChecked.length === 0}
+                            aria-label="move selected left"
+                        >
+                            &lt;
+                        </Button>
+                    </Grid>
+                </Grid>
+                <Grid item>
+                    <Paper className={classes.paper}>
+                        <List dense component="div" role="list">
+                            <ListItem role="listitem" button>
+                                <ListItemIcon>
+                                    <Checkbox
+                                        disableRipple
+                                        // inputProps={{ 'aria-labelledby': labelId }}
+                                    />
+                                </ListItemIcon>
+                                <ListItemText primary={`Test 1`} />
+                            </ListItem>
+                        </List>
+                    </Paper>
+                </Grid>
+            </Grid>
+        // </Paper>
+    )
+}
+
+const DataSelection = () => {
+    const classes = useStyles();
+    return (
+        <Paper className={classes.paper}>
+            <Typography variant="subtitle1" component="h2">Data</Typography>
+            <Grid container>
+                <Grid item md={4} xs={12}>
+                    <FormControl variant="outlined" className={classes.formControl}>
+                        <InputLabel>Dimension</InputLabel>
+                        <Select
+                            label="Dimension"
+                        >
+                            <MenuItem>Row</MenuItem>
+                            <MenuItem>Column</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <Grid item md={4} xs={12}>
+                    <FormControl variant="outlined" className={classes.formControl}>
+                        <InputLabel>Data</InputLabel>
+                        <Select
+                            label="Data"
+                        >
+                            <MenuItem>Departments</MenuItem>
+                            <MenuItem>Products</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <Grid item md={4} xs={12}>
+                    <FormControl variant="outlined" className={classes.formControl}>
+                        <InputLabel>Data Type</InputLabel>
+                        <Select
+                            label="Data Type"
+                        >
+                            <MenuItem>Number of Sales</MenuItem>
+                            <MenuItem>Sales Revenue</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                    <TransferList />
+                </Grid>
+            </Grid>
+        </Paper>
+    )
+}
+
+const PeriodSelection = () => {
+    const classes = useStyles();
+    return (
+        <Paper className={classes.paper}>
+            <Typography variant="subtitle1" component="h2">Period</Typography>
+            <Grid container>
+                <Grid item xs={12}>
+                    <FormControl variant="outlined" className={classes.formControl1}>
+                        <InputLabel>Period Type</InputLabel>
+                        <Select
+                            label="Period Type"
+                        >
+                            <MenuItem>Weekly</MenuItem>
+                            <MenuItem>Monthly</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                    <FormControl className={classes.formControl1}>
+                        <TextField
+                            label="Start Date"
+                            variant="outlined"
+                            type="date"
+                            InputLabelProps={{
+                                shrink: true
+                            }}
+                        />
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                    <FormControl className={classes.formControl1}>
+                    <TextField
+                            label="End Date"
+                            variant="outlined"
+                            type="date"
+                            InputLabelProps={{
+                                shrink: true
+                            }}
+                        />
+                    </FormControl>
+                </Grid>
+            </Grid>
+        </Paper>
+    )
+}
 
 const Reports = () => {
     const classes = useStyles();
@@ -85,100 +248,14 @@ const Reports = () => {
     return (
     <Grid container spacing={2}>
         <Grid item xs={12} md={8} lg={8}>
-            <Paper className={classes.paper}>
-                <Typography variant="subtitle1" component="h2">Data</Typography>
-                <Grid container>
-                    <Grid item md={4} xs={12}>
-                        <FormControl variant="outlined" className={classes.formControl}>
-                            <InputLabel>Dimension</InputLabel>
-                            <Select
-                                label="Dimension"
-                            >
-                                <MenuItem>Row</MenuItem>
-                                <MenuItem>Column</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid item md={4} xs={12}>
-                        <FormControl variant="outlined" className={classes.formControl}>
-                            <InputLabel>Data</InputLabel>
-                            <Select
-                                label="Data"
-                            >
-                                <MenuItem>Departments</MenuItem>
-                                <MenuItem>Products</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid item md={4} xs={12}>
-                        <FormControl variant="outlined" className={classes.formControl}>
-                            <InputLabel>Data Type</InputLabel>
-                            <Select
-                                label="Data Type"
-                            >
-                                <MenuItem>Number of Sales</MenuItem>
-                                <MenuItem>Sales Revenue</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <List dense component="div" role="list">
-                            <ListItem role="listitem" button>
-                                <ListItemIcon>
-                                    <Checkbox
-                                        disableRipple
-                                        inputProps={{ 'aria-labelledby': labelId }}
-                                    />
-                                </ListItemIcon>
-                                <ListItemText primary={`Test 1`} />
-                            </ListItem>
-                        </List>
-                    </Grid>
-                </Grid>
-            </Paper>
+            <DataSelection />
         </Grid>
         <Grid item xs={12} md={4} lg={4}>
-            <Paper className={classes.paper}>
-                <Typography variant="subtitle1" component="h2">Period</Typography>
-                <Grid container>
-                    <Grid item xs={12}>
-                        <FormControl variant="outlined" className={classes.formControl1}>
-                            <InputLabel>Period Type</InputLabel>
-                            <Select
-                                label="Period Type"
-                            >
-                                <MenuItem>Weekly</MenuItem>
-                                <MenuItem>Monthly</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <FormControl className={classes.formControl1}>
-                            <TextField
-                                label="Start Date"
-                                variant="outlined"
-                                type="date"
-                                InputLabelProps={{
-                                    shrink: true
-                                }}
-                            />
-                        </FormControl>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <FormControl className={classes.formControl1}>
-                        <TextField
-                                label="End Date"
-                                variant="outlined"
-                                type="date"
-                                InputLabelProps={{
-                                    shrink: true
-                                }}
-                            />
-                        </FormControl>
-                    </Grid>
-                </Grid>
-            </Paper>
+            <PeriodSelection />
         </Grid>
+        {/* <Grid item xs={12} md={8} lg={8}>
+            <TransferList />
+        </Grid> */}
         <Grid item xs={12}>
             <Paper className={classes.paper}>
                 <Typography variant="subtitle1" component="h2">Report</Typography>
