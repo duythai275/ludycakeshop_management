@@ -154,8 +154,8 @@ const OrderEditorDialog = props => {
                 </ListItem>
             </List>
             <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}></Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} sm={4}></Grid>
+                <Grid item xs={12} sm={8}>
                     <Typography variant="h6" gutterBottom className={classes.title}>
                         Order Details
                     </Typography>

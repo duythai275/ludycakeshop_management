@@ -13,10 +13,9 @@ const Row = props => {
             <TableCell>{props.user.name}</TableCell>
             <TableCell>
                 <Switch
-                    checked={props.user.name}
-                    // onChange={handleChange}
+                    checked={(props.user.active === 1) ? true : false}
+                    onChange={props.handleChange}
                     color="primary"
-                    name="checkedB"
                     inputProps={{ 'aria-label': 'primary checkbox' }}
                 />
             </TableCell>

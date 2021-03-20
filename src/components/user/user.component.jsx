@@ -52,7 +52,7 @@ const Users = () => {
         );
     }
 
-    useEffect(() => {
+    const loadUsers = () => {
         getAllWithAuth(`${url}/admin/users/list`, token)
         .then(res => {
             setUsers(res);
@@ -62,7 +62,41 @@ const Users = () => {
                 )
             );
         });
-    });
+    }
+
+    useEffect(() => {
+        loadUsers();
+    },[]);
+
+    const updateUser = user => {
+        fetch(`${url}/admin/users/uuid?email=${user.email}`, {
+            'method': 'GET',
+            'headers': {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+        .then(res => res.json())
+        .then(json => {
+            // console.log(json);
+            if (!json.hasOwnProperty("error")) {
+                if ( user.active === 0 ) {
+                    fetch(`${url}/admin/users/activate?uuid=${json.message}`, {
+                        'method': 'PUT',
+                        'headers': {
+                            'Authorization': 'Bearer ' + token
+                        }
+                    }).then(res => loadUsers())
+                } else {
+                    fetch(`${url}/admin/users/deactivate?uuid=${json.message}`, {
+                        'method': 'PUT',
+                        'headers': {
+                            'Authorization': 'Bearer ' + token
+                        }
+                    }).then(res => loadUsers())
+                }
+            }
+        });
+    }
 
     return (
         <Grid container spacing={2}>
@@ -125,7 +159,7 @@ const Users = () => {
                         </TableHead>
                         <TableBody>
                         {
-                            items.map(user => <Row user={user} />)
+                            items.slice(page * 10, page * 10 + 10).map((user, index) => <Row key={index} user={user} handleChange={event => updateUser(user)} />)
                         }
                         </TableBody>
                     </Table>
