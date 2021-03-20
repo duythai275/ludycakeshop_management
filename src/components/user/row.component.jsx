@@ -21,7 +21,7 @@ const Row = props => {
             </TableCell>
             <TableCell align="right">
                 <IconButton size="small">
-                    <DeleteIcon />
+                    <DeleteIcon onClick={props.handleDelete} />
                 </IconButton>
             </TableCell>
         </TableRow>

@@ -14,6 +14,8 @@ import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
 import ClearIcon from '@material-ui/icons/Clear';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Row from './row.component';
 
@@ -24,6 +26,7 @@ import { useStyles } from './user.styles';
 
 const Users = () => {
     const classes = useStyles();
+    const [backdrop, setBackdrop] = useState(false);
 
     const { url, token } = useContext(AccessContext);
 
@@ -53,6 +56,7 @@ const Users = () => {
     }
 
     const loadUsers = () => {
+        setBackdrop(true);
         getAllWithAuth(`${url}/admin/users/list`, token)
         .then(res => {
             setUsers(res);
@@ -61,6 +65,7 @@ const Users = () => {
                     user["email"].toUpperCase().includes(filter.email.toUpperCase())
                 )
             );
+            setBackdrop(false);
         });
     }
 
@@ -69,6 +74,7 @@ const Users = () => {
     },[]);
 
     const updateUser = user => {
+        setBackdrop(true);
         fetch(`${url}/admin/users/uuid?email=${user.email}`, {
             'method': 'GET',
             'headers': {
@@ -98,16 +104,94 @@ const Users = () => {
         });
     }
 
+    const deleteUser = user => {
+        setBackdrop(true);
+        fetch(`${url}/admin/users/uuid?email=${user.email}`, {
+            'method': 'GET',
+            'headers': {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+        .then(res => res.json())
+        .then(json => {
+            // console.log(json);
+            if (!json.hasOwnProperty("error")) {
+                fetch(`${url}/admin/users?uuid=${json.message}`, {
+                    'method': 'DELETE',
+                    'headers': {
+                        'Authorization': 'Bearer ' + token
+                    }
+                }).then(res => loadUsers())
+            }
+        });
+    }
+
     return (
-        <Grid container spacing={2}>
-            <Grid item xs={12}>
-                <Paper className={classes.paper}>
-                    <div className={classes.header}>
-                        <div className={classes.title}>
-                            <Typography component="h2" variant="h6" color="primary" gutterBottom>
-                                Users
-                            </Typography>
+        <div>
+            <Grid container spacing={2}>
+                <Grid item xs={12}>
+                    <Paper className={classes.paper}>
+                        <div className={classes.header}>
+                            <div className={classes.title}>
+                                <Typography component="h2" variant="h6" color="primary" gutterBottom>
+                                    Users
+                                </Typography>
+                            </div>
+                            <div className={classes.pager}>
+                                <TablePagination
+                                    rowsPerPageOptions={[]}
+                                    component="div"
+                                    count={items.length}
+                                    page={page}
+                                    onChangePage={handleChangePage}
+                                    rowsPerPage={10}
+                                />
+                            </div>
                         </div>
+                        <Table className={classes.table}>
+                            <TableHead>
+                                <TableRow className={classes.tableHead}>
+                                    <TableCell className={classes.tableHead} width={"40%"}>
+                                        Email <br/>
+                                        <TextField 
+                                            placeholder="Search by Email" 
+                                            variant="standard"
+                                            onChange={event => filterBy(event.target.value,"email")}
+                                            value={filter.email}
+                                            InputProps = {
+                                                {
+                                                    startAdornment: (
+                                                        <InputAdornment position="start">
+                                                                <SearchIcon fontSize="small" />
+                                                        </InputAdornment>
+                                                    ),
+                                                    endAdornment: (
+                                                        <InputAdornment position="end">
+                                                            <IconButton
+                                                                onClick={() => filterBy("","email")}
+                                                            >
+                                                                <ClearIcon fontSize="small" />
+                                                            </IconButton>
+                                                        </InputAdornment>
+                                                    ),
+                                                    inputProps: {
+                                                        "aria-label": "Search",
+                                                    }
+                                                }
+                                            }
+                                        />
+                                    </TableCell>
+                                    <TableCell className={classes.tableHead} width={"40%"} >Name</TableCell>
+                                    <TableCell className={classes.tableHead}>Active</TableCell>
+                                    <TableCell className={classes.tableHead}></TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                            {
+                                items.slice(page * 10, page * 10 + 10).map((user, index) => <Row key={index} user={user} handleChange={event => updateUser(user)} handleDelete={event => deleteUser(user)} />)
+                            }
+                            </TableBody>
+                        </Table>
                         <div className={classes.pager}>
                             <TablePagination
                                 rowsPerPageOptions={[]}
@@ -118,64 +202,13 @@ const Users = () => {
                                 rowsPerPage={10}
                             />
                         </div>
-                    </div>
-                    <Table className={classes.table}>
-                        <TableHead>
-                            <TableRow className={classes.tableHead}>
-                                <TableCell className={classes.tableHead} width={"40%"}>
-                                    Email <br/>
-                                    <TextField 
-                                        placeholder="Search by Email" 
-                                        variant="standard"
-                                        onChange={event => filterBy(event.target.value,"email")}
-                                        value={filter.email}
-                                        InputProps = {
-                                            {
-                                                startAdornment: (
-                                                    <InputAdornment position="start">
-                                                            <SearchIcon fontSize="small" />
-                                                    </InputAdornment>
-                                                ),
-                                                endAdornment: (
-                                                    <InputAdornment position="end">
-                                                        <IconButton
-                                                            onClick={() => filterBy("","email")}
-                                                        >
-                                                            <ClearIcon fontSize="small" />
-                                                        </IconButton>
-                                                    </InputAdornment>
-                                                ),
-                                                inputProps: {
-                                                    "aria-label": "Search",
-                                                }
-                                            }
-                                        }
-                                    />
-                                </TableCell>
-                                <TableCell className={classes.tableHead} width={"40%"} >Name</TableCell>
-                                <TableCell className={classes.tableHead}>Active</TableCell>
-                                <TableCell className={classes.tableHead}></TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                        {
-                            items.slice(page * 10, page * 10 + 10).map((user, index) => <Row key={index} user={user} handleChange={event => updateUser(user)} />)
-                        }
-                        </TableBody>
-                    </Table>
-                    <div className={classes.pager}>
-                        <TablePagination
-                            rowsPerPageOptions={[]}
-                            component="div"
-                            count={items.length}
-                            page={page}
-                            onChangePage={handleChangePage}
-                            rowsPerPage={10}
-                        />
-                    </div>
-                </Paper>
+                    </Paper>
+                </Grid>
             </Grid>
-        </Grid>
+            <Backdrop className={classes.backdrop} open={backdrop}>
+                <CircularProgress color="inherit" />
+            </Backdrop>
+        </div>
     )
 }
 

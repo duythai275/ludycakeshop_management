@@ -20,5 +20,9 @@ export const useStyles = makeStyles((theme) => ({
     },
     tableHead: {
         fontWeight: 'bold'
+    },
+    backdrop: {
+        zIndex: theme.zIndex.drawer + 1,
+        color: '#fff',
     }
 }));
