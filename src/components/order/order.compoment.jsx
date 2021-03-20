@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-// import { connect } from 'react-redux';
+import { connect } from 'react-redux';
 // import { createStructuredSelector } from 'reselect';
 
 import Grid from '@material-ui/core/Grid';
@@ -23,12 +23,12 @@ import Row from './row.component';
 
 import AccessContext from '../../contexts/access.context';
 
-// import { getOrders } from '../../redux/order/order.action';
+import { getOrders } from '../../redux/order/order.action';
 import { getAllWithAuth } from '../../utils/fetching';
 // import { selectOrders } from '../../redux/order/order.selector';
 import { useStyles } from './order.styles';
 
-const Orders = () => {
+const Orders = ({loadOrdersToStore}) => {
     const classes = useStyles();
 
     const { url, token } = useContext(AccessContext);
@@ -69,6 +69,12 @@ const Orders = () => {
             setTotalOrders(json.totalElements);
             setOrders(json.content);
         });
+
+        getAllWithAuth(`${url}/admin/order?all=true`, token)
+        .then(json => {
+            loadOrdersToStore(json.content);
+        });
+        
     }
 
     useEffect( () => {
@@ -277,4 +283,8 @@ const Orders = () => {
     )
 }
 
-export default Orders;
+const mapDispatchToProps = dispatch => ({
+    loadOrdersToStore: orders => dispatch(getOrders(orders))
+});
+
+export default connect(null, mapDispatchToProps)(Orders);

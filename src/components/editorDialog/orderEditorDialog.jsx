@@ -1,4 +1,5 @@
 import React, { useEffect, useContext, useState } from 'react';
+import { connect } from 'react-redux';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -17,7 +18,9 @@ import Grid from '@material-ui/core/Grid';
 
 import AccessContext from '../../contexts/access.context';
 
+import { updateOrderStatus } from '../../redux/order/order.action';
 import { getAllWithAuth, updating } from '../../utils/fetching';
+
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -85,6 +88,7 @@ const OrderEditorDialog = props => {
         .then(res => {
             setActiveStep(1);
             props.updateOrders();
+            props.updateOrder(obj);
         });
     }
 
@@ -108,6 +112,7 @@ const OrderEditorDialog = props => {
         .then(res => {
             setActiveStep(activeStep + 1);
             props.updateOrders();
+            props.updateOrder(obj);
         });
         
     }
@@ -187,4 +192,8 @@ const OrderEditorDialog = props => {
     )
 }
 
-export default OrderEditorDialog;
+const mapDispatchToProps = dispatch => ({
+    updateOrder: order => dispatch(updateOrderStatus(order))
+});
+
+export default connect(null, mapDispatchToProps)(OrderEditorDialog);

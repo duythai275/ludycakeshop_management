@@ -5,11 +5,6 @@ export const getOrders = orders => ({
     payload: orders
 });
 
-export const getOrder = order => ({
-    type: OrderActionTypes.GET_AN_ORDER,
-    payload: order
-});
-
 export const updateOrderStatus = order => ({
     type: OrderActionTypes.UPDATE_ORDER_STATUS,
     payload: order

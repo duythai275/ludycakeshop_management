@@ -22,6 +22,7 @@ import AlertContext from '../../contexts/alert.context';
 import { fetchAllCategories } from '../../redux/category/category.action';
 import { fetchAllProducts } from '../../redux/product/product.action';
 import { fetchAllWeightTypes } from '../../redux/weightType/weightType.action';
+import { getOrders } from '../../redux/order/order.action';
 import { getAll, getAllWithAuth } from '../../utils/fetching';
 
 import { useStyles } from './mainpage.styles';
@@ -59,7 +60,7 @@ const AlertNotification = () => {
     </Snackbar>
 )}
 
-const Mainpage = ({ setCategories, setProducts, setWeightType }) => {
+const Mainpage = ({ setOrders, setCategories, setProducts, setWeightType }) => {
     const classes = useStyles();
 
     const { url, token } = useContext(AccessContext);
@@ -68,14 +69,16 @@ const Mainpage = ({ setCategories, setProducts, setWeightType }) => {
 
     useEffect( () => {
         Promise.all([
+            getAllWithAuth(`${url}/admin/order?all=true`, token),
             getAll(`${url}/categories`),
             getAllWithAuth(`${url}/admin/product`, token),
             getAll(`${url}/weighttype`)
         ])
         .then( arr => {
-            setCategories(arr[0]);
-            setProducts(arr[1]);
-            setWeightType(arr[2]);
+            setOrders(arr[0].content);
+            setCategories(arr[1]);
+            setProducts(arr[2]);
+            setWeightType(arr[3]);
         })
     }, []);
 
@@ -112,7 +115,8 @@ const Mainpage = ({ setCategories, setProducts, setWeightType }) => {
 const mapDispatchToProps = dispatch => ({
     setCategories: categories => dispatch(fetchAllCategories(categories)),
     setProducts: products => dispatch(fetchAllProducts(products)),
-    setWeightType: weightTypes => dispatch(fetchAllWeightTypes(weightTypes))
+    setWeightType: weightTypes => dispatch(fetchAllWeightTypes(weightTypes)),
+    setOrders: orders => dispatch(getOrders(orders))
 });
 
 export default connect(null, mapDispatchToProps)(Mainpage);

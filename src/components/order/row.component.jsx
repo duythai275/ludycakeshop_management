@@ -1,4 +1,5 @@
 import React, { useState, useRef, useContext } from 'react';
+import { connect } from 'react-redux';
 
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
@@ -14,6 +15,7 @@ import StyledMenu from '../menu/menu';
 import AccessContext from '../../contexts/access.context';
 import AlertContext from '../../contexts/alert.context';
 
+import { deleteOrder } from '../../redux/order/order.action';
 import { deleting } from '../../utils/fetching';
 
 const Row = props => {
@@ -34,6 +36,7 @@ const Row = props => {
         .then(res => {
             props.updateOrders();
             handleAlert(true, "Deleted Successfully!");
+            props.deleteOrder(props.order);
         });
     }
 
@@ -58,4 +61,8 @@ const Row = props => {
     )
 }
 
-export default Row;
+const mapDispatchToProps = dispatch => ({
+    deleteOrder: order => dispatch(deleteOrder(order))
+});
+
+export default connect(null ,mapDispatchToProps)(Row);
