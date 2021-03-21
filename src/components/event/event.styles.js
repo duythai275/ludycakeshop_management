@@ -20,5 +20,14 @@ export const useStyles = makeStyles((theme) => ({
     },
     tableHead: {
         fontWeight: 'bold'
+    },
+    fab: {
+        position: 'absolute',
+        bottom: theme.spacing(3),
+        right: theme.spacing(5)
+    },
+    backdrop: {
+        zIndex: theme.zIndex.drawer + 1,
+        color: '#fff',
     }
 }));

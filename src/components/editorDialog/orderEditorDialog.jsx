@@ -24,6 +24,13 @@ import { getAllWithAuth, updating } from '../../utils/fetching';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
+    list: {
+        width: '100%',
+        position: 'relative',
+        overflow: 'auto',
+        maxHeight: 230,
+        // height: 300
+    },
     listItem: {
         padding: theme.spacing(1, 0),
     },
@@ -127,52 +134,56 @@ const OrderEditorDialog = props => {
     >
         <DialogTitle><Typography component="h1" variant="h4" align="center">{props.order.orderName}</Typography></DialogTitle>
         <DialogContent>
-            <Stepper activeStep={activeStep} alternativeLabel>
-            {
-                ["Waiting for customer's confirmation","Being prepared","Be ready for picking up","Finished"].map( label => 
-                    <Step key={label}>
-                        <StepLabel>{label}</StepLabel>
-                    </Step>
-                )
-            }
-            </Stepper>
-            <Typography variant="h6" gutterBottom>Order Summary</Typography>
-            <List disablePadding>
-            {
-                order.itemList.map( item => 
-                    <ListItem className={classes.listItem} key={item.order_items_id}>
-                        <ListItemText primary={item.product_name} secondary={"Qty: " + item.quantity} />
-                        <Typography variant="body2">${item.total}</Typography>
-                    </ListItem>
-                )
-            }
-                <ListItem className={classes.listItem}>
-                    <ListItemText primary="Total" />
-                    <Typography variant="subtitle1" className={classes.total}>
-                        ${order.priceSum}
-                    </Typography>
-                </ListItem>
-            </List>
             <Grid container spacing={2}>
-                <Grid item xs={12} sm={4}></Grid>
-                <Grid item xs={12} sm={8}>
-                    <Typography variant="h6" gutterBottom className={classes.title}>
-                        Order Details
-                    </Typography>
-                    <Grid container>
-                        <Grid item xs={6}>Email:</Grid>
-                        <Grid item xs={6} align="right">{order.email}</Grid>
-                        <Grid item xs={6}>Phone:</Grid>
-                        <Grid item xs={6} align="right">{order.phone}</Grid>
-                        <Grid item xs={6}>Ordered Date:</Grid>
-                        <Grid item xs={6} align="right">{order.orderDate}</Grid>
-                        {
-                            ( order.status === "paid" ) ? <Grid item xs={6}>Paid Date:</Grid> : ""
-                        }
-                        {
-                            ( order.status === "paid" ) ? <Grid item xs={6} align="right">{order.paidDate}</Grid> : ""
-                        }
-                        
+                <Grid item xs={12}>
+                    <Stepper activeStep={activeStep} alternativeLabel>
+                    {
+                        ["Waiting for customer's confirmation","Being prepared","Be ready for picking up","Finished"].map( label => 
+                            <Step key={label}>
+                                <StepLabel>{label}</StepLabel>
+                            </Step>
+                        )
+                    }
+                    </Stepper>
+                    <Typography variant="h6" gutterBottom>Order Summary</Typography>
+                    <List disablePadding className={classes.list}>
+                    {
+                        order.itemList.map( item => 
+                            <ListItem className={classes.listItem} key={item.order_items_id}>
+                                <ListItemText primary={item.product_name} secondary={"Qty: " + item.quantity} />
+                                <Typography variant="body2">${item.total}</Typography>
+                            </ListItem>
+                        )
+                    }
+                        <ListItem className={classes.listItem}>
+                            <ListItemText primary="Total" />
+                            <Typography variant="subtitle1" className={classes.total}>
+                                ${order.priceSum}
+                            </Typography>
+                        </ListItem>
+                    </List>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={4}></Grid>
+                        <Grid item xs={12} sm={8}>
+                            <Typography variant="h6" gutterBottom className={classes.title}>
+                                Order Details
+                            </Typography>
+                            <Grid container>
+                                <Grid item xs={6}>Email:</Grid>
+                                <Grid item xs={6} align="right">{order.email}</Grid>
+                                <Grid item xs={6}>Phone:</Grid>
+                                <Grid item xs={6} align="right">{order.phone}</Grid>
+                                <Grid item xs={6}>Ordered Date:</Grid>
+                                <Grid item xs={6} align="right">{order.orderDate}</Grid>
+                                {
+                                    ( order.status === "paid" ) ? <Grid item xs={6}>Paid Date:</Grid> : ""
+                                }
+                                {
+                                    ( order.status === "paid" ) ? <Grid item xs={6} align="right">{order.paidDate}</Grid> : ""
+                                }
+                                
+                            </Grid>
+                        </Grid>
                     </Grid>
                 </Grid>
             </Grid>
