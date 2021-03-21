@@ -133,6 +133,40 @@ const DataSelection = () => {
     )
 }
 
+
+{/* <Grid container spacing={2}>
+    <Grid item xs={6}>
+        <Paper className={classes.paper}>
+            <List disablePadding className={classes.list}>
+                <ListItem button>
+                    <ListItemText primary="Product 1" secondary="Original Price: $10" />
+                </ListItem>
+                <ListItem button>
+                    <ListItemText primary="Product 1" secondary="Original Price: $10" />
+                </ListItem>
+                <ListItem button>
+                    <ListItemText primary="Product 1" secondary="Original Price: $10" />
+                </ListItem>
+                <ListItem button>
+                    <ListItemText primary="Product 1" secondary="Original Price: $10" />
+                </ListItem>
+                <ListItem button>
+                    <ListItemText primary="Product 1" secondary="Original Price: $10" />
+                </ListItem>
+            </List>
+        </Paper>
+    </Grid>
+    <Grid item xs={6}>
+        <Paper className={classes.paper}>
+            <List disablePadding className={classes.list}>
+                <ListItem button>
+                    <ListItemText primary="Product 1" secondary="Discount Price: $10" />
+                </ListItem>
+            </List>
+        </Paper>
+    </Grid>
+</Grid> */}
+
 const PeriodSelection = () => {
     const classes = useStyles();
     return (
