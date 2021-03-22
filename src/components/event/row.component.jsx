@@ -28,7 +28,6 @@ const Row = props => {
     }
 
     const handleDelete = () => {
-        console.log("Test Event Row Delete");
         props.handleBackdrop();
         deleting(`${url}/admin/event/${props.event.id}`,token)
         .then(res => {
@@ -50,7 +49,11 @@ const Row = props => {
             </TableCell>
             <ContextMenu outerRef={outerRef} onEditClick={handleEdit} onDeleteClick={handleDelete} />
             <StyledMenu anchorEl={anchorEl} handleEdit={handleEdit} handleDelete={handleDelete} handleClose={() => setAnchorEl(null)} />
-            <EventEditorDialog data={props.event} open={dialog} handleClose={() => setDialog(false)} />
+            <EventEditorDialog data={props.event} open={dialog} 
+                handleClose={() => setDialog(false)} 
+                handleBackdrop={() => props.handleBackdrop()} 
+                updateEvents={() => props.updateEvents()}
+            />
         </TableRow>
     )
 }

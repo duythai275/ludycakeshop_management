@@ -26,7 +26,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import AccessContext from '../../contexts/access.context';
 import AlertContext from '../../contexts/alert.context';
 
-import { getAllWithAuth } from '../../utils/fetching';
+import { getAllWithAuth, adding, updating, deleting } from '../../utils/fetching';
 import { selectProducts } from '../../redux/product/product.selector';
 import  { selectCategories } from '../../redux/category/category.selector';
 
@@ -83,7 +83,73 @@ const EventEditorDialog = props => {
         "itemList": []
     });
 
+    const [product, setProduct] = useState(null);
+    const [discountPrice, setDiscountPrice] = useState("");
+
     const { url, token } = useContext(AccessContext);
+
+    const updateEvent = () => {
+
+    }
+
+    const addEvent = () => {
+        props.handleBackdrop();
+        adding(`${url}/admin/event`, token, {
+            "title": event.event_title,
+            "startDate": event.start_date,
+            "endDate": event.end_date,
+            "description": event.description
+        })
+        .then(json => {
+            Promise.all( event.itemList.map( item => {
+                adding(`${url}/admin/event/${json.content[0].id}`, token, {
+                    "productId": item.product_id,
+                    "discountPrice": item.discount_price
+                })
+            }))
+            .then( arr => {
+                props.handleClose();
+                props.updateEvents();
+                setEvent({
+                    "event_title": "",
+                    "start_date": "",
+                    "end_date": "",
+                    "description": "",
+                    "itemList": []
+                });
+            });
+        });
+    }
+
+    const handleChange = ( val, attr ) => {
+        event[attr] = val;
+        setEvent({...event});
+    }
+
+    const handleAddDiscount = () => {
+        if ( discountPrice !== "" && product !== null ) {
+            event["itemList"].push({
+                "product_id": product.id,
+                "discount_price": parseFloat(discountPrice),
+                "product_name": product.name,
+                "original_price": product.price
+            });
+            setEvent({
+                ...event
+            });
+            setProduct(null);
+            setDiscountPrice("");
+        }
+    }
+    
+    const handleDeleteDiscount = deletedItem => {
+        event["itemList"] = event["itemList"].filter( item => 
+            deletedItem.product_id !== item.product_id || deletedItem.discount_price !== item.discount_price
+        );
+        setEvent({
+            ...event
+        });
+    }
 
     useEffect(() => {
         if ( props.data.title !== "" ) {
@@ -97,7 +163,7 @@ const EventEditorDialog = props => {
     return (
         <Dialog
             fullWidth={true}
-            maxWidth={'md'}
+            maxWidth={'lg'}
             open={props.open} 
             onClose={props.handleClose} 
             TransitionComponent={Transition}
@@ -110,7 +176,7 @@ const EventEditorDialog = props => {
                             label="Title"
                             fullWidth
                             value={event.event_title}
-                            // onChange={event => updateValue(event.target.value)}
+                            onChange={event => handleChange(event.target.value, "event_title")}
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -118,7 +184,7 @@ const EventEditorDialog = props => {
                             label="Description"
                             fullWidth
                             value={event.description}
-                            // onChange={event => updateValue(event.target.value)}
+                            onChange={event => handleChange(event.target.value, "description")}
                         />
                     </Grid>
                     <Grid item xs={6}>
@@ -127,7 +193,7 @@ const EventEditorDialog = props => {
                             type="date"
                             fullWidth
                             defaultValue={(event.hasOwnProperty("start_date")) ? event.start_date.substring(0,10) : ""}
-                            // onChange={event => updateValue(event.target.value)}
+                            onChange={event => handleChange(event.target.value, "start_date")}
                             InputLabelProps={{
                                 shrink: true
                             }}
@@ -139,7 +205,7 @@ const EventEditorDialog = props => {
                             type="date"
                             fullWidth
                             defaultValue={(event.hasOwnProperty("end_date")) ? event.end_date.substring(0,10) : ""}
-                            // onChange={event => updateValue(event.target.value)}
+                            onChange={event => handleChange(event.target.value, "end_date")}
                             InputLabelProps={{
                                 shrink: true
                             }}
@@ -164,7 +230,7 @@ const EventEditorDialog = props => {
                                             <TableCell>{item.original_price}</TableCell>
                                             <TableCell>{item.discount_price}</TableCell>
                                             <TableCell>
-                                                <IconButton size="small">
+                                                <IconButton size="small" onClick={e => handleDeleteDiscount(item)}>
                                                     <HighlightOffIcon />
                                                 </IconButton>
                                             </TableCell>
@@ -197,12 +263,14 @@ const EventEditorDialog = props => {
                                                         }}
                                                     />
                                                 )}
+                                                value={product}
+                                                onChange={(e, selectedProduct) => setProduct(selectedProduct)}
                                             />
                                         </TableCell>
-                                        <TableCell><TextField label="Original Price" variant="outlined" fullWidth size="small" disabled={true}/></TableCell>
-                                        <TableCell><TextField label="Discount Price" variant="outlined" fullWidth size="small" /></TableCell>
+                                        <TableCell><TextField label="Original Price" variant="outlined" fullWidth size="small" disabled={true} value={(product !== null) ? product.price : ""}/></TableCell>
+                                        <TableCell><TextField label="Discount Price" variant="outlined" fullWidth size="small" value={discountPrice} onChange={e => setDiscountPrice(e.target.value)}/></TableCell>
                                         <TableCell>
-                                            <IconButton size="small">
+                                            <IconButton size="small" onClick={e => handleAddDiscount()}>
                                                 <AddCircleIcon />
                                             </IconButton>
                                         </TableCell>
@@ -217,7 +285,7 @@ const EventEditorDialog = props => {
             <DialogActions>
             {
                 (props.data.title === "") ? 
-                    <Button variant="contained" color="primary" /*onClick={handleAddCategory}*/>
+                    <Button variant="contained" color="primary" onClick={() => addEvent()}>
                         Add
                     </Button>
                 :

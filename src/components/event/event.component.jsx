@@ -100,7 +100,7 @@ const Events = () => {
                             </TableHead>
                             <TableBody>
                                 {
-                                    events.map( event => <Row key={event.id} event={event} updateEvents={loadEvents} handleBackdrop={() => setBackdrop(true)} />)
+                                    events.map( event => <Row key={event.id} event={event} updateEvents={() => loadEvents()} handleBackdrop={() => setBackdrop(true)} />)
                                 }
                             </TableBody>
                         </Table>
@@ -123,6 +123,8 @@ const Events = () => {
                             }}
                             open={dialog}
                             handleClose={() => setDialog(false)}
+                            handleBackdrop={() => setBackdrop(true)}
+                            updateEvents={() => loadEvents()}
                         />
                     </Paper>
                 </Grid>
