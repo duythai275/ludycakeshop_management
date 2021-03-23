@@ -41,66 +41,72 @@ export const checkPrice = (originalPrice, discountPrice) => {
     return valid;
 }
 
-export const checkProduct = obj => { 
+export const checkProduct = obj => {
     var valid;
+
+    try {
+
+        var productName = obj.name;
+        var productDescription = obj.description;
+        var productBrand = obj.brand;
+        var productPrice = obj.price;
+        var productActive = obj.active;
+        var productImage = obj.image;
+        var productCategory = obj.category;
+        var productQuantity = obj.quantity;
+        var productWeightValue = obj.weightValue;
+        var productWeightType = obj.weightType;
+
+        if (!typeof productName === 'string' || !productName instanceof String) {
+            valid = false;
+        }
     
-    var productName = obj.name;
-    var productDescription = obj.description;
-    var productBrand = obj.brand;
-    var productPrice = obj.price;
-    var productActive = obj.active;
-    var productImage = obj.image;
-    var productCategory = obj.category;
-    var productQuantity = obj.quantity;
-    var productWeightValue = obj.weightValue;
-    var productWeightType = obj.weightType;
+        else if (!typeof productDescription === 'string' || !productDescription instanceof String) {
+            valid = false;
+        }
+    
+        else if (!typeof productBrand === 'string' || !productBrand instanceof String) {
+            valid = false;
+        }
+    
+        else if (!Number.isNaN(productPrice)) {
+            valid = false;
+        }
+    
+        else if (!typeof productActive === 'boolean' || !productActive instanceof Boolean) {
+            valid = false;
+        }
+    
+        else if (!typeof productImage === 'string' || !productImage instanceof String) {
+            valid = false;
+        }
+    
+        else if (!Number.isNaN(productCategory)) {
+            valid = false;
+        }
+    
+        else if (!Number.isNaN(productQuantity)) {
+            valid = false;
+        }
+    
+        else if (!Number.isNaN(productQuantity)) {
+            valid = false;
+        }
+    
+        else if (!Number.isNaN(productWeightValue)) {
+            valid = false;
+        }
+    
+        else if (!Number.isNaN(productWeightType)) {
+            valid = false;
+        }
+    
+        else {
+            valid = true;
+        }
 
-    if (!typeof productName === 'string' || !productName instanceof String) {
+    } catch (error) {
         valid = false;
-    }
-
-    else if (!typeof productDescription === 'string' || !productDescription instanceof String) {
-        valid = false;
-    }
-
-    else if (!typeof productBrand === 'string' || !productBrand instanceof String) {
-        valid = false;
-    }
-
-    else if (!Number.isNaN(productPrice)) {
-        valid = false;
-    }
-
-    else if (!typeof productActive === 'boolean' || !productActive instanceof Boolean) {
-        valid = false;
-    }
-
-    else if (!typeof productImage === 'string' || !productImage instanceof String) {
-        valid = false;
-    }
-
-    else if (!Number.isNaN(productCategory)) {
-        valid = false;
-    }
-
-    else if (!Number.isNaN(productQuantity)) {
-        valid = false;
-    }
-
-    else if (!Number.isNaN(productQuantity)) {
-        valid = false;
-    }
-
-    else if (!Number.isNaN(productWeightValue)) {
-        valid = false;
-    }
-
-    else if (!Number.isNaN(productWeightType)) {
-        valid = false;
-    }
-
-    else {
-        valid = true;
     }
 
     return valid;
