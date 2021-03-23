@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import TextField from '@material-ui/core/TextField';
+import SearchIcon from '@material-ui/icons/Search';
+import IconButton from '@material-ui/core/IconButton';
+import ClearIcon from '@material-ui/icons/Clear';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import List from '@material-ui/core/List';
@@ -13,6 +17,16 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Divider from '@material-ui/core/Divider';
+import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
+import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormLabel from '@material-ui/core/FormLabel';
 
 import Highcharts from 'highcharts';
 import HighchartsExporting from 'highcharts/modules/exporting';
@@ -21,7 +35,7 @@ import HighchartsReact from 'highcharts-react-official';
 import { useStyles } from './report.styles.js';
 
 HighchartsExporting(Highcharts);
-
+/*
 const TransferList = () => {
     const classes = useStyles();
     return (
@@ -85,14 +99,26 @@ const TransferList = () => {
         // </Paper>
     )
 }
-
-const DataSelection = () => {
+*/
+const DataTypeSelection = () => {
     const classes = useStyles();
     return (
         <Paper className={classes.paper}>
-            <Typography variant="subtitle1" component="h2">Data</Typography>
-            <Grid container>
-                <Grid item md={4} xs={12}>
+            {/* <Typography variant="subtitle1" component="h2">Data</Typography> */}
+            <Grid container spacing={2}>
+                {/* <Grid item md={6} xs={12}>
+                    <FormControl variant="outlined" className={classes.formControl}>
+                        <InputLabel>Report Type</InputLabel>
+                        <Select
+                            label="Report Type"
+                        >
+                            <MenuItem>Column</MenuItem>
+                            <MenuItem>Line</MenuItem>
+                            <MenuItem>Table</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <Grid item md={6} xs={12}>
                     <FormControl variant="outlined" className={classes.formControl}>
                         <InputLabel>Dimension</InputLabel>
                         <Select
@@ -102,114 +128,327 @@ const DataSelection = () => {
                             <MenuItem>Column</MenuItem>
                         </Select>
                     </FormControl>
+                </Grid> */}
+                <Grid item md={6} xs={12}>
+                    <TextField
+                        select
+                        label="Data"
+                        // value={periodType}
+                        // onChange={e => setPeriodType(e.target.value)}
+                        fullWidth
+                        variant="outlined"
+                        size="small"
+                    >
+                        <MenuItem>Departments</MenuItem>
+                        <MenuItem>Products</MenuItem>
+                    </TextField>
                 </Grid>
-                <Grid item md={4} xs={12}>
-                    <FormControl variant="outlined" className={classes.formControl}>
-                        <InputLabel>Data</InputLabel>
-                        <Select
-                            label="Data"
-                        >
-                            <MenuItem>Departments</MenuItem>
-                            <MenuItem>Products</MenuItem>
-                        </Select>
-                    </FormControl>
-                </Grid>
-                <Grid item md={4} xs={12}>
-                    <FormControl variant="outlined" className={classes.formControl}>
-                        <InputLabel>Data Type</InputLabel>
-                        <Select
-                            label="Data Type"
-                        >
-                            <MenuItem>Number of Sales</MenuItem>
-                            <MenuItem>Sales Revenue</MenuItem>
-                        </Select>
-                    </FormControl>
-                </Grid>
-                <Grid item xs={12}>
-                    <TransferList />
+                <Grid item md={6} xs={12}>
+                    <TextField
+                        select
+                        label="Data Type"
+                        // value={periodType}
+                        // onChange={e => setPeriodType(e.target.value)}
+                        fullWidth
+                        variant="outlined"
+                        size="small"
+                    >
+                        <MenuItem>Number of Sales</MenuItem>
+                        <MenuItem>Sales Revenue</MenuItem>
+                    </TextField>
                 </Grid>
             </Grid>
         </Paper>
     )
 }
 
-
-{/* <Grid container spacing={2}>
-    <Grid item xs={6}>
-        <Paper className={classes.paper}>
-            <List disablePadding className={classes.list}>
-                <ListItem button>
-                    <ListItemText primary="Product 1" secondary="Original Price: $10" />
-                </ListItem>
-                <ListItem button>
-                    <ListItemText primary="Product 1" secondary="Original Price: $10" />
-                </ListItem>
-                <ListItem button>
-                    <ListItemText primary="Product 1" secondary="Original Price: $10" />
-                </ListItem>
-                <ListItem button>
-                    <ListItemText primary="Product 1" secondary="Original Price: $10" />
-                </ListItem>
-                <ListItem button>
-                    <ListItemText primary="Product 1" secondary="Original Price: $10" />
-                </ListItem>
-            </List>
-        </Paper>
-    </Grid>
-    <Grid item xs={6}>
-        <Paper className={classes.paper}>
-            <List disablePadding className={classes.list}>
-                <ListItem button>
-                    <ListItemText primary="Product 1" secondary="Discount Price: $10" />
-                </ListItem>
-            </List>
-        </Paper>
-    </Grid>
-</Grid> */}
-
 const PeriodSelection = () => {
     const classes = useStyles();
     return (
+        <Grid container spacing={2}>
+            <Grid item xs={12}>
+                <Card>
+                    <CardActions>
+                        <Grid container spacing={2}>
+                            <Grid item xs={6}>
+                                <Button fullWidth size="small">
+                                    PREV YEAR
+                                </Button>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Button fullWidth size="small">
+                                    NEXT YEAR
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </CardActions>
+                    <Divider />
+                    <List disablePadding className={classes.listPaper} dense>
+                        <ListItem button>
+                            <ListItemIcon><Checkbox /></ListItemIcon>
+                            <ListItemText primary="January" />
+                        </ListItem>
+                        <ListItem button>
+                            <ListItemIcon><Checkbox /></ListItemIcon>
+                            <ListItemText primary="Febuary" />
+                        </ListItem>
+                        <ListItem button>
+                            <ListItemIcon><Checkbox /></ListItemIcon>
+                            <ListItemText primary="March" />
+                        </ListItem>
+                        <ListItem button>
+                            <ListItemIcon><Checkbox /></ListItemIcon>
+                            <ListItemText primary="April" />
+                        </ListItem>
+                        <ListItem button>
+                            <ListItemIcon><Checkbox /></ListItemIcon>
+                            <ListItemText primary="May" />
+                        </ListItem>
+                        <ListItem button>
+                            <ListItemIcon><Checkbox /></ListItemIcon>
+                            <ListItemText primary="June" />
+                        </ListItem>
+                        <ListItem button>
+                            <ListItemIcon><Checkbox /></ListItemIcon>
+                            <ListItemText primary="July" />
+                        </ListItem>
+                        <ListItem button>
+                            <ListItemIcon><Checkbox /></ListItemIcon>
+                            <ListItemText primary="August" />
+                        </ListItem>
+                        <ListItem button>
+                            <ListItemIcon><Checkbox /></ListItemIcon>
+                            <ListItemText primary="September" />
+                        </ListItem>
+                        <ListItem button>
+                            <ListItemIcon><Checkbox /></ListItemIcon>
+                            <ListItemText primary="October" />
+                        </ListItem>
+                        <ListItem button>
+                            <ListItemIcon><Checkbox /></ListItemIcon>
+                            <ListItemText primary="November" />
+                        </ListItem>
+                        <ListItem button>
+                            <ListItemIcon><Checkbox /></ListItemIcon>
+                            <ListItemText primary="December" />
+                        </ListItem>
+                    </List>
+                </Card>
+                {/* <Paper className={classes.listPaper}>
+                    
+                </Paper> */}
+            </Grid>
+        </Grid>
+    )
+}
+
+const DataSelection = () => {
+    const classes = useStyles();
+    return (
+        <Grid container spacing={2}>
+            <Grid item xs={6}>
+                <Card>
+                    <CardActions>
+                        <TextField label="Search Product" fullWidth size="small" 
+                            InputProps = {
+                                {
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                                <SearchIcon fontSize="small" />
+                                        </InputAdornment>
+                                    ),
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                // onClick={() => filterBy("","email")}
+                                            >
+                                                <ClearIcon fontSize="small" />
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ),
+                                    inputProps: {
+                                        "aria-label": "Search",
+                                    }
+                                }
+                            }
+                        />
+                    </CardActions>
+                    <Divider />
+                    <List disablePadding className={classes.listPaper1} dense={true}>
+                        <ListItem button>
+                            <ListItemText primary="Product 1" secondary="Meat" />
+                            <ListItemIcon>
+                                <IconButton size="small">
+                                    <KeyboardArrowRightIcon />
+                                </IconButton>
+                            </ListItemIcon>
+                        </ListItem>
+                        <ListItem button>
+                            <ListItemText primary="Product 2" secondary="Product" />
+                            <ListItemIcon>
+                                <IconButton size="small">
+                                    <KeyboardArrowRightIcon />
+                                </IconButton>
+                            </ListItemIcon>
+                        </ListItem>
+                        <ListItem button>
+                            <ListItemText primary="Product 3" secondary="Grocery" />
+                            <ListItemIcon>
+                                <IconButton size="small">
+                                    <KeyboardArrowRightIcon />
+                                </IconButton>
+                            </ListItemIcon>
+                        </ListItem>
+                        <ListItem button>
+                            <ListItemText primary="Product 4" secondary="Grocery" />
+                            <ListItemIcon>
+                                <IconButton size="small">
+                                    <KeyboardArrowRightIcon />
+                                </IconButton>
+                            </ListItemIcon>
+                        </ListItem>
+                    </List>
+                </Card>
+            </Grid>
+            <Grid item xs={6}>
+                <Card>
+                    <CardActions>
+                        <TextField label="Product" fullWidth size="small" value={"1 selected item"} disabled />
+                    </CardActions>
+                    <Divider />
+                    <List disablePadding className={classes.listPaper1} dense={true}>
+                        <ListItem button>
+                            <ListItemIcon>
+                                <IconButton size="small">
+                                    <KeyboardArrowLeftIcon />
+                                </IconButton>
+                            </ListItemIcon>
+                            <ListItemText primary="Product 5" secondary="Produce" />
+                        </ListItem>
+                    </List>
+                </Card>
+            </Grid>
+        </Grid>
+    )
+}
+
+const PeriodTypeSelection = () => {
+    const classes = useStyles();
+    const [periodType, setPeriodType] = useState("monthly");
+
+    return (
         <Paper className={classes.paper}>
-            <Typography variant="subtitle1" component="h2">Period</Typography>
+            {/* <Typography variant="subtitle1" component="h2">Period</Typography> */}
             <Grid container>
                 <Grid item xs={12}>
-                    <FormControl variant="outlined" className={classes.formControl1}>
-                        <InputLabel>Period Type</InputLabel>
-                        <Select
-                            label="Period Type"
-                        >
-                            <MenuItem>Weekly</MenuItem>
-                            <MenuItem>Monthly</MenuItem>
-                        </Select>
-                    </FormControl>
-                </Grid>
-                <Grid item xs={12}>
-                    <FormControl className={classes.formControl1}>
-                        <TextField
-                            label="Start Date"
-                            variant="outlined"
-                            type="date"
-                            InputLabelProps={{
-                                shrink: true
-                            }}
-                        />
-                    </FormControl>
-                </Grid>
-                <Grid item xs={12}>
-                    <FormControl className={classes.formControl1}>
                     <TextField
-                            label="End Date"
+                        select
+                        label="Period Type"
+                        value={periodType}
+                        onChange={e => setPeriodType(e.target.value)}
+                        fullWidth
+                        variant="outlined"
+                        size="small"
+                    >
+                        <MenuItem value={"weekly"}>Weekly</MenuItem>
+                        <MenuItem value={"monthly"}>Monthly</MenuItem>
+                    </TextField>
+                </Grid>
+                {/* <Grid item xs={12}>
+                    <FormControl className={classes.formControl}>
+                        <TextField
+                            label="Year"
                             variant="outlined"
-                            type="date"
-                            InputLabelProps={{
-                                shrink: true
-                            }}
+                            fullWidth
                         />
                     </FormControl>
-                </Grid>
+                </Grid> */}
             </Grid>
         </Paper>
+    )
+}
+
+
+
+const ReportTypeSelection = () => {
+    const classes = useStyles();
+    const [periodType, setPeriodType] = useState("monthly");
+
+    return (
+        <Paper className={classes.paper}>
+            {/* <Typography variant="subtitle1" component="h2">Period</Typography> */}
+            <Grid container>
+                <Grid item xs={12}>
+                    <TextField
+                        select
+                        label="Report Type"
+                        // value={periodType}
+                        // onChange={e => setPeriodType(e.target.value)}
+                        fullWidth
+                        variant="outlined"
+                        size="small"
+                    >
+                        <MenuItem>Column Chart</MenuItem>
+                        <MenuItem>Line Chart</MenuItem>
+                        <MenuItem>Pivot Table</MenuItem>
+                    </TextField>
+                </Grid>
+                {/* <Grid item xs={12}>
+                    <FormControl className={classes.formControl}>
+                        <TextField
+                            label="Year"
+                            variant="outlined"
+                            fullWidth
+                        />
+                    </FormControl>
+                </Grid> */}
+            </Grid>
+        </Paper>
+    )
+}
+
+const ReportSelection = () => {
+    const classes = useStyles();
+    // const [periodType, setPeriodType] = useState("monthly");
+
+    return (
+        <Grid container spacing={2}>
+            <Grid item xs={12}>
+                <Card>
+                    <CardContent className={classes.cardContent}>
+                        <Typography variant="subtitle1" component="h2">
+                            Dimensions
+                        </Typography>
+                        <br/>
+                        <Grid container spacing={2}>
+                            <Grid item xs={6}>
+                                <FormControl component="fieldset">
+                                    <FormLabel component="legend">Data</FormLabel>
+                                    <RadioGroup name="data" value={"category"}>
+                                        <FormControlLabel value="category" control={<Radio />} label="Category" />
+                                        <FormControlLabel value="serie" control={<Radio />} label="Serie" />
+                                    </RadioGroup>
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <FormControl component="fieldset">
+                                    <FormLabel component="legend">Period</FormLabel>
+                                    <RadioGroup name="period" value={"serie"}>
+                                        <FormControlLabel value="category" control={<Radio />} label="Category" />
+                                        <FormControlLabel value="serie" control={<Radio />} label="Serie" />
+                                    </RadioGroup>
+                                </FormControl>
+                            </Grid>
+                        </Grid>
+                    </CardContent>
+                    <CardActions>
+                        <Button variant="contained" color="primary" size="small" fullWidth>
+                            UPDATE
+                        </Button>
+                    </CardActions>
+                </Card>
+            </Grid>
+        </Grid>
     )
 }
 
@@ -281,15 +520,24 @@ const Reports = () => {
     
     return (
     <Grid container spacing={2}>
-        <Grid item xs={12} md={8} lg={8}>
-            <DataSelection />
+         <Grid item xs={12} md={3} lg={3}>
+            <ReportTypeSelection />
         </Grid>
-        <Grid item xs={12} md={4} lg={4}>
+        <Grid item xs={12} md={3} lg={3}>
+            <PeriodTypeSelection />
+        </Grid>
+        <Grid item xs={12} md={6} lg={6}>
+            <DataTypeSelection />
+        </Grid>
+        <Grid item xs={12} md={3} lg={3}>
+            <ReportSelection />
+        </Grid>
+        <Grid item xs={12} md={3} lg={3}>
             <PeriodSelection />
         </Grid>
-        {/* <Grid item xs={12} md={8} lg={8}>
-            <TransferList />
-        </Grid> */}
+        <Grid item xs={12} md={6} lg={6}>
+            <DataSelection />
+        </Grid>
         <Grid item xs={12}>
             <Paper className={classes.paper}>
                 <Typography variant="subtitle1" component="h2">Report</Typography>
@@ -300,6 +548,7 @@ const Reports = () => {
             </Paper>
         </Grid>
     </Grid>
+    
 )}
 
 export default Reports;

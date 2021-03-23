@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         position: 'relative',
         overflow: 'auto',
-        maxHeight: 230,
+        maxHeight: 220,
         // height: 300
     },
     listItem: {

@@ -7,12 +7,28 @@ export const useStyles = makeStyles((theme) => ({
         overflow: 'auto',
         flexDirection: 'column'
     },
+    listPaper: {
+        // padding: theme.spacing(2),
+        display: 'flex',
+        overflow: 'auto',
+        flexDirection: 'column',
+        height: 200
+    },
+    listPaper1: {
+        // padding: theme.spacing(2),
+        display: 'flex',
+        overflow: 'auto',
+        flexDirection: 'column',
+        height: 186
+    },
     formControl: {
         margin: theme.spacing(1),
-        minWidth: 240,
+        width: '95%',
     },
-    formControl1: {
-        margin: theme.spacing(1),
-        minWidth: 350,
+    cardContent: {
+        display: 'flex',
+        // overflow: 'auto',
+        flexDirection: 'column',
+        height: 168
     }
 }));
