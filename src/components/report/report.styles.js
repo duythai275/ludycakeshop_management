@@ -29,6 +29,6 @@ export const useStyles = makeStyles((theme) => ({
         display: 'flex',
         // overflow: 'auto',
         flexDirection: 'column',
-        height: 168
+        height: 108
     }
 }));
