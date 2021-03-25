@@ -134,9 +134,12 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes,
                 console.log(file.name);
                 formData.append("image_file", file, file.name);
             } 
-            // else {
-            //     formData.append("image_file", file, "/path/to/file");
-            // }
+            else {
+                // const fi = new File([JSON.stringify(null)], {type : 'application/json'});
+                // var fi = document.getElementById(`upload-image-product-${product.id}`).files[0];
+                var fi = new Blob();
+                formData.append("image_file", fi, "/path/to/file");
+            }
                 
             fetch(`${url}/admin/product`, {
                 'method': 'PUT',
@@ -205,7 +208,7 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes,
                                     <input 
                                         style={{ display: "none" }}
                                         accept="image/png, image/jpeg"
-                                        id="upload-image"
+                                        id={`upload-image-product-${product.id}`}
                                         type="file"
                                         onChange={e => handleUploadImage(e.target.files[0])}
                                     />

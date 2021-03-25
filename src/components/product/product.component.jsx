@@ -255,7 +255,8 @@ const Products = ({products, categories}) => {
                     <ProductEditorDialog open={dialog} handleClose={ () => setDialog(false) } data={
                         {
                             name: "New Product",
-                            categories: []
+                            categories: [],
+                            image: "https://sait-capstone.s3-us-west-2.amazonaws.com/dev_image.png"
                         }
                     }/>
                     <ImportExportDialog open={syncDialog} handleClose={ () => setSyncDialog(false) } />
