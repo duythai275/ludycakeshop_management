@@ -53,11 +53,12 @@ const Row = (props) => {
         <TableCell>{props.product.brand}</TableCell>
         <TableCell className={classes.chip}>
         {
-            props.product.category.map( category => 
-                <Chip key={category.id} size="small" label={category.name} />
-            )
+            // props.product.category.map( category => 
+            //     <Chip key={category.id} size="small" label={props.product.category.name} />
+            // )
             // product.category
         }
+            <Chip size="small" label={props.product.category.name} />
         </TableCell>
         <TableCell>{props.product.price}</TableCell>
         {/* <TableCell><Avatar src={`${url}/products/${product.image}`} className={classes.smallAvatar} /></TableCell> */}

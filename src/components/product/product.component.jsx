@@ -78,7 +78,7 @@ const Products = ({products, categories}) => {
         // })
 
         products.map( product => {
-            if( !Array.isArray(product.category) ) product.category = categories.filter( category => category.id === product.category )
+            if ((typeof product.category) !== "object") product.category = categories.filter( category => category.id === product.category )[0]
             if ( product.brand === null ) product.brand = "";
             return product;
         });
@@ -86,13 +86,14 @@ const Products = ({products, categories}) => {
         setItems(products.filter( item => 
             item["name"].toUpperCase().includes(filter.name.toUpperCase()) 
             && item["brand"].toUpperCase().includes(filter.brand.toUpperCase())
-            && item["category"][0].name.toUpperCase().includes(filter.category.toUpperCase())
+            && item["category"].name.toUpperCase().includes(filter.category.toUpperCase())
             // && item["categories"][0].name.toUpperCase().includes(filter.brand.toUpperCase())
             // .find( 
             //     category => category.name.toUpperCase().includes(filter.category.toUpperCase()) 
             // )
         ));
         
+        console.log("Test Product");
 
     }, [products, categories, filter] )
     
