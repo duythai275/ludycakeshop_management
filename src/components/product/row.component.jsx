@@ -1,5 +1,6 @@
 import React, { useContext, useRef, useState } from 'react';
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import IconButton from '@material-ui/core/IconButton';
@@ -14,6 +15,7 @@ import ProductEditorDialog from '../editorDialog/productEditorDialog';
 import AccessContext from '../../contexts/access.context';
 import AlertContext from '../../contexts/alert.context';
 
+import  { selectCategories } from '../../redux/category/category.selector';
 import { deleteProduct } from '../../redux/product/product.action';
 import { deleting } from '../../utils/fetching';
 
@@ -58,7 +60,7 @@ const Row = (props) => {
             // )
             // product.category
         }
-            <Chip size="small" label={props.product.category.name} />
+            <Chip size="small" label={props.categories.find( cate => cate.id === props.product.category).name} />
         </TableCell>
         <TableCell>{props.product.price}</TableCell>
         {/* <TableCell><Avatar src={`${url}/products/${product.image}`} className={classes.smallAvatar} /></TableCell> */}
@@ -75,4 +77,8 @@ const mapDispatchToProps = dispatch => ({
     deleteProduct: product => dispatch(deleteProduct(product))
 });
 
-export default connect(null, mapDispatchToProps)(Row);
+const mapStateToProps = createStructuredSelector({
+    categories: selectCategories
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Row);

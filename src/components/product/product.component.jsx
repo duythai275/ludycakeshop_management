@@ -78,7 +78,7 @@ const Products = ({products, categories}) => {
         // })
 
         products.map( product => {
-            if ((typeof product.category) !== "object") product.category = categories.filter( category => category.id === product.category )[0]
+            // if ((typeof product.category) !== "object") product.category = categories.filter( category => category.id === product.category )[0]
             if ( product.brand === null ) product.brand = "";
             return product;
         });
@@ -86,7 +86,7 @@ const Products = ({products, categories}) => {
         setItems(products.filter( item => 
             item["name"].toUpperCase().includes(filter.name.toUpperCase()) 
             && item["brand"].toUpperCase().includes(filter.brand.toUpperCase())
-            && item["category"].name.toUpperCase().includes(filter.category.toUpperCase())
+            && categories.find(cate => cate.id === item["category"]).name.toUpperCase().includes(filter.category.toUpperCase())
             // && item["categories"][0].name.toUpperCase().includes(filter.brand.toUpperCase())
             // .find( 
             //     category => category.name.toUpperCase().includes(filter.category.toUpperCase()) 
