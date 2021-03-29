@@ -89,7 +89,18 @@ const EventEditorDialog = props => {
     const { url, token } = useContext(AccessContext);
 
     const updateEvent = () => {
-
+        props.handleBackdrop();
+        updating(`${url}/admin/event`, token, {
+            "id": event.id,
+            "title": event.event_title,
+            "startDate": event.start_date,
+            "endDate": event.end_date,
+            "description": event.description
+        })
+        .then(json => {
+            // Delete all discount in db
+            // Add all discount in editor
+        });
     }
 
     const addEvent = () => {
@@ -289,7 +300,7 @@ const EventEditorDialog = props => {
                         Add
                     </Button>
                 :
-                    <Button variant="contained" color="primary" /*onClick={handleUpdateCategory}*/>
+                    <Button variant="contained" color="primary" onClick={() => updateEvent()}>
                         Update
                     </Button>
             }
