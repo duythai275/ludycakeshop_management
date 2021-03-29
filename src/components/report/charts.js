@@ -1,4 +1,4 @@
-export const columnChart = (title, categories, series) => {
+export const columnChart = (title, categories, series, dataType) => {
     return {
         chart: {
             type: 'column'
@@ -13,7 +13,7 @@ export const columnChart = (title, categories, series) => {
         yAxis: {
             min: 0,
             title: {
-                text: 'Thousands'
+                text: dataType
             }
         },
         tooltip: {
@@ -34,7 +34,7 @@ export const columnChart = (title, categories, series) => {
     }
 }
 
-export const lineChart = (title, categories, series) => {
+export const lineChart = (title, categories, series, dataType) => {
     return {
         chart: {
             type: 'line'
@@ -45,7 +45,7 @@ export const lineChart = (title, categories, series) => {
         },
         yAxis: {
             title: {
-                text: 'Number of Employees'
+                text: dataType
             }
         },
         xAxis: {

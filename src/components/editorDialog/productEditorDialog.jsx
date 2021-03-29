@@ -107,12 +107,31 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes,
 
     const handleProduct = () => {
         if ( data.name === "New Product" ) {
-            product.category = product.category[0].id;
-            product.price = parseFloat(product.price);
-            product.quantity = parseInt(product.quantity);
-            product.weightType = parseInt(product.weightType);
-
-            adding(`${url}/admin/product`, token, product)
+            let formData = new FormData();
+            formData.append("name", product.name);
+            formData.append("description", product.description);
+            formData.append("brand", product.brand);
+            formData.append("price", product.price + "");
+            formData.append("active", product.active + "");
+            formData.append("category", ((typeof product.category) === "object") ? ("" + product.category.id) : ("" + product.category));
+            formData.append("quantity", product.quantity + "");
+            formData.append("weightValue", product.weightValue + "");
+            formData.append("weightType", product.weightType + "");
+            if ( file !== null ) {
+                formData.append("image_file", file, file.name);
+            } 
+            else {
+                formData.append("image_file", new Blob(), "/path/to/file");
+            }
+                
+            fetch(`${url}/admin/product`, {
+                'method': 'POST',
+                'headers': {
+                    'Authorization': 'Bearer ' + token,
+                    // 'Content-Type': 'application/json'
+                },
+                'body': formData
+            }).then( res => res.json())
             .then(result => {
                 addProduct(result);
                 handleAlert(true, "Added Successfully!");
@@ -131,7 +150,6 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes,
             formData.append("weightValue", product.weightValue + "");
             formData.append("weightType", product.weightType + "");
             if ( file !== null ) {
-                console.log(file.name);
                 formData.append("image_file", file, file.name);
             } 
             else {
@@ -147,7 +165,6 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes,
                 'body': formData
             }).then( res => res.json())
             .then(result => {
-                console.log(result);
                 editProduct(product);
                 handleAlert(true, "Edited Successfully!");
             });
@@ -189,17 +206,9 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes,
                         <Card className={classes.image}>
                             <CardMedia 
                                 component="img"
-                                alt="Contemplative Reptile"
                                 height="310"
                                 image={(image === null) ? product.image : image}
-                                // title="Contemplative Reptile"
-                            />
-                            {/* <CardContent>
-                                <Typography variant="body1">
-                                    {(file === null) ? "" : file.name}
-                                </Typography>
-                            </CardContent> */}
-                            <Divider />
+                            /><Divider />
                             <CardActions>
                                 <label htmlFor="upload-image" style={{display:"inline-block", width: "100%"}}>
                                     <input 
@@ -244,7 +253,6 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes,
                                 </Grid>
                                 <Grid item xs={12}>
                                     <FormControl>
-                                        {/* <FormLabel>Active</FormLabel> */}
                                         <FormControlLabel 
                                             control={<Checkbox checked={product.active} color="primary" onChange={ () => updateValue(!product.active,"active") } />}
                                             label="Active"
@@ -258,7 +266,6 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes,
                                     <TextField label="Weight Value" fullWidth value={product.weightValue} onChange={event => updateValue(event.target.value, "weightValue")} />
                                 </Grid>
                                 <Grid item xs={4}>
-                                    {/* <TextField label="Weight Type" fullWidth value={product.weightType} onChange={event => updateValue(event.target.value, "weightType")} /> */}
                                     <FormControl className={classes.formControl}>
                                         <InputLabel>Weight Type</InputLabel>
                                         <Select label="Weight Type" value={(product.weightType === undefined ) ? "" : product.weightType} onChange={event => updateValue(event.target.value, "weightType")}>

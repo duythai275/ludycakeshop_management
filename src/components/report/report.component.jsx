@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -31,6 +34,9 @@ import HighchartsExporting from 'highcharts/modules/exporting';
 import HighchartsReact from 'highcharts-react-official';
 
 import { columnChart, lineChart } from './charts';
+
+import { selectProducts } from '../../redux/product/product.selector';
+import  { selectCategories } from '../../redux/category/category.selector';
 
 import { useStyles } from './report.styles.js';
 
@@ -114,9 +120,8 @@ const ReportSelection = props => {
     )
 }
 
-const PeriodTypeSelection = () => {
+const PeriodTypeSelection = props => {
     const classes = useStyles();
-    const [periodType, setPeriodType] = useState("monthly");
 
     return (
         <Paper className={classes.paper}>
@@ -125,8 +130,8 @@ const PeriodTypeSelection = () => {
                     <TextField
                         select
                         label="Period Type"
-                        value={periodType}
-                        onChange={e => setPeriodType(e.target.value)}
+                        value={props.periodType}
+                        onChange={e => props.changePeriodType(e.target.value)}
                         fullWidth
                         variant="outlined"
                         size="small"
@@ -220,7 +225,7 @@ const PeriodSelection = () => {
     )
 }
 
-const DataTypeSelection = () => {
+const DataTypeSelection = props => {
     const classes = useStyles();
     return (
         <Paper className={classes.paper}>
@@ -244,14 +249,14 @@ const DataTypeSelection = () => {
                     <TextField
                         select
                         label="Data Type"
-                        // value={periodType}
-                        // onChange={e => setPeriodType(e.target.value)}
+                        value={props.dataType}
+                        onChange={e => props.changeDataType(e.target.value)}
                         fullWidth
                         variant="outlined"
                         size="small"
                     >
-                        <MenuItem>Number of Sales</MenuItem>
-                        <MenuItem>Sales Revenue</MenuItem>
+                        <MenuItem value="Number of Sales">Number of Sales</MenuItem>
+                        <MenuItem value="Sales Revenue">Sales Revenue</MenuItem>
                     </TextField>
                 </Grid>
             </Grid>
@@ -349,7 +354,7 @@ const DataSelection = () => {
     )
 }
 
-const Reports = () => {
+const Reports = props => {
     const classes = useStyles();
 
     const fakeData = [
@@ -359,16 +364,24 @@ const Reports = () => {
         [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4, 47.6, 39.1, 46.8, 51.1]
     ];
 
-    const [data, setData] = useState(['Grocery','Frozen','Produce','Meat']);
-    const [period, setPeriod] = useState(['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']);
+    // Report
     const [title, setTitle] = useState("Report");
-
     const [chart, setChart] = useState("column");
     const [dimension, setDimension] = useState("category");
 
+    // Period
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const [year, setYear] = useState(2020);
+    const [periodType, setPeriodType] = useState("monthly");
+    const [period, setPeriod] = useState([]);
+
+    // Data
+    const [dataType, setDataType] = useState("");
+    const [data, setData] = useState(['Grocery','Frozen','Produce','Meat']);
+        
+    // HighChart
     const [categories, setCategories] = useState([]);
     const [series, setSeries] = useState([]);
-
     const [chartOption, setChartOption] = useState({});
 
     let transformData = [];
@@ -383,8 +396,8 @@ const Reports = () => {
             });
         });
 
-        if (chart === 'column') setChartOption(columnChart(title,categories,transformData));
-        else if (chart === 'line') setChartOption(lineChart(title,categories,transformData));
+        if (chart === 'column') setChartOption(columnChart(title,categories,transformData,dataType));
+        else if (chart === 'line') setChartOption(lineChart(title,categories,transformData,dataType));
         else setChartOption({});
     }
 
@@ -406,10 +419,10 @@ const Reports = () => {
             />
         </Grid>
         <Grid item xs={12} md={3} lg={3}>
-            <PeriodTypeSelection />
+            <PeriodTypeSelection periodType={periodType} changePeriodType={val => setPeriodType(val)}/>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-            <DataTypeSelection />
+            <DataTypeSelection dataType={dataType} changeDataType={val => setDataType(val)} />
         </Grid>
         <Grid item xs={12} md={3} lg={3}>
             <ReportSelection 
@@ -419,7 +432,10 @@ const Reports = () => {
             />
         </Grid>
         <Grid item xs={12} md={3} lg={3}>
-            <PeriodSelection />
+            <PeriodSelection 
+                changeYear={a => (a === "prev") ? setYear(year - 1) : setYear(year + 1)}
+                period={period}
+            />
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
             <DataSelection />
@@ -436,4 +452,9 @@ const Reports = () => {
     
 )}
 
-export default Reports;
+const mapStateToProps = createStructuredSelector({
+    products: selectProducts,
+    categories: selectCategories
+});
+
+export default connect(mapStateToProps)(Reports);

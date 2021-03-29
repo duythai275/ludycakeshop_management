@@ -62,23 +62,7 @@ const Products = ({products, categories}) => {
 
     useEffect( () => {
 
-        // products.map( product => {
-        //     product["categories"] = productCategories.filter(
-        //         productCategory => productCategory.product === product._id
-        //     ).map(
-        //         productCategory => {
-        //             const cate = categories.find( category => category._id === productCategory.category );
-        //             return {
-        //                 ...cate,
-        //                 mapping: productCategory._id
-        //             }
-        //         }
-        //     );
-        //     return product;
-        // })
-
         products.map( product => {
-            // if ((typeof product.category) !== "object") product.category = categories.filter( category => category.id === product.category )[0]
             if ( product.brand === null ) product.brand = "";
             return product;
         });
@@ -87,20 +71,11 @@ const Products = ({products, categories}) => {
             item["name"].toUpperCase().includes(filter.name.toUpperCase()) 
             && item["brand"].toUpperCase().includes(filter.brand.toUpperCase())
             && categories.find(cate => cate.id === item["category"]).name.toUpperCase().includes(filter.category.toUpperCase())
-            // && item["categories"][0].name.toUpperCase().includes(filter.brand.toUpperCase())
-            // .find( 
-            //     category => category.name.toUpperCase().includes(filter.category.toUpperCase()) 
-            // )
         ));
         
         console.log("Test Product");
 
-    }, [products, categories, filter] )
-    
-    // const handleChangeRowsPerPage = (event) => {
-    //     setRowsPerPage(+event.target.value);
-    //     setPage(0);
-    // };
+    }, [products, categories, filter] );
 
     return (
         <Grid container spacing={2}>
