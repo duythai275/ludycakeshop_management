@@ -371,7 +371,7 @@ const Reports = props => {
 
     // Period
     const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    const [year, setYear] = useState(2020);
+    const [year, setYear] = useState(2021);
     const [periodType, setPeriodType] = useState("monthly");
     const [period, setPeriod] = useState([]);
 
