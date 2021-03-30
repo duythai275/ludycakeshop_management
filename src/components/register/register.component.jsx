@@ -4,6 +4,11 @@ import logo from '../../assets/logo.jpg';
 import AccessContext from '../../contexts/access.context';
 
 const Register = () => {
+    const classes = useStyles();
+
+    const [backdrop, setBackdrop] = useState(false);
+    const [errMsg, setErrMsg] = useState(null);
+    const [serverAddress, setServerAddress] = useState("https://hha-capstone.herokuapp.com/api");
 
     const register = () => {
         // code to register an account goes here
@@ -13,56 +18,69 @@ const Register = () => {
         <Container component="main" maxWidth="xs">
             <CssBaseline />
             <div className={classes.paper}>
-                    <Avatar alt="Hiephoa" src={logo} className={classes.avatar} />
-                    <Typography component="h1" variant="h5">
-                        Hiephoa Site's Management
+                <Avatar alt="Hiephoa" src={logo} className={classes.avatar} />
+                <Typography component="h1" variant="h5">
+                    Hiephoa Site's Management
                     </Typography>
-                    <div className={classes.form}>
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="email"
-                            label="email"
-                            name="email"
-                            value={email}
-                            onChange={event => setEmail(event.target.value)}
-                        />
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="password"
-                            label="Password"
-                            type="password"
-                            id="password"
-                            value={password}
-                            onChange={event => setPassword(event.target.value)}
-                        />
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submit}
-                            onClick={() => register()}
-                        >
-                            Register Account
+                <div className={classes.form}>
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="username"
+                        label="username"
+                        name="username"
+                        value={username}
+                        onChange={event => setUsername(event.target.value)}
+                    />
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="email"
+                        label="email"
+                        name="email"
+                        value={email}
+                        onChange={event => setEmail(event.target.value)}
+                    />
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Password"
+                        type="password"
+                        id="password"
+                        value={password}
+                        onChange={event => setPassword(event.target.value)}
+                    />
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                        onClick={() => register()}
+                    >
+                        Register Account
                         </Button>
-                    </div>
+                </div>
             </div>
-            { 
-            ( errMsg !== null ) ? 
-                <Alert severity="error">
-                    Error - {errMsg}
-                </Alert> 
-                : null 
+            {
+                (errMsg !== null) ?
+                    <Alert severity="error">
+                        Error - {errMsg}
+                    </Alert>
+                    : null
             }
             <Backdrop className={classes.backdrop} open={backdrop}>
                 <CircularProgress color="inherit" />
             </Backdrop>
         </Container>
-      );
-} 
+    );
+}
+
+export default Register;
