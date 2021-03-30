@@ -10,7 +10,7 @@ import Orders from '../order/order.compoment';
 import Products from '../product/product.component';
 import Categories from '../category/category.component';
 import WeightTypes from '../weightType/weightType.component';
-import Settings from '../intro/setting.component';
+import Banners from '../banner/banner.component';
 import Reports from '../report/report.component';
 import Menu from '../mainMenu/menu.component';
 import Users from '../user/user.component';
@@ -103,7 +103,7 @@ const Mainpage = ({ setOrders, setCategories, setProducts, setWeightType }) => {
                             <Route exact path="/weightTypes" component={WeightTypes} />
                             <Route exact path="/reports" component={Reports} />
                             <Route exact path="/users" component={Users} />
-                            <Route exact path="/settings" component={Settings} />
+                            <Route exact path="/banners" component={Banners} />
                         </Switch>
                     </Container>
                 </main>

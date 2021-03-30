@@ -120,11 +120,11 @@ const ListMenu = ({history}) => {
                     </ListItemIcon>
                     <ListItemText primary="Users" />
                 </ListItem>
-                <ListItem button onClick={() => history.push("/settings")}>
+                <ListItem button onClick={() => history.push("/banners")}>
                     <ListItemIcon>
                         <SettingsIcon />
                     </ListItemIcon>
-                    <ListItemText primary="Setting" />
+                    <ListItemText primary="Banner" />
                 </ListItem>
             </div>
         </List>

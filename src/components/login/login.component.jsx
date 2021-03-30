@@ -8,6 +8,8 @@ import Container from '@material-ui/core/Container';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Alert from '@material-ui/lab/Alert';
+import Link from '@material-ui/core/Link';
+import Grid from '@material-ui/core/Grid';
 
 import { useStyles } from './login.styles';
 import logo from '../../assets/logo.jpg';
@@ -54,57 +56,66 @@ const Login = () => {
     <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
-                <Avatar alt="Hiephoa" src={logo} className={classes.avatar} />
-                <Typography component="h1" variant="h5">
-                    Hiephoa Site's Management
-                </Typography>
-                <div className={classes.form}>
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="server"
-                        label="Server Address"
-                        name="server"
-                        autoFocus
-                        value={serverAddress}
-                        onChange={event => setServerAddress(event.target.value)}
-                    />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="email"
-                        label="email"
-                        name="email"
-                        value={email}
-                        onChange={event => setEmail(event.target.value)}
-                    />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="password"
-                        label="Password"
-                        type="password"
-                        id="password"
-                        value={password}
-                        onChange={event => setPassword(event.target.value)}
-                    />
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                        onClick={() => login()}
-                    >
-                        Login
-                    </Button>
-                </div>
+            <Avatar alt="Hiephoa" src={logo} className={classes.avatar} />
+            <Typography component="h1" variant="h5">
+                Hiephoa Site's Management
+            </Typography>
+            <div className={classes.form}>
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="server"
+                    label="Server Address"
+                    name="server"
+                    autoFocus
+                    value={serverAddress}
+                    onChange={event => setServerAddress(event.target.value)}
+                />
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="email"
+                    label="email"
+                    name="email"
+                    value={email}
+                    onChange={event => setEmail(event.target.value)}
+                />
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    value={password}
+                    onChange={event => setPassword(event.target.value)}
+                />
+                <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                    onClick={() => login()}
+                >
+                    Login
+                </Button>
+                <Grid container>
+                    <Grid item xs>
+                        <div align="center">
+                            <Link href="#" variant="body2" onClick>
+                                {"Create a new user"}
+                            </Link>
+                        </div>
+                    </Grid>
+                </Grid>
+            </div>
         </div>
         { 
         ( errMsg !== null ) ? 
