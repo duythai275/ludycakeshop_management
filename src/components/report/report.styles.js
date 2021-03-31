@@ -30,5 +30,12 @@ export const useStyles = makeStyles((theme) => ({
         // overflow: 'auto',
         flexDirection: 'column',
         height: 108
+    },
+    option: {
+        fontSize: 15,
+        '& > span': {
+            marginRight: 10,
+            fontSize: 18,
+        }
     }
 }));

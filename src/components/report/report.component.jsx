@@ -32,10 +32,13 @@ const Reports = props => {
 
     // Period
     const [period, setPeriod] = useState([]);
+    const [periodType, setPeriodType] = useState("monthly");
+    const [year, setYear] = useState(2021);
 
     // Data
-    const [data, setData] = useState(['Grocery','Frozen','Produce','Meat']);
+    const [data, setData] = useState([]);
     const [dataType, setDataType] = useState("Sales Revenue");
+    const [type, setType] = useState("category");
         
     // HighChart
     const [categories, setCategories] = useState([]);
@@ -82,12 +85,15 @@ const Reports = props => {
         <Grid item xs={12} md={3} lg={3}>
             <PeriodSelection 
                 period={period} changePeriod={periods => setPeriod(periods)}
+                periodType={periodType} changePeriodType={ pType => setPeriodType(pType) }
+                year={year} changeYear={y => setYear(y)}
             />
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
             <DataSelection 
                 data={data} changeData={d => setData(d)}
                 dataType={dataType} changeDataType={dType => setDataType(dType)}
+                type={type} changeType={t => setType(t)}
             />
         </Grid>
         <Grid item xs={12}>

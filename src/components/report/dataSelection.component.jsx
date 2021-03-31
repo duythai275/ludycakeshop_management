@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
@@ -28,7 +28,12 @@ import { useStyles } from './report.styles.js';
 const DataSelection = props => {
     const classes = useStyles();
 
-    const [type, setType] = useState("category");
+    const [search, setSearch] = useState("");
+
+    const uploadList = value => {
+        props.changeType(value);
+        props.changeData([]);
+    }
     
     return (
         <Grid container spacing={2}>
@@ -42,8 +47,8 @@ const DataSelection = props => {
                                 fullWidth
                                 variant="outlined"
                                 size="small"
-                                value={type}
-                                onChange={e => setType(e.target.value) }
+                                value={props.type}
+                                onChange={e => uploadList(e.target.value) }
                             >
                                 <MenuItem value="category">Departments</MenuItem>
                                 <MenuItem value="product">Products</MenuItem>
@@ -69,7 +74,7 @@ const DataSelection = props => {
             <Grid item xs={6}>
                 <Card>
                     <CardActions>
-                        <TextField label="Search Product" fullWidth size="small" 
+                        <TextField label="Search" fullWidth size="small" value={search} onChange={e => setSearch(e.target.value)}
                             InputProps = {
                                 {
                                     startAdornment: (
@@ -80,7 +85,7 @@ const DataSelection = props => {
                                     endAdornment: (
                                         <InputAdornment position="end">
                                             <IconButton
-                                                // onClick={() => filterBy("","email")}
+                                                onClick={() => setSearch("")}
                                             >
                                                 <ClearIcon fontSize="small" />
                                             </IconButton>
@@ -95,56 +100,58 @@ const DataSelection = props => {
                     </CardActions>
                     <Divider />
                     <List disablePadding className={classes.listPaper1} dense={true}>
-                        <ListItem button>
-                            <ListItemText primary="Product 1" secondary="Meat" />
-                            <ListItemIcon>
-                                <IconButton size="small">
-                                    <KeyboardArrowRightIcon />
-                                </IconButton>
-                            </ListItemIcon>
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemText primary="Product 2" secondary="Product" />
-                            <ListItemIcon>
-                                <IconButton size="small">
-                                    <KeyboardArrowRightIcon />
-                                </IconButton>
-                            </ListItemIcon>
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemText primary="Product 3" secondary="Grocery" />
-                            <ListItemIcon>
-                                <IconButton size="small">
-                                    <KeyboardArrowRightIcon />
-                                </IconButton>
-                            </ListItemIcon>
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemText primary="Product 4" secondary="Grocery" />
-                            <ListItemIcon>
-                                <IconButton size="small">
-                                    <KeyboardArrowRightIcon />
-                                </IconButton>
-                            </ListItemIcon>
-                        </ListItem>
+                    {
+                        (props.type === "product") ? props.products.filter(product => !props.data.includes(product) && product.name.toUpperCase().includes(search.toUpperCase())).map( product => 
+                            <ListItem button onClick={() => props.changeData([...props.data,...[product]])}>
+                                <ListItemText primary={(product.name.length > 23) ? `${product.name.substring(0,20)}...` : product.name} secondary={props.categories.find(category => category.id === product.category).name} />
+                                <ListItemIcon>
+                                    <IconButton size="small">
+                                        <KeyboardArrowRightIcon />
+                                    </IconButton>
+                                </ListItemIcon>
+                            </ListItem>
+                        ) : props.categories.filter(category => !props.data.includes(category) && category.name.toUpperCase().includes(search.toUpperCase())).map( category => 
+                            <ListItem button onClick={() => props.changeData([...props.data,...[category]])}>
+                                <ListItemText primary={category.name} secondary={`${props.products.filter(product => product.category === category.id).length} items`} />
+                                <ListItemIcon>
+                                    <IconButton size="small">
+                                        <KeyboardArrowRightIcon />
+                                    </IconButton>
+                                </ListItemIcon>
+                            </ListItem>
+                        )
+                    }
                     </List>
                 </Card>
             </Grid>
             <Grid item xs={6}>
                 <Card>
                     <CardActions>
-                        <TextField label="Product" fullWidth size="small" value={"1 selected item"} disabled />
+                        <TextField label="Product" fullWidth size="small" value={`${props.data.length} selected items`} disabled />
                     </CardActions>
                     <Divider />
                     <List disablePadding className={classes.listPaper1} dense={true}>
-                        <ListItem button>
-                            <ListItemIcon>
-                                <IconButton size="small">
-                                    <KeyboardArrowLeftIcon />
-                                </IconButton>
-                            </ListItemIcon>
-                            <ListItemText primary="Product 5" secondary="Produce" />
-                        </ListItem>
+                    {
+                        (props.type === "product") ? props.data.map( product => 
+                            <ListItem button onClick={() => props.changeData(props.data.filter(pData => pData.id !== product.id))}>
+                                <ListItemIcon>
+                                    <IconButton size="small">
+                                        <KeyboardArrowLeftIcon />
+                                    </IconButton>
+                                </ListItemIcon>
+                                <ListItemText primary={(product.name.length > 23) ? `${product.name.substring(0,20)}...` : product.name} secondary={props.categories.find(category => category.id === product.category).name} />
+                            </ListItem>
+                        ) : props.data.map( category => 
+                            <ListItem button onClick={() => props.changeData(props.data.filter(pData => pData.id !== category.id))}>
+                                <ListItemIcon>
+                                    <IconButton size="small">
+                                        <KeyboardArrowLeftIcon />
+                                    </IconButton>
+                                </ListItemIcon>
+                                <ListItemText primary={category.name} secondary={`${props.products.filter(product => product.category === category.id).length} items`} />
+                            </ListItem>
+                        )
+                    }
                     </List>
                 </Card>
             </Grid>

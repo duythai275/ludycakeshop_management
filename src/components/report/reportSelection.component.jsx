@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -18,7 +18,6 @@ import { useStyles } from './report.styles.js';
 
 const ReportSelection = props => {
     const classes = useStyles();
-    const [periodType, setPeriodType] = useState("monthly");
 
     return (
         <Grid container spacing={2}>
