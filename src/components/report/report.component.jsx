@@ -1,358 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
 
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import FormControl from '@material-ui/core/FormControl';
-import TextField from '@material-ui/core/TextField';
-import SearchIcon from '@material-ui/icons/Search';
-import IconButton from '@material-ui/core/IconButton';
-import ClearIcon from '@material-ui/icons/Clear';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import MenuItem from '@material-ui/core/MenuItem';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Checkbox from '@material-ui/core/Checkbox';
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Divider from '@material-ui/core/Divider';
-import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
-import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormLabel from '@material-ui/core/FormLabel';
+
+import ReportSelection from './reportSelection.component';
+import PeriodSelection from './periodSelection.component';
+import DataSelection from './dataSelection.component';
+
+import { useStyles } from './report.styles.js';
 
 import Highcharts from 'highcharts';
 import HighchartsExporting from 'highcharts/modules/exporting';
 import HighchartsReact from 'highcharts-react-official';
-
 import { columnChart, lineChart } from './charts';
-
-import { selectProducts } from '../../redux/product/product.selector';
-import  { selectCategories } from '../../redux/category/category.selector';
-
-import { useStyles } from './report.styles.js';
-
 HighchartsExporting(Highcharts);
-
-const ReportTypeSelection = props => {
-    const classes = useStyles();
-    const [periodType, setPeriodType] = useState("monthly");
-
-    return (
-        <Paper className={classes.paper}>
-            <Grid container>
-                <Grid item xs={12}>
-                    <TextField
-                        select
-                        label="Report Type"
-                        // value={periodType}
-                        // onChange={e => setPeriodType(e.target.value)}
-                        fullWidth
-                        variant="outlined"
-                        size="small"
-                        value={props.chart}
-                        onChange={e => props.changeChart(e.target.value)}
-                    >
-                        <MenuItem value={"column"}>Column Chart</MenuItem>
-                        <MenuItem value={"line"}>Line Chart</MenuItem>
-                        <MenuItem value={"table"}>Pivot Table</MenuItem>
-                    </TextField>
-                </Grid>
-            </Grid>
-        </Paper>
-    )
-}
-
-const ReportSelection = props => {
-    const classes = useStyles();
-    // const [periodType, setPeriodType] = useState("monthly");
-
-    return (
-        <Grid container spacing={2}>
-            <Grid item xs={12}>
-                <Card>
-                    <CardActions>
-                        <TextField label="Report Title" size="small" fullWidth value={props.title} onChange={e => props.changeTitle(e.target.value)} />
-                    </CardActions>
-                    <CardContent className={classes.cardContent}>
-                        <Grid container spacing={2}>
-                            {/* <Grid item xs={12}>
-                                <Typography variant="body1" component="span">
-                                    Dimensions
-                                </Typography>
-                            </Grid> */}
-                            <Grid item xs={6}>
-                                <FormControl component="fieldset">
-                                    <FormLabel component="legend">Period</FormLabel>
-                                    <RadioGroup name="period" value={props.dimension} onChange={e => props.changeDimension(e.target.value)}>
-                                        <FormControlLabel value="category" control={<Radio />} label="Category" />
-                                        <FormControlLabel value="serie" control={<Radio />} label="Serie" />
-                                    </RadioGroup>
-                                </FormControl>
-                            </Grid>
-                            <Grid item xs={6}>
-                                <FormControl component="fieldset">
-                                    <FormLabel component="legend">Data</FormLabel>
-                                    <RadioGroup name="data" value={(props.dimension === "serie") ? "category" : "serie"} onChange={e => props.changeDimension((e.target.value === "serie") ? "category" : "serie")}>
-                                        <FormControlLabel value="category" control={<Radio />} label="Category" />
-                                        <FormControlLabel value="serie" control={<Radio />} label="Serie" />
-                                    </RadioGroup>
-                                </FormControl>
-                            </Grid>
-                        </Grid>
-                    </CardContent>
-                    <CardActions>
-                        <Button variant="contained" color="primary" size="small" fullWidth onClick={() => props.updateReport()}>
-                            UPDATE
-                        </Button>
-                    </CardActions>
-                </Card>
-            </Grid>
-        </Grid>
-    )
-}
-
-const PeriodTypeSelection = props => {
-    const classes = useStyles();
-
-    return (
-        <Paper className={classes.paper}>
-            <Grid container>
-                <Grid item xs={12}>
-                    <TextField
-                        select
-                        label="Period Type"
-                        value={props.periodType}
-                        onChange={e => props.changePeriodType(e.target.value)}
-                        fullWidth
-                        variant="outlined"
-                        size="small"
-                    >
-                        <MenuItem value={"weekly"}>Weekly</MenuItem>
-                        <MenuItem value={"monthly"}>Monthly</MenuItem>
-                    </TextField>
-                </Grid>
-            </Grid>
-        </Paper>
-    )
-}
-
-const PeriodSelection = () => {
-    const classes = useStyles();
-    return (
-        <Grid container spacing={2}>
-            <Grid item xs={12}>
-                <Card>
-                    <CardActions>
-                        <Grid container spacing={2}>
-                            <Grid item xs={6}>
-                                <Button fullWidth size="small">
-                                    PREV YEAR
-                                </Button>
-                            </Grid>
-                            <Grid item xs={6}>
-                                <Button fullWidth size="small">
-                                    NEXT YEAR
-                                </Button>
-                            </Grid>
-                        </Grid>
-                    </CardActions>
-                    <Divider />
-                    <List disablePadding className={classes.listPaper} dense>
-                        <ListItem button>
-                            <ListItemIcon><Checkbox /></ListItemIcon>
-                            <ListItemText primary="January" />
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemIcon><Checkbox /></ListItemIcon>
-                            <ListItemText primary="Febuary" />
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemIcon><Checkbox /></ListItemIcon>
-                            <ListItemText primary="March" />
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemIcon><Checkbox /></ListItemIcon>
-                            <ListItemText primary="April" />
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemIcon><Checkbox /></ListItemIcon>
-                            <ListItemText primary="May" />
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemIcon><Checkbox /></ListItemIcon>
-                            <ListItemText primary="June" />
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemIcon><Checkbox /></ListItemIcon>
-                            <ListItemText primary="July" />
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemIcon><Checkbox /></ListItemIcon>
-                            <ListItemText primary="August" />
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemIcon><Checkbox /></ListItemIcon>
-                            <ListItemText primary="September" />
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemIcon><Checkbox /></ListItemIcon>
-                            <ListItemText primary="October" />
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemIcon><Checkbox /></ListItemIcon>
-                            <ListItemText primary="November" />
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemIcon><Checkbox /></ListItemIcon>
-                            <ListItemText primary="December" />
-                        </ListItem>
-                    </List>
-                </Card>
-                {/* <Paper className={classes.listPaper}>
-                    
-                </Paper> */}
-            </Grid>
-        </Grid>
-    )
-}
-
-const DataTypeSelection = props => {
-    const classes = useStyles();
-    return (
-        <Paper className={classes.paper}>
-            <Grid container spacing={2}>
-                <Grid item md={6} xs={12}>
-                    <TextField
-                        select
-                        label="Data"
-                        // value={periodType}
-                        // onChange={e => setPeriodType(e.target.value)}
-                        fullWidth
-                        variant="outlined"
-                        size="small"
-                        value={"product"}
-                    >
-                        <MenuItem value="category">Departments</MenuItem>
-                        <MenuItem value="product">Products</MenuItem>
-                    </TextField>
-                </Grid>
-                <Grid item md={6} xs={12}>
-                    <TextField
-                        select
-                        label="Data Type"
-                        value={props.dataType}
-                        onChange={e => props.changeDataType(e.target.value)}
-                        fullWidth
-                        variant="outlined"
-                        size="small"
-                    >
-                        <MenuItem value="Number of Sales">Number of Sales</MenuItem>
-                        <MenuItem value="Sales Revenue">Sales Revenue</MenuItem>
-                    </TextField>
-                </Grid>
-            </Grid>
-        </Paper>
-    )
-}
-
-const DataSelection = () => {
-    const classes = useStyles();
-    return (
-        <Grid container spacing={2}>
-            <Grid item xs={6}>
-                <Card>
-                    <CardActions>
-                        <TextField label="Search Product" fullWidth size="small" 
-                            InputProps = {
-                                {
-                                    startAdornment: (
-                                        <InputAdornment position="start">
-                                                <SearchIcon fontSize="small" />
-                                        </InputAdornment>
-                                    ),
-                                    endAdornment: (
-                                        <InputAdornment position="end">
-                                            <IconButton
-                                                // onClick={() => filterBy("","email")}
-                                            >
-                                                <ClearIcon fontSize="small" />
-                                            </IconButton>
-                                        </InputAdornment>
-                                    ),
-                                    inputProps: {
-                                        "aria-label": "Search",
-                                    }
-                                }
-                            }
-                        />
-                    </CardActions>
-                    <Divider />
-                    <List disablePadding className={classes.listPaper1} dense={true}>
-                        <ListItem button>
-                            <ListItemText primary="Product 1" secondary="Meat" />
-                            <ListItemIcon>
-                                <IconButton size="small">
-                                    <KeyboardArrowRightIcon />
-                                </IconButton>
-                            </ListItemIcon>
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemText primary="Product 2" secondary="Product" />
-                            <ListItemIcon>
-                                <IconButton size="small">
-                                    <KeyboardArrowRightIcon />
-                                </IconButton>
-                            </ListItemIcon>
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemText primary="Product 3" secondary="Grocery" />
-                            <ListItemIcon>
-                                <IconButton size="small">
-                                    <KeyboardArrowRightIcon />
-                                </IconButton>
-                            </ListItemIcon>
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemText primary="Product 4" secondary="Grocery" />
-                            <ListItemIcon>
-                                <IconButton size="small">
-                                    <KeyboardArrowRightIcon />
-                                </IconButton>
-                            </ListItemIcon>
-                        </ListItem>
-                    </List>
-                </Card>
-            </Grid>
-            <Grid item xs={6}>
-                <Card>
-                    <CardActions>
-                        <TextField label="Product" fullWidth size="small" value={"1 selected item"} disabled />
-                    </CardActions>
-                    <Divider />
-                    <List disablePadding className={classes.listPaper1} dense={true}>
-                        <ListItem button>
-                            <ListItemIcon>
-                                <IconButton size="small">
-                                    <KeyboardArrowLeftIcon />
-                                </IconButton>
-                            </ListItemIcon>
-                            <ListItemText primary="Product 5" secondary="Produce" />
-                        </ListItem>
-                    </List>
-                </Card>
-            </Grid>
-        </Grid>
-    )
-}
 
 const Reports = props => {
     const classes = useStyles();
@@ -370,14 +31,11 @@ const Reports = props => {
     const [dimension, setDimension] = useState("category");
 
     // Period
-    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    const [year, setYear] = useState(2021);
-    const [periodType, setPeriodType] = useState("monthly");
     const [period, setPeriod] = useState([]);
 
     // Data
-    const [dataType, setDataType] = useState("");
     const [data, setData] = useState(['Grocery','Frozen','Produce','Meat']);
+    const [dataType, setDataType] = useState("Sales Revenue");
         
     // HighChart
     const [categories, setCategories] = useState([]);
@@ -414,18 +72,8 @@ const Reports = props => {
     return (
     <Grid container spacing={2}>
         <Grid item xs={12} md={3} lg={3}>
-            <ReportTypeSelection
+            <ReportSelection
                 chart={chart} changeChart={ value => setChart(value) }
-            />
-        </Grid>
-        <Grid item xs={12} md={3} lg={3}>
-            <PeriodTypeSelection periodType={periodType} changePeriodType={val => setPeriodType(val)}/>
-        </Grid>
-        <Grid item xs={12} md={6} lg={6}>
-            <DataTypeSelection dataType={dataType} changeDataType={val => setDataType(val)} />
-        </Grid>
-        <Grid item xs={12} md={3} lg={3}>
-            <ReportSelection 
                 title={title} changeTitle={ value => setTitle(value) } 
                 dimension={dimension} changeDimension={ value => setDimension(value) } 
                 updateReport={() => update()}
@@ -433,12 +81,14 @@ const Reports = props => {
         </Grid>
         <Grid item xs={12} md={3} lg={3}>
             <PeriodSelection 
-                changeYear={a => (a === "prev") ? setYear(year - 1) : setYear(year + 1)}
-                period={period}
+                period={period} changePeriod={periods => setPeriod(periods)}
             />
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-            <DataSelection />
+            <DataSelection 
+                data={data} changeData={d => setData(d)}
+                dataType={dataType} changeDataType={dType => setDataType(dType)}
+            />
         </Grid>
         <Grid item xs={12}>
             <Paper className={classes.paper}>
@@ -452,9 +102,4 @@ const Reports = props => {
     
 )}
 
-const mapStateToProps = createStructuredSelector({
-    products: selectProducts,
-    categories: selectCategories
-});
-
-export default connect(mapStateToProps)(Reports);
+export default Reports;
