@@ -2,22 +2,14 @@
 
 This app is for managing the Hiep Hoa Asia Food Store's Website
 
-## Quick Installation
+## 1. Quick Installation
 
 The lastest version of the app is in the setup file with the link [https://drive.google.com/drive/folders/18sLAHDv3t0y5-j3iKrSGkNVTKUpsBFHu?usp=sharing] <br/>
 After download the setup file, then run the file to install the app on your local
 
-## For deploying the app online
+## 2. For deploying the app online
 
 This part is for hosting or running the app as the website
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm install`
-
-Install dependency repos for this Node app
 
 ### `npm start`
 
@@ -35,7 +27,7 @@ It correctly bundles React in production mode and optimizes the build for the be
 The build is minified and the filenames include the hashes.<br />
 Your app is ready to be deployed!
 
-## For building the app offline
+## 3. For building the app offline
 
 This part is for running the app as a desktop app and build the setup file
 
@@ -46,3 +38,11 @@ Runs the app in the desktop mode.
 ### `npm run electron-pack`
 
 Create the install file for the desktop app.
+
+## 3. Available Scripts
+
+In the project directory, you can run:
+
+### `npm install`
+
+Install dependency repos for this Node app
