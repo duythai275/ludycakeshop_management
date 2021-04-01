@@ -33,7 +33,7 @@ This part is for running the app as a desktop app and build the setup file
 
 ### `npm run electron`
 
-Runs the app in the desktop mode. Before executing this command run `npm run build`.
+Runs the app in the desktop mode. Before executing this command, run #### `npm run build`.
 
 ### `npm run electron-pack`
 
