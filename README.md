@@ -39,7 +39,7 @@ Runs the app in the desktop mode.
 
 Create the install file for the desktop app.
 
-## 3. Available Scripts
+## 4. Available Scripts
 
 In the project directory, you can run:
 
