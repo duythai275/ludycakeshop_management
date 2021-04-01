@@ -89,9 +89,10 @@ const EventEditorDialog = props => {
     const { url, token } = useContext(AccessContext);
 
     const updateEvent = () => {
+        console.log(event);
         props.handleBackdrop();
         updating(`${url}/admin/event`, token, {
-            "id": event.id,
+            "id": event.event_id,
             "title": event.event_title,
             "startDate": event.start_date,
             "endDate": event.end_date,
@@ -100,6 +101,24 @@ const EventEditorDialog = props => {
         .then(json => {
             // Delete all discount in db
             // Add all discount in editor
+            getAllWithAuth(`${url}/admin/event/${props.data.id}`, token)
+            .then(json => {
+                Promise.all( json.itemList.map( item => {
+                    deleting(`${url}/admin/event/discount?eventid=${json.event_id}&discountid=${item.discount_id}`,token)
+                }))
+                .then( res => {
+                    Promise.all( event.itemList.map( item => {
+                        adding(`${url}/admin/event/${json.event_id}`, token, {
+                            "productId": item.product_id,
+                            "discountPrice": item.discount_price
+                        })
+                    }))
+                    .then( arr => {
+                        props.handleClose();
+                        props.updateEvents();
+                    });
+                })
+            })
         });
     }
 

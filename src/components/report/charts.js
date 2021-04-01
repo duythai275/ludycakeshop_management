@@ -51,11 +51,11 @@ export const lineChart = (title, categories, series, dataType) => {
         xAxis: {
             categories: categories
         },
-        legend: {
-            layout: 'vertical',
-            align: 'right',
-            verticalAlign: 'middle'
-        },
+        // legend: {
+        //     layout: 'vertical',
+        //     align: 'right',
+        //     verticalAlign: 'middle'
+        // },
         series: series,
         plotOptions: {
             line: {
