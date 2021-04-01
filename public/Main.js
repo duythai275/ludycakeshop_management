@@ -11,6 +11,8 @@ const createWindow = () => {
     // load the url
     // win.loadURL("http:/localhost:3000/");
     win.loadURL(`file://${path.join(__dirname, '../build/index.html')}`)
+    win.setMenu(null);
+
 
     // win.webContents.openDevTools()
 }      

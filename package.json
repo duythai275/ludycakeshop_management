@@ -1,6 +1,7 @@
 {
   "name": "HHA_Management",
-  "version": "1.0.0",
+  "author": "Thai Nguyen",
+  "version": "1.0.1",
   "main": "public/Main.js",
   "homepage": "./",
   "private": true,
@@ -25,6 +26,13 @@
     "xlsx": "^0.16.9"
   },
   "build": {
+    "win": {
+      "icon": "./public/logo.jpg"
+    },
+    "mac": {
+      "icon": "./public/logo.jpg",
+      "category": "public.app-category.utilities"
+    },
     "files": [
       "build/**/*",
       "node_modules/**/*"
