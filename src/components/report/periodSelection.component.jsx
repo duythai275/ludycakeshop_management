@@ -80,12 +80,12 @@ const PeriodSelection = props => {
                             <List disablePadding className={classes.listPaper} dense>
                             {
                                 ( props.periodType === "monthly" ) ? months.map( month => 
-                                    <ListItem button onClick={() => checkPeriod(`${month} ${props.year}`)}>
+                                    <ListItem key={month} button onClick={() => checkPeriod(`${month} ${props.year}`)}>
                                         <ListItemIcon><Checkbox checked={(props.period.includes(`${month} ${props.year}`))} /></ListItemIcon>
                                         <ListItemText primary={`${month} ${props.year}`} />
                                     </ListItem>
                                 ) : weeks.map( week => 
-                                    <ListItem button onClick={() => checkPeriod(`${week} ${props.year}`)}>
+                                    <ListItem key={week} button onClick={() => checkPeriod(`${week} ${props.year}`)}>
                                         <ListItemIcon><Checkbox checked={(props.period.includes(`${week} ${props.year}`))} /></ListItemIcon>
                                         <ListItemText primary={`${week} ${props.year}`} />
                                     </ListItem>

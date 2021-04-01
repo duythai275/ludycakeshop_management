@@ -102,7 +102,7 @@ const DataSelection = props => {
                     <List disablePadding className={classes.listPaper1} dense={true}>
                     {
                         (props.type === "product") ? props.products.filter(product => !props.data.includes(product) && product.name.toUpperCase().includes(search.toUpperCase())).map( product => 
-                            <ListItem button onClick={() => props.changeData([...props.data,...[product]])}>
+                            <ListItem key={product.id} button onClick={() => props.changeData([...props.data,...[product]])}>
                                 <ListItemText primary={(product.name.length > 23) ? `${product.name.substring(0,20)}...` : product.name} secondary={props.categories.find(category => category.id === product.category).name} />
                                 <ListItemIcon>
                                     <IconButton size="small">
@@ -111,7 +111,7 @@ const DataSelection = props => {
                                 </ListItemIcon>
                             </ListItem>
                         ) : props.categories.filter(category => !props.data.includes(category) && category.name.toUpperCase().includes(search.toUpperCase())).map( category => 
-                            <ListItem button onClick={() => props.changeData([...props.data,...[category]])}>
+                            <ListItem key={category.id} button onClick={() => props.changeData([...props.data,...[category]])}>
                                 <ListItemText primary={category.name} secondary={`${props.products.filter(product => product.category === category.id).length} items`} />
                                 <ListItemIcon>
                                     <IconButton size="small">
@@ -133,7 +133,7 @@ const DataSelection = props => {
                     <List disablePadding className={classes.listPaper1} dense={true}>
                     {
                         (props.type === "product") ? props.data.map( product => 
-                            <ListItem button onClick={() => props.changeData(props.data.filter(pData => pData.id !== product.id))}>
+                            <ListItem key={product.id} button onClick={() => props.changeData(props.data.filter(pData => pData.id !== product.id))}>
                                 <ListItemIcon>
                                     <IconButton size="small">
                                         <KeyboardArrowLeftIcon />
@@ -142,7 +142,7 @@ const DataSelection = props => {
                                 <ListItemText primary={(product.name.length > 23) ? `${product.name.substring(0,20)}...` : product.name} secondary={props.categories.find(category => category.id === product.category).name} />
                             </ListItem>
                         ) : props.data.map( category => 
-                            <ListItem button onClick={() => props.changeData(props.data.filter(pData => pData.id !== category.id))}>
+                            <ListItem key={category.id} button onClick={() => props.changeData(props.data.filter(pData => pData.id !== category.id))}>
                                 <ListItemIcon>
                                     <IconButton size="small">
                                         <KeyboardArrowLeftIcon />

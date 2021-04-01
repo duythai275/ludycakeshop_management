@@ -53,19 +53,19 @@ const ReportSelection = props => {
                                 <Grid container spacing={2}>
                                     <Grid item xs={6}>
                                         <FormControl component="fieldset">
-                                            <FormLabel component="legend">Period</FormLabel>
-                                            <RadioGroup name="period" value={props.dimension} onChange={e => props.changeDimension(e.target.value)}>
-                                                <FormControlLabel value="category" control={<Radio />} label="Category" />
-                                                <FormControlLabel value="serie" control={<Radio />} label="Serie" />
+                                            <FormLabel component="legend">Series</FormLabel>
+                                            <RadioGroup name="series" value={props.dimension} onChange={e => props.changeDimension(e.target.value)}>
+                                                <FormControlLabel value="data" control={<Radio />} label="Data" />
+                                                <FormControlLabel value="period" control={<Radio />} label="Period" />
                                             </RadioGroup>
                                         </FormControl>
                                     </Grid>
                                     <Grid item xs={6}>
                                         <FormControl component="fieldset">
-                                            <FormLabel component="legend">Data</FormLabel>
-                                            <RadioGroup name="data" value={(props.dimension === "serie") ? "category" : "serie"} onChange={e => props.changeDimension((e.target.value === "serie") ? "category" : "serie")}>
-                                                <FormControlLabel value="category" control={<Radio />} label="Category" />
-                                                <FormControlLabel value="serie" control={<Radio />} label="Serie" />
+                                            <FormLabel component="legend">Categories</FormLabel>
+                                            <RadioGroup name="categories" value={(props.dimension === "data") ? "period" : "data"} onChange={e => props.changeDimension((e.target.value === "data") ? "period" : "data")}>
+                                                <FormControlLabel value="data" control={<Radio />} label="Data" />
+                                                <FormControlLabel value="period" control={<Radio />} label="Period" />
                                             </RadioGroup>
                                         </FormControl>
                                     </Grid>

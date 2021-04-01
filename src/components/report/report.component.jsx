@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -6,6 +6,9 @@ import Paper from '@material-ui/core/Paper';
 import ReportSelection from './reportSelection.component';
 import PeriodSelection from './periodSelection.component';
 import DataSelection from './dataSelection.component';
+
+import AccessContext from '../../contexts/access.context';
+import { getAllWithAuth } from '../../utils/fetching';
 
 import { useStyles } from './report.styles.js';
 
@@ -17,18 +20,12 @@ HighchartsExporting(Highcharts);
 
 const Reports = props => {
     const classes = useStyles();
-
-    const fakeData = [
-        [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.1],
-        [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3],
-        [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2],
-        [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4, 47.6, 39.1, 46.8, 51.1]
-    ];
+    const { url, token } = useContext(AccessContext);
 
     // Report
     const [title, setTitle] = useState("Report");
     const [chart, setChart] = useState("column");
-    const [dimension, setDimension] = useState("category");
+    const [key, setKey] = useState("data"); // key is seria
 
     // Period
     const [period, setPeriod] = useState([]);
@@ -45,32 +42,56 @@ const Reports = props => {
     const [series, setSeries] = useState([]);
     const [chartOption, setChartOption] = useState({});
 
-    let transformData = [];
-
     const update = () => {
-        transformData = [];
-        series.forEach((serie, index) => {
-            const d = (dimension === "category") ? fakeData[index] : fakeData.map( row => row[index]);
-            transformData.push({
-                name: serie,
-                data: d
-            });
-        });
 
-        if (chart === 'column') setChartOption(columnChart(title,categories,transformData,dataType));
-        else if (chart === 'line') setChartOption(lineChart(title,categories,transformData,dataType));
-        else setChartOption({});
+        let transformData = [];
+        let ids = "";
+        data.forEach( d => ids += `&idList=${d.id}`);
+
+        getAllWithAuth(`${url}/admin/report?key=${key}&type=${(type === "category") ? "cate" : "prod"}&year=${year}&term=${(periodType === "monthly") ? "month" : "week"}${ids}`, token)
+        .then( json => {
+
+            series.forEach( ( serie, r ) => { 
+                const obj = {
+                    "name": (serie.hasOwnProperty("name")) ? serie.name : serie,
+                    "data": categories.map( ( category, c ) => {
+                        let d;
+
+                        if ( key === "data" ) {
+                            if ( json[r].filter( obj => obj.paid_date === ( c + 1 ) ).length > 0 ) d = json[r].filter( obj => obj.paid_date === ( c + 1 ) )[0];
+                            else d = { "qty": 0, "sales": 0};
+                        }
+                        else {
+                            if ( json[r][c] === {} ) d = { "qty": 0, "sales": 0};
+                            else d = json[r][c];
+                        }
+
+                        return ( dataType === "Sales Revenue" ) ? d.sales : d.qty
+                    })
+                };
+                transformData.push(obj);
+            })
+            
+            if (chart === 'column') setChartOption(columnChart(title,categories,transformData,dataType));
+            else if (chart === 'line') setChartOption(lineChart(title,categories,transformData,dataType));
+            else setChartOption({});
+
+        });
     }
 
-    useEffect(() => {
-        if (dimension === "category") { 
+    const handleDimension = () => {
+        if (key === "data") { 
             setCategories(period);
             setSeries(data);
         } else {
-            setCategories(data);
+            setCategories(data.map( d => d.name ));
             setSeries(period);
         }
-    }, [dimension]);
+    }
+
+    useEffect( () => {
+        handleDimension();
+    }, [key,period,data])
     
     return (
     <Grid container spacing={2}>
@@ -78,7 +99,7 @@ const Reports = props => {
             <ReportSelection
                 chart={chart} changeChart={ value => setChart(value) }
                 title={title} changeTitle={ value => setTitle(value) } 
-                dimension={dimension} changeDimension={ value => setDimension(value) } 
+                dimension={key} changeDimension={ value => setKey(value) } 
                 updateReport={() => update()}
             />
         </Grid>
