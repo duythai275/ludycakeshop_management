@@ -27,13 +27,13 @@ It correctly bundles React in production mode and optimizes the build for the be
 The build is minified and the filenames include the hashes.<br />
 Your app is ready to be deployed!
 
-## 3. For building the app offline
+## 3. For building the offline app 
 
 This part is for running the app as a desktop app and build the setup file
 
 ### `npm run electron`
 
-Runs the app in the desktop mode.
+Runs the app in the desktop mode. Before executing this command run `npm run build`.
 
 ### `npm run electron-pack`
 
@@ -45,4 +45,5 @@ In the project directory, you can run:
 
 ### `npm install`
 
-Install dependency repos for this Node app
+Install dependency repos for this Node app. <br/>
+This command should be executed before setting up the online or offline app 
