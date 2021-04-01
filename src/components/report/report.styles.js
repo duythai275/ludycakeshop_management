@@ -37,5 +37,9 @@ export const useStyles = makeStyles((theme) => ({
             marginRight: 10,
             fontSize: 18,
         }
+    },
+    backdrop: {
+        zIndex: theme.zIndex.drawer + 1,
+        color: '#fff',
     }
 }));

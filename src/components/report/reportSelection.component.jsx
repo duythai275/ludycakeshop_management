@@ -36,7 +36,6 @@ const ReportSelection = props => {
                             >
                                 <MenuItem value={"column"}>Column Chart</MenuItem>
                                 <MenuItem value={"line"}>Line Chart</MenuItem>
-                                <MenuItem value={"table"}>Pivot Table</MenuItem>
                             </TextField>
                         </Grid>
                     </Grid>

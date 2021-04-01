@@ -2,10 +2,16 @@ import React, { useEffect, useState, useContext } from 'react';
 
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import ReportSelection from './reportSelection.component';
 import PeriodSelection from './periodSelection.component';
 import DataSelection from './dataSelection.component';
+
+import DataTable from './dataTable.component';
 
 import AccessContext from '../../contexts/access.context';
 import { getAllWithAuth } from '../../utils/fetching';
@@ -18,9 +24,39 @@ import HighchartsReact from 'highcharts-react-official';
 import { columnChart, lineChart } from './charts';
 HighchartsExporting(Highcharts);
 
+const ErrorNotification = props => {
+    // const { alert, alertMsg, handleAlert } = useContext(AlertContext);
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        props.handleAlert(false);
+    }
+
+    return (
+        <Snackbar
+            anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'center',
+            }}
+            open={props.alert}
+            autoHideDuration={3000}
+            onClose={handleClose}
+        >
+            <Alert onClose={handleClose} severity="error" variant="filled"><strong>ERROR!</strong> There is no selected Data or Period</Alert>
+        </Snackbar>
+    )
+}
+
 const Reports = props => {
     const classes = useStyles();
     const { url, token } = useContext(AccessContext);
+
+    //Error Notification and Backdrop
+    const [alert, setAlert] = useState(false);
+    const [backdrop, setBackdrop] = useState(false);
 
     // Report
     const [title, setTitle] = useState("Report");
@@ -42,7 +78,18 @@ const Reports = props => {
     const [series, setSeries] = useState([]);
     const [chartOption, setChartOption] = useState({});
 
+    // Data Table
+    const [rows, setRows] = useState([]);
+
     const update = () => {
+
+        setBackdrop(true);
+
+        if ( data.length === 0 || period === 0 ) {
+            setAlert(true);
+            setBackdrop(false);
+            return;
+        }
 
         let transformData = [];
         let ids = "";
@@ -76,7 +123,56 @@ const Reports = props => {
             else if (chart === 'line') setChartOption(lineChart(title,categories,transformData,dataType));
             else setChartOption({});
 
+            setBackdrop(false);
+            setRows(transformData);
+
         });
+    }
+
+    const handlePeriod = value => {
+        // Sort period
+        let sort = ["","","","","","","","","","","",""];
+        value.forEach( p => {
+            switch (p.substring(0,3)) {
+                case "Jan": 
+                    sort[0] = p;
+                    break;
+                case "Feb": 
+                    sort[1] = p;
+                    break;
+                case "Mar": 
+                    sort[2] = p;
+                    break;
+                case "Apr": 
+                    sort[3] = p;
+                    break;
+                case "May": 
+                    sort[4] = p;
+                    break;
+                case "Jun": 
+                    sort[5] = p;
+                    break;
+                case "Jul": 
+                    sort[6] = p;
+                    break;
+                case "Aug": 
+                    sort[7] = p;
+                    break;
+                case "Sep": 
+                    sort[8] = p;
+                    break;
+                case "Oct": 
+                    sort[9] = p;
+                    break;
+                case "Nov": 
+                    sort[10] = p;
+                    break;
+                case "Dec": 
+                    sort[11] = p;
+                    break;
+            }
+        });
+        setPeriod(sort.filter( s => s !== ""));
     }
 
     const handleDimension = () => {
@@ -94,39 +190,49 @@ const Reports = props => {
     }, [key,period,data])
     
     return (
-    <Grid container spacing={2}>
-        <Grid item xs={12} md={3} lg={3}>
-            <ReportSelection
-                chart={chart} changeChart={ value => setChart(value) }
-                title={title} changeTitle={ value => setTitle(value) } 
-                dimension={key} changeDimension={ value => setKey(value) } 
-                updateReport={() => update()}
-            />
-        </Grid>
-        <Grid item xs={12} md={3} lg={3}>
-            <PeriodSelection 
-                period={period} changePeriod={periods => setPeriod(periods)}
-                periodType={periodType} changePeriodType={ pType => setPeriodType(pType) }
-                year={year} changeYear={y => setYear(y)}
-            />
-        </Grid>
-        <Grid item xs={12} md={6} lg={6}>
-            <DataSelection 
-                data={data} changeData={d => setData(d)}
-                dataType={dataType} changeDataType={dType => setDataType(dType)}
-                type={type} changeType={t => setType(t)}
-            />
-        </Grid>
-        <Grid item xs={12}>
-            <Paper className={classes.paper}>
-                <HighchartsReact 
-                    highcharts={Highcharts}
-                    options={chartOption}
+    <div>
+        <Grid container spacing={2}>
+            <Grid item xs={12} md={3} lg={3}>
+                <ReportSelection
+                    chart={chart} changeChart={ value => setChart(value) }
+                    title={title} changeTitle={ value => setTitle(value) } 
+                    dimension={key} changeDimension={ value => setKey(value) } 
+                    updateReport={() => update()}
                 />
-            </Paper>
+            </Grid>
+            <Grid item xs={12} md={3} lg={3}>
+                <PeriodSelection 
+                    period={period} changePeriod={periods => handlePeriod(periods)}
+                    periodType={periodType} changePeriodType={ pType => setPeriodType(pType) }
+                    year={year} changeYear={y => setYear(y)}
+                />
+            </Grid>
+            <Grid item xs={12} md={6} lg={6}>
+                <DataSelection 
+                    data={data} changeData={d => setData(d)}
+                    dataType={dataType} changeDataType={dType => setDataType(dType)}
+                    type={type} changeType={t => setType(t)}
+                />
+            </Grid>
+            <Grid item xs={12}>
+                <Paper className={classes.paper}>
+                    <HighchartsReact 
+                        highcharts={Highcharts}
+                        options={chartOption}
+                    />
+                </Paper>
+            </Grid>
+            {
+                (rows.length > 0) ? <Grid item xs={12}>
+                    <DataTable col={categories} row={rows} />
+                </Grid> : ""
+            }
         </Grid>
-    </Grid>
-    
+        <ErrorNotification alert={alert} handleAlert={ val => setAlert(val) } />
+        <Backdrop className={classes.backdrop} open={backdrop}>
+            <CircularProgress color="inherit" />
+        </Backdrop>
+    </div>
 )}
 
 export default Reports;
