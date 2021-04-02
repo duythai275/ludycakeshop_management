@@ -50,6 +50,66 @@ const ErrorNotification = props => {
     )
 }
 
+const findVal = (json, period, id, type, periodType) => {
+    let res = 0;
+    let paid_date = 0;
+
+    if ( periodType === "monthly" ) {
+        switch (period.substring(0,3)) {
+            case "Jan": 
+                paid_date = 1;
+                break;
+            case "Feb": 
+                paid_date = 2;
+                break;
+            case "Mar": 
+                paid_date = 3;
+                break;
+            case "Apr": 
+                paid_date = 4;
+                break;
+            case "May": 
+                paid_date = 5;
+                break;
+            case "Jun": 
+                paid_date = 6;
+                break;
+            case "Jul": 
+                paid_date = 7;
+                break;
+            case "Aug": 
+                paid_date = 8;
+                break;
+            case "Sep": 
+                paid_date = 9;
+                break;
+            case "Oct": 
+                paid_date = 10;
+                break;
+            case "Nov": 
+                paid_date = 11;
+                break;
+            case "Dec": 
+                paid_date = 12;
+                break;
+        }
+    } else {
+        paid_date = `${period.substring(4,8)}${period.substring(1,3)}`
+    }
+
+    json.forEach( row => {
+        row.forEach( col => {
+            if ( col !== {} ) {
+                if ( col.id === id && col.paid_date === parseInt(paid_date) ) {
+                    res = ( type === "Sales Revenue" ) ? col.sales : col.qty;
+                }
+            }
+        })
+    })
+
+    return res;
+}
+
 const Reports = props => {
     const classes = useStyles();
     const { url, token } = useContext(AccessContext);
@@ -98,81 +158,91 @@ const Reports = props => {
         getAllWithAuth(`${url}/admin/report?key=${key}&type=${(type === "category") ? "cate" : "prod"}&year=${year}&term=${(periodType === "monthly") ? "month" : "week"}${ids}`, token)
         .then( json => {
 
-            series.forEach( ( serie, r ) => { 
+            series.forEach( serie => { 
                 const obj = {
                     "name": (serie.hasOwnProperty("name")) ? serie.name : serie,
-                    "data": categories.map( ( category, c ) => {
+                    "data": categories.map( category => {
                         let d;
 
                         if ( key === "data" ) {
-                            if ( json[r].filter( obj => obj.paid_date === ( c + 1 ) ).length > 0 ) d = json[r].filter( obj => obj.paid_date === ( c + 1 ) )[0];
-                            else d = { "qty": 0, "sales": 0};
+                            d = findVal(json,category,serie.id,dataType,periodType);
                         }
                         else {
-                            if ( json[r][c] === {} ) d = { "qty": 0, "sales": 0};
-                            else d = json[r][c];
+                            d = findVal(json,serie,category.id,dataType,periodType);
                         }
 
-                        return ( dataType === "Sales Revenue" ) ? d.sales : d.qty
+                        return d;
                     })
                 };
+                
                 transformData.push(obj);
             })
             
-            if (chart === 'column') setChartOption(columnChart(title,categories,transformData,dataType));
-            else if (chart === 'line') setChartOption(lineChart(title,categories,transformData,dataType));
+            if (chart === 'column') setChartOption(columnChart(title,( key === "data" ) ? categories : categories.map(c => c.name),transformData,dataType));
+            else if (chart === 'line') setChartOption(lineChart(title,( key === "data" ) ? categories : categories.map(c => c.name),transformData,dataType));
             else setChartOption({});
 
             setBackdrop(false);
             setRows(transformData);
-
         });
     }
 
     const handlePeriod = value => {
         // Sort period
-        let sort = ["","","","","","","","","","","",""];
-        value.forEach( p => {
-            switch (p.substring(0,3)) {
-                case "Jan": 
-                    sort[0] = p;
-                    break;
-                case "Feb": 
-                    sort[1] = p;
-                    break;
-                case "Mar": 
-                    sort[2] = p;
-                    break;
-                case "Apr": 
-                    sort[3] = p;
-                    break;
-                case "May": 
-                    sort[4] = p;
-                    break;
-                case "Jun": 
-                    sort[5] = p;
-                    break;
-                case "Jul": 
-                    sort[6] = p;
-                    break;
-                case "Aug": 
-                    sort[7] = p;
-                    break;
-                case "Sep": 
-                    sort[8] = p;
-                    break;
-                case "Oct": 
-                    sort[9] = p;
-                    break;
-                case "Nov": 
-                    sort[10] = p;
-                    break;
-                case "Dec": 
-                    sort[11] = p;
-                    break;
+        if ( periodType === "monthly" ) {
+            let sort = ["","","","","","","","","","","",""];
+            value.forEach( p => {
+                switch (p.substring(0,3)) {
+                    case "Jan": 
+                        sort[0] = p;
+                        break;
+                    case "Feb": 
+                        sort[1] = p;
+                        break;
+                    case "Mar": 
+                        sort[2] = p;
+                        break;
+                    case "Apr": 
+                        sort[3] = p;
+                        break;
+                    case "May": 
+                        sort[4] = p;
+                        break;
+                    case "Jun": 
+                        sort[5] = p;
+                        break;
+                    case "Jul": 
+                        sort[6] = p;
+                        break;
+                    case "Aug": 
+                        sort[7] = p;
+                        break;
+                    case "Sep": 
+                        sort[8] = p;
+                        break;
+                    case "Oct": 
+                        sort[9] = p;
+                        break;
+                    case "Nov": 
+                        sort[10] = p;
+                        break;
+                    case "Dec": 
+                        sort[11] = p;
+                        break;
+                }
+            });
+            setPeriod(sort.filter( s => s !== ""));
+        } else {
+            let sort = [];
+            for ( let i = 0; i < 52; i++ ) {
+                sort.push("");
             }
-        });
-        setPeriod(sort.filter( s => s !== ""));
+            value.forEach( p => {
+                sort[parseInt(p.substring(1,3)) - 1] = p;
+            })
+            setPeriod(sort.filter( s => s !== ""));
+        }
+        
     }
 
     const handleDimension = () => {
@@ -180,7 +250,7 @@ const Reports = props => {
             setCategories(period);
             setSeries(data);
         } else {
-            setCategories(data.map( d => d.name ));
+            setCategories(data);
             setSeries(period);
         }
     }
@@ -223,7 +293,7 @@ const Reports = props => {
                 </Paper>
             </Grid>
             {
-                (rows.length > 0) ? <Grid item xs={12}>
+                (rows.length > 0 && categories.length > 0) ? <Grid item xs={12}>
                     <DataTable col={categories} row={rows} />
                 </Grid> : ""
             }

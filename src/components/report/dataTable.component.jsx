@@ -16,17 +16,17 @@ const DataTable = props => {
                     <TableRow>
                         <TableCell><strong>{( props.col[0].hasOwnProperty("name") ) ? "Period" : "Data"}</strong></TableCell>
                         {
-                            props.col.map ( column => <TableCell align="right"><strong>{(column.hasOwnProperty("name")) ? column.name : column}</strong></TableCell>)
+                            props.col.map ( (column,i) => <TableCell key={i} align="right"><strong>{(column.hasOwnProperty("name")) ? column.name : column}</strong></TableCell>)
                         }
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {
-                        props.row.map( r => 
-                            <TableRow>
+                        props.row.map( (r,k) => 
+                            <TableRow key={k}>
                                 <TableCell component="th" scope="row">{r.name}</TableCell>
                                 { 
-                                    r.data.map( val => <TableCell align="right">{val}</TableCell>)
+                                    r.data.map( (val,i) => <TableCell key={i} align="right">{val}</TableCell>)
                                 }
                             </TableRow>
                         )
