@@ -145,7 +145,7 @@ const Reports = props => {
 
         setBackdrop(true);
 
-        if ( data.length === 0 || period === 0 ) {
+        if ( data.length === 0 || period.length === 0 ) {
             setAlert(true);
             setBackdrop(false);
             return;
@@ -293,7 +293,7 @@ const Reports = props => {
                 </Paper>
             </Grid>
             {
-                (rows.length > 0 && categories.length > 0) ? <Grid item xs={12}>
+                (rows.length > 0 && categories.length > 0 && series.length > 0) ? <Grid item xs={12}>
                     <DataTable col={categories} row={rows} />
                 </Grid> : ""
             }

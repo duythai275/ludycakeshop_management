@@ -9,15 +9,15 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-// import TextField from '@material-ui/core/TextField';
-// import SearchIcon from '@material-ui/icons/Search';
-import IconButton from '@material-ui/core/IconButton';
-// import ClearIcon from '@material-ui/icons/Clear';
-// import InputAdornment from '@material-ui/core/InputAdornment';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import TextField from '@material-ui/core/TextField';
+import SearchIcon from '@material-ui/icons/Search';
+import IconButton from '@material-ui/core/IconButton';
+import ClearIcon from '@material-ui/icons/Clear';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 import Row from './row.component';
 import EventEditorDialog from '../editorDialog/eventEditorDialog';
@@ -39,6 +39,20 @@ const Events = () => {
     const [events, setEvents] = useState([]);
     const [totalEvents, setTotalEvents] = useState(0);
     const [page, setPage] = useState(0);
+    const [filters, setFilters] = useState({
+        name: "",
+        startDate: "",
+        endDate: ""
+    });
+
+    const filterBy = (value, property) => {
+        // setBackdrop(true);
+        filters[property] = value;
+        setPage(0);
+        setFilters({
+            ...filters
+        });
+    }
 
     const handleChangePage = (event, newPage) => {
         // setBackdrop(true);
@@ -46,9 +60,12 @@ const Events = () => {
     };
 
     const loadEvents = () => {
-        console.log("Test Event Comp");
         setBackdrop(true);
         let filter = "";
+        if ( filters["name"] !== "" ) filter += `name=${filters.name}&`;
+        if ( filters["startDate"] !== "" && filters["endDate"] === "" ) filter += `date=${filters.startDate}:${filters.startDate}&`;
+        if ( filters["startDate"] === "" && filters["endDate"] !== "" ) filter += `date=${filters.endDate}:${filters.endDate}&`;
+        if ( filters["startDate"] !== "" && filters["endDate"] !== "" ) filter += `date=${filters.startDate}:${filters.endDate}&`;
         getAllWithAuth(`${url}/admin/event?${filter}page=${(page + 1)}`, token)
         .then(json => {
             setTotalEvents(json.totalElements);
@@ -59,7 +76,7 @@ const Events = () => {
 
     useEffect( () => {
         loadEvents();
-    }, [page]);
+    }, [page,filters]);
 
     return (
         <div>
@@ -87,13 +104,94 @@ const Events = () => {
                             <TableHead>
                                 <TableRow>
                                     <TableCell className={classes.tableHead}>
-                                        Event Name
+                                        Event Name <br/>
+                                        <TextField 
+                                            placeholder="Search by Name" 
+                                            variant="standard"
+                                            onChange={event => filterBy(event.target.value,"name")}
+                                            value={filters.name}
+                                            InputProps = {
+                                                {
+                                                    startAdornment: (
+                                                        <InputAdornment position="start">
+                                                                <SearchIcon fontSize="small" />
+                                                        </InputAdornment>
+                                                    ),
+                                                    endAdornment: (
+                                                        <InputAdornment position="end">
+                                                            <IconButton
+                                                                onClick={() => filterBy("","name")}
+                                                            >
+                                                                <ClearIcon fontSize="small" />
+                                                            </IconButton>
+                                                        </InputAdornment>
+                                                    ),
+                                                    inputProps: {
+                                                        "aria-label": "Search",
+                                                    }
+                                                }
+                                            }
+                                        />
                                     </TableCell>
                                     <TableCell className={classes.tableHead}>
-                                        Start Date
+                                        Start Date <br/>
+                                        <TextField 
+                                            placeholder="Search by Date" 
+                                            variant="standard"
+                                            onChange={event => filterBy(event.target.value,"startDate")}
+                                            value={filters.startDate}
+                                            InputProps = {
+                                                {
+                                                    startAdornment: (
+                                                        <InputAdornment position="start">
+                                                                <SearchIcon fontSize="small" />
+                                                        </InputAdornment>
+                                                    ),
+                                                    endAdornment: (
+                                                        <InputAdornment position="end">
+                                                            <IconButton
+                                                                onClick={() => filterBy("","startDate")}
+                                                            >
+                                                                <ClearIcon fontSize="small" />
+                                                            </IconButton>
+                                                        </InputAdornment>
+                                                    ),
+                                                    inputProps: {
+                                                        "aria-label": "Search",
+                                                    }
+                                                }
+                                            }
+                                        />
                                     </TableCell>
                                     <TableCell className={classes.tableHead}>
-                                        End Date
+                                        End Date <br/>
+                                        <TextField 
+                                            placeholder="Search by Date" 
+                                            variant="standard"
+                                            onChange={event => filterBy(event.target.value,"endDate")}
+                                            value={filters.endDate}
+                                            InputProps = {
+                                                {
+                                                    startAdornment: (
+                                                        <InputAdornment position="start">
+                                                                <SearchIcon fontSize="small" />
+                                                        </InputAdornment>
+                                                    ),
+                                                    endAdornment: (
+                                                        <InputAdornment position="end">
+                                                            <IconButton
+                                                                onClick={() => filterBy("","endDate")}
+                                                            >
+                                                                <ClearIcon fontSize="small" />
+                                                            </IconButton>
+                                                        </InputAdornment>
+                                                    ),
+                                                    inputProps: {
+                                                        "aria-label": "Search",
+                                                    }
+                                                }
+                                            }
+                                        />
                                     </TableCell>
                                     <TableCell></TableCell>
                                 </TableRow>

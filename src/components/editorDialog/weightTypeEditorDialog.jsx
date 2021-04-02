@@ -23,7 +23,9 @@ const WeightTypeEditorDialog = (props) => {
     const { url, token } = useContext(AccessContext);
     const { handleAlert } = useContext(AlertContext);
 
-    const [weightType, setWeightType] = useState(props.weightType);
+    const [weightType, setWeightType] = useState({
+        "name": props.weightType.name
+    });
 
     const handleAddWeightType = () => {
         adding(`${url}/weighttype`, token, weightType)
@@ -32,12 +34,18 @@ const WeightTypeEditorDialog = (props) => {
             handleAlert(true, "Added Successfully!");
         });
         props.handleClose();
+        setWeightType({
+            "name": ""
+        });
     }
 
     const handleEditWeightType = () => {
         updating(`${url}/weighttype/${props.weightType.id}`, token, weightType)
         .then(result => {
-            props.editWeightType(weightType);
+            props.editWeightType({
+                "id": props.weightType.id,
+                "name": weightType.name
+            });
             handleAlert(true, "Edited Successfully!");
         });
         props.handleClose();
@@ -48,12 +56,19 @@ const WeightTypeEditorDialog = (props) => {
         setWeightType({...weightType});
     }
 
+    const closeDialog = () => {
+        props.handleClose();
+        setWeightType({
+            "name": props.weightType.name
+        });
+    }
+
     return (
         <Dialog 
             fullWidth={true}
             maxWidth={'xs'}
             open={props.open} 
-            onClose={props.handleClose} 
+            onClose={() => closeDialog()} 
             TransitionComponent={Transition}
         >
             <DialogTitle>{(props.weightType.name === "") ? "Add Weight Type" : "Update Weight Type" }</DialogTitle>
@@ -76,7 +91,7 @@ const WeightTypeEditorDialog = (props) => {
                         Update
                     </Button>
                 }
-                <Button variant="contained" onClick={props.handleClose}>
+                <Button variant="contained" onClick={() => closeDialog()}>
                     Cancel
                 </Button>
             </DialogActions>

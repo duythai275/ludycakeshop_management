@@ -76,7 +76,7 @@ const EventEditorDialog = props => {
     const classes = useStyles();
 
     const [event, setEvent] = useState({
-        "event_title": "",
+        "title": "",
         "start_date": "",
         "end_date": "",
         "description": "",
@@ -141,7 +141,7 @@ const EventEditorDialog = props => {
                 props.handleClose();
                 props.updateEvents();
                 setEvent({
-                    "event_title": "",
+                    "title": "",
                     "start_date": "",
                     "end_date": "",
                     "description": "",
@@ -181,6 +181,24 @@ const EventEditorDialog = props => {
         });
     }
 
+    const closeDialog = () => {
+        props.handleClose();
+        if ( props.data.title !== "" ) {
+            getAllWithAuth(`${url}/admin/event/${props.data.id}`, token)
+            .then(json => {
+                setEvent(json);
+            });
+        } else {
+            setEvent({
+                "event_title": "",
+                "start_date": "",
+                "end_date": "",
+                "description": "",
+                "itemList": []
+            });
+        }
+    }
+
     useEffect(() => {
         if ( props.data.title !== "" ) {
             getAllWithAuth(`${url}/admin/event/${props.data.id}`, token)
@@ -195,7 +213,7 @@ const EventEditorDialog = props => {
             fullWidth={true}
             maxWidth={'lg'}
             open={props.open} 
-            onClose={props.handleClose} 
+            onClose={() => closeDialog()} 
             TransitionComponent={Transition}
         >
             <DialogTitle>{(props.data.title === "") ? "Add New Event" : "Update Event" }</DialogTitle>
@@ -323,7 +341,7 @@ const EventEditorDialog = props => {
                         Update
                     </Button>
             }
-                <Button variant="contained" onClick={props.handleClose}>
+                <Button variant="contained" onClick={() => closeDialog()}>
                     Cancel
                 </Button>
             </DialogActions>

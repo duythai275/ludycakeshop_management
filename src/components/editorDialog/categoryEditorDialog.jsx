@@ -23,7 +23,9 @@ const CategoryEditorDialog = (props) => {
     const { url, token } = useContext(AccessContext);
     const { handleAlert } = useContext(AlertContext);
 
-    const [category, setCategory] = useState(props.data);
+    const [category, setCategory] = useState({
+        "name": props.data.name
+    });
 
     const handleAddCategory = () => {
         adding(`${url}/categories`, token, category)
@@ -32,12 +34,18 @@ const CategoryEditorDialog = (props) => {
             handleAlert(true, "Added Successfully!");
         });
         props.handleClose();
+        setCategory({
+            "name": ""
+        });
     }
 
     const handleUpdateCategory = () => {
         updating(`${url}/categories/${props.data.id}`, token, category)
         .then(result => {
-            props.editCategory(category);
+            props.editCategory({
+                "id": props.data.id,
+                "name": category.name
+            });
             handleAlert(true, "Edited Successfully!");
         });
         props.handleClose();
@@ -48,12 +56,19 @@ const CategoryEditorDialog = (props) => {
         setCategory({...category});
     }
 
+    const closeDialog = () => {
+        props.handleClose();
+        setCategory({
+            "name": props.data.name
+        })
+    }
+
     return (
         <Dialog 
             fullWidth={true}
             maxWidth={'xs'}
             open={props.open} 
-            onClose={props.handleClose} 
+            onClose={() => closeDialog()} 
             TransitionComponent={Transition}
         >
             <DialogTitle>{(props.data.name === "") ? "Add Category" : "Update Category" }</DialogTitle>
@@ -76,7 +91,7 @@ const CategoryEditorDialog = (props) => {
                         Update
                     </Button>
                 }
-                <Button variant="contained" onClick={props.handleClose}>
+                <Button variant="contained" onClick={() => closeDialog()}>
                     Cancel
                 </Button>
             </DialogActions>
