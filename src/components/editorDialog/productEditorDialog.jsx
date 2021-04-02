@@ -95,7 +95,19 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes,
     const [file, setFile] = useState(null);
     const [image, setImage] = useState(null);
 
-    const [product, setProduct] = useState(data);
+    const [product, setProduct] = useState({
+        "name": data.name,
+        "description": data.description,
+        "brand": data.brand,
+        "price": data.price,
+        "active": data.active,
+        "category": data.category,
+        "quantity": data.quantity,
+        "weightValue": data.weightValue,
+        "weightType": data.weightType,
+        "image": data.image,
+
+    });
 
     const { url, token } = useContext(AccessContext);
     const { handleAlert } = useContext(AlertContext);
@@ -135,6 +147,19 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes,
             .then(result => {
                 addProduct(result);
                 handleAlert(true, "Added Successfully!");
+                setProduct({
+                    "name": data.name,
+                    "description": data.description,
+                    "brand": data.brand,
+                    "price": data.price,
+                    "active": data.active,
+                    "category": data.category,
+                    "quantity": data.quantity,
+                    "weightValue": data.weightValue,
+                    "weightType": data.weightType,
+                    "image": data.image,
+            
+                });
             });
 
         } else {
@@ -174,6 +199,22 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes,
         handleClose();
     }
 
+    const closeDialog = () => {
+        handleClose();
+        setProduct({
+            "name": data.name,
+            "description": data.description,
+            "brand": data.brand,
+            "price": data.price,
+            "active": data.active,
+            "category": data.category,
+            "quantity": data.quantity,
+            "weightValue": data.weightValue,
+            "weightType": data.weightType,
+            "image": data.image,
+        });
+    }
+
     const handleUploadImage = f => {
         const reader = new FileReader();
 
@@ -186,10 +227,10 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes,
     }
 
     return (
-        <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
+        <Dialog fullScreen open={open} onClose={() => closeDialog()} TransitionComponent={Transition}>
             <AppBar className={classes.appBar}>
                 <Toolbar>
-                    <IconButton edge="start" color="inherit" onClick={handleClose}>
+                    <IconButton edge="start" color="inherit" onClick={() => closeDialog()}>
                         <CloseIcon />
                     </IconButton>
                     <Typography variant="h6" className={classes.title}>
