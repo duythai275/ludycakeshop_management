@@ -72,8 +72,6 @@ const Products = ({products, categories}) => {
             && item["brand"].toUpperCase().includes(filter.brand.toUpperCase())
             && categories.find(cate => cate.id === item["category"]).name.toUpperCase().includes(filter.category.toUpperCase())
         ));
-        
-        console.log("Test Product");
 
     }, [products, categories, filter] );
 

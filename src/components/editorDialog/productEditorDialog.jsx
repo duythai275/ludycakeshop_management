@@ -163,31 +163,31 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes,
             });
 
         } else {
-            let formData = new FormData();
-            formData.append("id", product.id + "");
-            formData.append("name", product.name);
-            formData.append("description", product.description);
-            formData.append("brand", product.brand);
-            formData.append("price", product.price + "");
-            formData.append("active", product.active + "");
-            formData.append("category", ((typeof product.category) === "object") ? ("" + product.category.id) : ("" + product.category));
-            formData.append("quantity", product.quantity + "");
-            formData.append("weightValue", product.weightValue + "");
-            formData.append("weightType", product.weightType + "");
+            let formData1 = new FormData();
+            formData1.append("id", data.id + "");
+            formData1.append("name", product.name);
+            formData1.append("description", product.description);
+            formData1.append("brand", product.brand);
+            formData1.append("price", product.price + "");
+            formData1.append("active", product.active + "");
+            formData1.append("category", ((typeof product.category) === "object") ? ("" + product.category.id) : ("" + product.category));
+            formData1.append("quantity", product.quantity + "");
+            formData1.append("weightValue", product.weightValue + "");
+            formData1.append("weightType", product.weightType + "");
             if ( file !== null ) {
-                formData.append("image_file", file, file.name);
+                formData1.append("image_file", file, file.name);
             } 
             else {
-                formData.append("image_file", new Blob(), "/path/to/file");
+                formData1.append("image_file", new Blob(), "/path/to/file");
             }
-                
+
             fetch(`${url}/admin/product`, {
                 'method': 'PUT',
                 'headers': {
                     'Authorization': 'Bearer ' + token,
                     // 'Content-Type': 'application/json'
                 },
-                'body': formData
+                'body': formData1
             }).then( res => res.json())
             .then(result => {
                 editProduct(product);
