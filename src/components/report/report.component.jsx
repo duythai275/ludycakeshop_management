@@ -92,6 +92,8 @@ const findVal = (json, period, id, type, periodType) => {
             case "Dec": 
                 paid_date = 12;
                 break;
+            default:
+                break;
         }
     } else {
         paid_date = `${period.substring(4,8)}${period.substring(1,3)}`
@@ -228,6 +230,8 @@ const Reports = props => {
                         break;
                     case "Dec": 
                         sort[11] = p;
+                        break;
+                    default:
                         break;
                 }
             });

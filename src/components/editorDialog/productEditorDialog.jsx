@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import { editProduct, fetchAllProducts } from '../../redux/product/product.action';
-import { adding, updating } from '../../utils/fetching';
 
 import  { selectCategories } from '../../redux/category/category.selector';
 import { selectWeightTypes } from '../../redux/weightType/weightType.selector';
@@ -25,17 +24,13 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-// import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-// import InputLabel from '@material-ui/core/InputLabel';
-// import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Divider from '@material-ui/core/Divider';
 
@@ -276,7 +271,7 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes,
                                     <TextField label="Brand" fullWidth value={product.brand} onChange={event => updateValue(event.target.value, "brand")}/>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <TextField label="Description" multiline rows={4} fullWidth value={product.description} multiline onChange={event => updateValue(event.target.value, "description")} />
+                                    <TextField label="Description" multiline rows={4} fullWidth value={product.description} onChange={event => updateValue(event.target.value, "description")} />
                                 </Grid>
                                 <Grid item xs={6}>
                                     <TextField label="Price" fullWidth value={product.price} onChange={event => updateValue(event.target.value, "price")} />

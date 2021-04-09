@@ -18,8 +18,6 @@ import ClearIcon from '@material-ui/icons/Clear';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Fab from '@material-ui/core/Fab';
 import CachedIcon from '@material-ui/icons/Cached';
-import Backdrop from '@material-ui/core/Backdrop';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Row from './row.component';
 
@@ -32,7 +30,6 @@ import { useStyles } from './order.styles';
 
 const Orders = ({loadOrdersToStore}) => {
     const classes = useStyles();
-    const [backdrop, setBackdrop] = useState(false);
 
     const { url, token } = useContext(AccessContext);
 
@@ -85,7 +82,24 @@ const Orders = ({loadOrdersToStore}) => {
     }
 
     useEffect( () => {
-        loadOrders();
+        let filter = "";
+        if ( filters["name"] !== "" ) filter += `name=${filters["name"]}&`;
+        if ( filters["email"] !== "" ) filter += `emai=${filters["email"]}&`;
+        if ( filters["phone"] !== "" ) filter += `phon=${filters["phone"]}&`;
+        if ( filters["orderDate"] !== "" ) filter += `orde=${filters["orderDate"]}:${filters["orderDate"]}&`;
+        if ( filters["status"] !== "" ) filter += `stat=${filters["status"]}&`;
+
+        getAllWithAuth(`${url}/admin/order?${filter}page=${(page + 1)}`, token)
+        .then(json => {
+            setTotalOrders(json.totalElements);
+            setOrders(json.content);
+            // setBackdrop(false);
+        });
+
+        getAllWithAuth(`${url}/admin/order?all=true`, token)
+        .then(json => {
+            loadOrdersToStore(json.content);
+        });
     }, [page,filters]);
 
     return (
@@ -288,9 +302,6 @@ const Orders = ({loadOrdersToStore}) => {
                     </Paper>
                 </Grid>
             </Grid>
-            <Backdrop className={classes.backdrop} open={backdrop}>
-                <CircularProgress color="inherit" />
-            </Backdrop>
         </div>
     )
 }

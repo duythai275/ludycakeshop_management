@@ -24,7 +24,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import AccessContext from '../../contexts/access.context';
-import AlertContext from '../../contexts/alert.context';
 
 import { getAllWithAuth, adding, updating, deleting } from '../../utils/fetching';
 import { selectProducts } from '../../redux/product/product.selector';

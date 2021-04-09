@@ -46,7 +46,6 @@ const Products = ({products, categories}) => {
     });
 
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -92,7 +91,7 @@ const Products = ({products, categories}) => {
                                 count={items.length}
                                 page={page}
                                 onChangePage={handleChangePage}
-                                rowsPerPage={rowsPerPage}
+                                rowsPerPage={10}
                                 // rowsPerPage={rowsPerPage}
                                 // onChangeRowsPerPage={handleChangeRowsPerPage}
                             />
@@ -203,7 +202,7 @@ const Products = ({products, categories}) => {
                         </TableHead>
                         <TableBody>
                         {
-                            items.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map( product => <Row key={product.id} product={product} /> )
+                            items.slice(page * 10, page * 10 + 10).map( product => <Row key={product.id} product={product} /> )
                         }
                         </TableBody>
                     </Table>
@@ -214,7 +213,7 @@ const Products = ({products, categories}) => {
                             count={items.length}
                             page={page}
                             onChangePage={handleChangePage}
-                            rowsPerPage={rowsPerPage}
+                            rowsPerPage={10}
                         />
                     </div>
                     <Fab /* ref={outerRef} */ aria-label="add" className={classes.fab1} onClick={ () => setSyncDialog(true)}>

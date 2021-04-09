@@ -106,15 +106,6 @@ const Login = () => {
                 >
                     Login
                 </Button>
-                <Grid container>
-                    <Grid item xs>
-                        <div align="center">
-                            <Link href="#" variant="body2" onClick>
-                                Create a new user
-                            </Link>
-                        </div>
-                    </Grid>
-                </Grid>
             </div>
         </div>
         { 

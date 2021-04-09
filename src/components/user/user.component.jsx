@@ -16,8 +16,11 @@ import ClearIcon from '@material-ui/icons/Clear';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
 
 import Row from './row.component';
+import RegisterDialog from '../editorDialog/registerDialog';
 
 import AccessContext from '../../contexts/access.context';
 
@@ -27,6 +30,7 @@ import { useStyles } from './user.styles';
 const Users = () => {
     const classes = useStyles();
     const [backdrop, setBackdrop] = useState(false);
+    const [dialog, setDialog] = useState(false);
 
     const { url, token } = useContext(AccessContext);
 
@@ -70,7 +74,17 @@ const Users = () => {
     }
 
     useEffect(() => {
-        loadUsers();
+        setBackdrop(true);
+        getAllWithAuth(`${url}/admin/users/list`, token)
+        .then(res => {
+            setUsers(res);
+            setItems(
+                res.filter( user => 
+                    user["email"].toUpperCase().includes(filter.email.toUpperCase())
+                )
+            );
+            setBackdrop(false);
+        });
     },[]);
 
     const updateUser = user => {
@@ -202,6 +216,16 @@ const Users = () => {
                                 rowsPerPage={10}
                             />
                         </div>
+                        <Fab color="primary" aria-label="add" className={classes.fab} onClick={ () => setDialog(true)}>
+                            <AddIcon />
+                        </Fab>
+                        <RegisterDialog
+                            users={users}
+                            open={dialog}
+                            handleClose={() => setDialog(false)}
+                            handleBackdrop={() => setBackdrop(true)}
+                            updateUsers={() => loadUsers()}
+                        />
                     </Paper>
                 </Grid>
             </Grid>
