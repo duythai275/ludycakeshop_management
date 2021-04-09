@@ -47,19 +47,19 @@ const ImportExportDialog = props => {
         <DialogContent>
             For importing products, your sheet should use the following column names:
             <ul>
+                <li>id</li>
                 <li>name</li>
                 <li>description</li>
                 <li>brand</li>
                 <li>price</li>
                 <li>active</li>
-                <li>image</li>
                 <li>category</li>
                 <li>quantity</li>
                 <li>weightValue</li>
                 <li>weightType</li>
             </ul>
             <strong><u>Note:</u></strong><br></br>
-            - name is mandatory field. Your sheet should have this column, the other columns are optional. <br></br>
+            - id is mandatory field. When adding a new product, id must be 0. Otherwise, id should be existed in database for updating the product. <br></br>
             - category and weightType are using their ids, you can refer the <strong>Category and Weight Type management page</strong> to know their ids.
         </DialogContent>
         <DialogActions>
