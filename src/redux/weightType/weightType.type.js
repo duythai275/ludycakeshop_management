@@ -1,3 +1,4 @@
+// define all action in variables
 export const WeightTypeActionTypes = {
     FETCH_ALL_WEIGHT_TYPES: "FETCH_ALL_WEIGHT_TYPES",
     GET_WEIGHT_TYPE: "GET_WEIGHT_TYPE",

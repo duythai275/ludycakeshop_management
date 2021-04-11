@@ -1,9 +1,17 @@
+// inmport action types
 import { WeightTypeActionTypes } from './weightType.type';
 
+// initiate store for weight type
 const INITIAL_STATE = {
     weightTypes: []
 };
 
+/**
+ * Manage states in store by actions
+ * @param {*} state initial state
+ * @param {*} action action object
+ * @returns updated state
+ */
 const weightTypeReducer = ( state = INITIAL_STATE, action ) => {
     switch( action.type ) {
         case WeightTypeActionTypes.FETCH_ALL_WEIGHT_TYPES:

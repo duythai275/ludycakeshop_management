@@ -7,4 +7,16 @@ export const useStyles = makeStyles((theme) => ({
     media: {
         height: 140,
     },
+    content: {
+        height: 90,
+    },
+    backdrop: {
+        zIndex: theme.zIndex.drawer + 1,
+        color: '#fff',
+    },
+    fab: {
+        position: 'absolute',
+        bottom: theme.spacing(3),
+        right: theme.spacing(5)
+    }
 }));
