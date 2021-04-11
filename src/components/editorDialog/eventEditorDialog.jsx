@@ -276,7 +276,7 @@ const EventEditorDialog = props => {
             <DialogTitle>{(props.data.title === "") ? "Add New Event" : "Update Event" }</DialogTitle>
             <DialogContent>
                 <Grid container spacing={2}>
-                    <Grid item xs={4}>
+                    <Grid item xs={3}>
                         <Card className={classes.image}>
                             <CardMedia 
                                 component="img"
@@ -293,13 +293,13 @@ const EventEditorDialog = props => {
                                         onChange={e => handleUploadImage(e.target.files[0])}
                                     />
                                     <Button startIcon={<PhotoCamera />} fullWidth variant="text" color="primary" size="small" component="span">
-                                        Upload Image
+                                        Upload Banner
                                     </Button>
                                 </label>
                             </CardActions>
                         </Card>
                     </Grid>
-                    <Grid item xs={8}>
+                    <Grid item xs={9}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <TextField
@@ -313,11 +313,12 @@ const EventEditorDialog = props => {
                                 <TextField
                                     label="Description"
                                     fullWidth
+                                    multiline rows={3}
                                     value={event.description}
                                     onChange={event => handleChange(event.target.value, "description")}
                                 />
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid item xs={6}>
                                 <TextField
                                     label="Start Date"
                                     type="date"
@@ -329,7 +330,7 @@ const EventEditorDialog = props => {
                                     }}
                                 />
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid item xs={6}>
                                 <TextField
                                     label="End Date"
                                     type="date"
