@@ -29,6 +29,15 @@ const Row = props => {
 
     const handleDelete = () => {
         props.handleBackdrop();
+        deleting(`${url}/v2/admin/event_banner/${props.event.id}`,token)
+        .then(json => {
+            deleting(`${url}/admin/event/${props.event.id}`,token)
+            .then(res => {
+                props.updateEvents();
+                handleAlert(true, "Deleted Successfully!");
+                // props.deleteOrder(props.order);
+            });
+        });
         deleting(`${url}/admin/event/${props.event.id}`,token)
         .then(res => {
             props.updateEvents();

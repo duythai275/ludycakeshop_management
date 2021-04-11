@@ -20,6 +20,13 @@ import TableRow from '@material-ui/core/TableRow';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import IconButton from '@material-ui/core/IconButton';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Divider from '@material-ui/core/Divider';
+import PhotoCamera from '@material-ui/icons/PhotoCamera';
 
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
@@ -48,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: 'bold'
     },
     container: {
-      maxHeight: 320,
+      maxHeight: 250,
     },
     option: {
         fontSize: 15,
@@ -79,16 +86,19 @@ const EventEditorDialog = props => {
         "start_date": "",
         "end_date": "",
         "description": "",
-        "itemList": []
+        "itemList": [],
+        "banner": "https://sait-capstone.s3-us-west-2.amazonaws.com/dev_image.png"
     });
 
     const [product, setProduct] = useState(null);
     const [discountPrice, setDiscountPrice] = useState("");
 
+    const [file, setFile] = useState(null);
+    const [image, setImage] = useState(null);
+
     const { url, token } = useContext(AccessContext);
 
     const updateEvent = () => {
-        console.log(event);
         props.handleBackdrop();
         updating(`${url}/admin/event`, token, {
             "id": event.event_id,
@@ -118,6 +128,25 @@ const EventEditorDialog = props => {
                     });
                 })
             })
+
+            if ( image !== null ) {
+                if (event.banner === "https://sait-capstone.s3-us-west-2.amazonaws.com/dev_image.png") {
+                    adding(`${url}/v2/admin/event_banner`, token, {
+                        "id": props.data.id,
+                        "comment": event.description,
+                        "image": image.substring(image.indexOf(",")+1),
+                        "imageExtension": file.type.replace("image/",".")
+                    })
+                }
+                else {
+                    updating(`${url}/v2/admin/event_banner`, token, {
+                        "id": props.data.id,
+                        "comment": event.description,
+                        "image": image.substring(image.indexOf(",")+1),
+                        "imageExtension": file.type.replace("image/",".")
+                    })
+                }
+            }
         });
     }
 
@@ -130,12 +159,14 @@ const EventEditorDialog = props => {
             "description": event.description
         })
         .then(json => {
-            Promise.all( event.itemList.map( item => {
-                adding(`${url}/admin/event/${json.content[0].id}`, token, {
-                    "productId": item.product_id,
-                    "discountPrice": item.discount_price
+            Promise.all([
+                event.itemList.map( item => {
+                    adding(`${url}/admin/event/${json.content[0].id}`, token, {
+                        "productId": item.product_id,
+                        "discountPrice": item.discount_price
+                    })
                 })
-            }))
+            ])
             .then( arr => {
                 props.handleClose();
                 props.updateEvents();
@@ -147,6 +178,15 @@ const EventEditorDialog = props => {
                     "itemList": []
                 });
             });
+                    
+            if ( image !== null ) {
+                adding(`${url}/v2/admin/event_banner`, token, {
+                    "id": json.content[0].id,
+                    "comment": event.description,
+                    "image": image.substring(image.indexOf(",")+1),
+                    "imageExtension": file.type.replace("image/",".")
+                })
+            }
         });
     }
 
@@ -180,12 +220,26 @@ const EventEditorDialog = props => {
         });
     }
 
+    const handleUploadImage = f => {
+        const reader = new FileReader();
+
+        reader.onload = e => {
+            setImage(e.target.result);
+        }
+
+        reader.readAsDataURL(f);
+        setFile(f);
+    }
+
     const closeDialog = () => {
         props.handleClose();
         if ( props.data.title !== "" ) {
-            getAllWithAuth(`${url}/admin/event/${props.data.id}`, token)
-            .then(json => {
-                setEvent(json);
+            Promise.all([
+                getAllWithAuth(`${url}/admin/event/${props.data.id}`, token),
+                getAllWithAuth(`${url}/v2/admin/event_banner`, token)
+            ])
+            .then( arr => {
+                setEvent({...arr[0], banner: (arr[1].filter( banner => banner.event.id === props.data.id).length > 0) ? arr[1].filter( banner => banner.event.id === props.data.id)[0].imageUrl : "https://sait-capstone.s3-us-west-2.amazonaws.com/dev_image.png"});
             });
         } else {
             setEvent({
@@ -193,16 +247,20 @@ const EventEditorDialog = props => {
                 "start_date": "",
                 "end_date": "",
                 "description": "",
-                "itemList": []
+                "itemList": [],
+                "banner": "https://sait-capstone.s3-us-west-2.amazonaws.com/dev_image.png"
             });
         }
     }
 
     useEffect(() => {
         if ( props.data.title !== "" ) {
-            getAllWithAuth(`${url}/admin/event/${props.data.id}`, token)
-            .then(json => {
-                setEvent(json);
+            Promise.all([
+                getAllWithAuth(`${url}/admin/event/${props.data.id}`, token),
+                getAllWithAuth(`${url}/v2/admin/event_banner`, token)
+            ])
+            .then( arr => {
+                setEvent({...arr[0], banner: (arr[1].filter( banner => banner.event.id === props.data.id).length > 0) ? arr[1].filter( banner => banner.event.id === props.data.id)[0].imageUrl : "https://sait-capstone.s3-us-west-2.amazonaws.com/dev_image.png"});
             });
         }
     }, []);
@@ -218,45 +276,72 @@ const EventEditorDialog = props => {
             <DialogTitle>{(props.data.title === "") ? "Add New Event" : "Update Event" }</DialogTitle>
             <DialogContent>
                 <Grid container spacing={2}>
-                    <Grid item xs={6}>
-                        <TextField
-                            label="Title"
-                            fullWidth
-                            value={event.event_title}
-                            onChange={event => handleChange(event.target.value, "event_title")}
-                        />
+                    <Grid item xs={4}>
+                        <Card className={classes.image}>
+                            <CardMedia 
+                                component="img"
+                                height="200"
+                                image={(image === null) ? event.banner : image}
+                            /><Divider />
+                            <CardActions>
+                                <label htmlFor="upload-image" style={{display:"inline-block", width: "100%"}}>
+                                    <input 
+                                        style={{ display: "none" }}
+                                        accept="image/png, image/jpeg"
+                                        id="upload-image"
+                                        type="file"
+                                        onChange={e => handleUploadImage(e.target.files[0])}
+                                    />
+                                    <Button startIcon={<PhotoCamera />} fullWidth variant="text" color="primary" size="small" component="span">
+                                        Upload Image
+                                    </Button>
+                                </label>
+                            </CardActions>
+                        </Card>
                     </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            label="Description"
-                            fullWidth
-                            value={event.description}
-                            onChange={event => handleChange(event.target.value, "description")}
-                        />
-                    </Grid>
-                    <Grid item xs={6}>
-                        <TextField
-                            label="Start Date"
-                            type="date"
-                            fullWidth
-                            defaultValue={(event.hasOwnProperty("start_date")) ? event.start_date.substring(0,10) : ""}
-                            onChange={event => handleChange(event.target.value, "start_date")}
-                            InputLabelProps={{
-                                shrink: true
-                            }}
-                        />
-                    </Grid>
-                    <Grid item xs={6}>
-                        <TextField
-                            label="End Date"
-                            type="date"
-                            fullWidth
-                            defaultValue={(event.hasOwnProperty("end_date")) ? event.end_date.substring(0,10) : ""}
-                            onChange={event => handleChange(event.target.value, "end_date")}
-                            InputLabelProps={{
-                                shrink: true
-                            }}
-                        />
+                    <Grid item xs={8}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <TextField
+                                    label="Title"
+                                    fullWidth
+                                    value={event.event_title}
+                                    onChange={event => handleChange(event.target.value, "event_title")}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    label="Description"
+                                    fullWidth
+                                    value={event.description}
+                                    onChange={event => handleChange(event.target.value, "description")}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    label="Start Date"
+                                    type="date"
+                                    fullWidth
+                                    defaultValue={(event.hasOwnProperty("start_date")) ? event.start_date.substring(0,10) : ""}
+                                    onChange={event => handleChange(event.target.value, "start_date")}
+                                    InputLabelProps={{
+                                        shrink: true
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    label="End Date"
+                                    type="date"
+                                    fullWidth
+                                    defaultValue={(event.hasOwnProperty("end_date")) ? event.end_date.substring(0,10) : ""}
+                                    onChange={event => handleChange(event.target.value, "end_date")}
+                                    InputLabelProps={{
+                                        shrink: true
+                                    }}
+                                />
+                            </Grid>
+                        </Grid>
                     </Grid>
                     <Grid item xs={12}>
                         <br/>

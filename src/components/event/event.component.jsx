@@ -81,6 +81,7 @@ const Events = () => {
         if ( filters["startDate"] !== "" && filters["endDate"] === "" ) filter += `date=${filters.startDate}:${filters.startDate}&`;
         if ( filters["startDate"] === "" && filters["endDate"] !== "" ) filter += `date=${filters.endDate}:${filters.endDate}&`;
         if ( filters["startDate"] !== "" && filters["endDate"] !== "" ) filter += `date=${filters.startDate}:${filters.endDate}&`;
+        
         getAllWithAuth(`${url}/admin/event?${filter}page=${(page + 1)}`, token)
         .then(json => {
             setTotalEvents(json.totalElements);

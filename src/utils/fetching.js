@@ -13,7 +13,9 @@ export const getAll = url => fetch(url).then(res => res.json());
  */
 export const getAllWithAuth = (url, token) => fetch(url, {
     'headers': {
-        'Authorization': 'Bearer ' + token
+        'Authorization': 'Bearer ' + token,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
     }
 }).then( res => res.json());
 
