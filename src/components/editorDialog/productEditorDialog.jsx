@@ -1,16 +1,25 @@
+// import React modules
 import React, { useState, useContext } from 'react';
+
+// import React Redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
+// import Redux action
 import { editProduct, fetchAllProducts } from '../../redux/product/product.action';
 
-import  { selectCategories } from '../../redux/category/category.selector';
+// import selector for Redux
+import { selectCategories } from '../../redux/category/category.selector';
 import { selectWeightTypes } from '../../redux/weightType/weightType.selector';
 
+// import React contexts
 import AccessContext from '../../contexts/access.context';
 import AlertContext from '../../contexts/alert.context';
 
+// import styles for the component
 import { makeStyles } from '@material-ui/core/styles';
+
+// import Material UI
 import Dialog from '@material-ui/core/Dialog';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -34,7 +43,7 @@ import CardActions from '@material-ui/core/CardActions';
 import CardMedia from '@material-ui/core/CardMedia';
 import Divider from '@material-ui/core/Divider';
 
-
+// define styles
 const useStyles = makeStyles((theme) => ({
     appBar: {
         position: 'relative',
@@ -67,7 +76,6 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
             marginTop: theme.spacing(6),
             marginBottom: theme.spacing(6),
-            // padding: theme.spacing(6),
         }
     },
     formControl: {
@@ -80,16 +88,27 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+/**
+ * Animation for Component
+ */
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
+/**
+ * Editor dialog for Product
+ * @param {*} props of component 
+ * @returns component
+ */
 const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes, editProduct, addProduct }) => {
+    // use styke
     const classes = useStyles();
 
+    // for image uploading
     const [file, setFile] = useState(null);
     const [image, setImage] = useState(null);
 
+    // inputs
     const [product, setProduct] = useState({
         "name": data.name,
         "description": data.description,
@@ -104,14 +123,19 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes,
 
     });
 
+    // authentication
     const { url, token } = useContext(AccessContext);
+    
+    // alert for any action
     const { handleAlert } = useContext(AlertContext);
 
+    // update inputs
     const updateValue = ( value, attr ) => {
         product[attr] = value;
         setProduct({...product});
     }
 
+    // handle add and update product
     const handleProduct = () => {
         if ( data.name === "New Product" ) {
             let formData = new FormData();
@@ -194,6 +218,7 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes,
         handleClose();
     }
 
+    // handle closing dialog
     const closeDialog = () => {
         handleClose();
         setProduct({
@@ -210,6 +235,7 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes,
         });
     }
 
+    // handle uploading image
     const handleUploadImage = f => {
         const reader = new FileReader();
 
@@ -320,11 +346,17 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes,
     )
 }
 
+// map state to props of the component
 const mapStateToProps = createStructuredSelector({
     categories: selectCategories,
     weightTypes: selectWeightTypes
 });
 
+/**
+ * To map Dispatch function of Redux to props of Row component 
+ * @param {*} dispatch function to pass Redux action to Redux reducer
+ * @returns objects of mapping
+ */
 const mapDispatchToProps = dispatch => ({
     editProduct: product => dispatch(editProduct(product)),
     addProduct: products => dispatch(fetchAllProducts(products))

@@ -1,7 +1,11 @@
+// import React modules
 import React, { useState } from 'react';
+
+// import React Redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
+// import Material UI
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -14,19 +18,30 @@ import TableRow from '@material-ui/core/TableRow';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 
+// import row and editor dialog components
 import Row from './row.component';
 import WeightTypeEditorDialog from '../editorDialog/weightTypeEditorDialog';
 
+// import selector for Redux
 import { selectWeightTypes } from '../../redux/weightType/weightType.selector';
 
+// import styles for the component
 import { useStyles } from './weightType.styles';
 
+/**
+ * Component of weight type management page
+ * @param {*} props of the component
+ * @returns component
+ */
 const WeightTypes = (props) => {
+    // use style
     const classes = useStyles();
 
+    // state for paging and dialog
     const [page, setPage] = useState(0);
     const [dialog, setDialog] = useState(false);
 
+    // for moving to pages
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };  
@@ -43,14 +58,12 @@ const WeightTypes = (props) => {
                         </div>
                         <div className={classes.pager}>
                             <TablePagination
-                                rowsPerPageOptions={[]} // disable RowsPerPage
+                                rowsPerPageOptions={[]}
                                 component="div"
                                 count={props.weightTypes.length}
                                 page={page}
                                 onChangePage={handleChangePage}
                                 rowsPerPage={10}
-                                // rowsPerPage={rowsPerPage}
-                                // onChangeRowsPerPage={handleChangeRowsPerPage}
                             />
                         </div>
                     </div>
@@ -72,14 +85,12 @@ const WeightTypes = (props) => {
                     </Table>
                     <div className={classes.pager}>
                         <TablePagination
-                            rowsPerPageOptions={[]} // disable RowsPerPage
+                            rowsPerPageOptions={[]}
                             component="div"
                             count={props.weightTypes.length}
                             page={page}
                             onChangePage={handleChangePage}
                             rowsPerPage={10}
-                            // rowsPerPage={rowsPerPage}
-                            // onChangeRowsPerPage={handleChangeRowsPerPage}
                         />
                     </div>
                     <Fab color="primary" aria-label="add" className={classes.fab} 
@@ -100,6 +111,7 @@ const WeightTypes = (props) => {
     )
 }
 
+// map state to props of the component
 const mapStateToProps = createStructuredSelector({
     weightTypes: selectWeightTypes
 })

@@ -1,5 +1,7 @@
+// import React modules
 import React, { useState, useEffect, useContext } from 'react';
 
+// import Material UI
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Fab from '@material-ui/core/Fab';
@@ -12,9 +14,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import TextField from '@material-ui/core/TextField';
 import Divider from '@material-ui/core/Divider';
@@ -23,19 +23,27 @@ import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 
+// import banner components of holiday and homepage
 import HolidayBanner from './holidayBanner.component';
 import HomeBanner from './homeBanner.component';
 
+// import React contexts
 import AccessContext from '../../contexts/access.context';
 
-import { getAllWithAuth } from '../../utils/fetching';
-import { adding } from '../../utils/fetching';
+// import functions for requesting to server 
+import { getAllWithAuth, adding } from '../../utils/fetching';
 
+// import styles for the component
 import { useStyles } from './banner.styles.js';
 
+/**
+ * Error Notification component
+ * @param {*} props of the component
+ * @returns component
+ */
 const ErrorNotification = props => {
-    // const { alert, alertMsg, handleAlert } = useContext(AlertContext);
 
+    // handle close notification
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -59,19 +67,33 @@ const ErrorNotification = props => {
     )
 }
 
+/**
+ * Animation for Component
+ */
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
+/**
+ * Banner Management component
+ * @returns component
+ */
 const Banners = () => {
+    // use style
     const classes = useStyles();
+
+    // authentication
     const { url, token } = useContext(AccessContext);
 
+    // alert and animation for loading
     const [alert, setAlert] = useState(false);
     const [backdrop, setBackdrop] = useState(false);
 
+    // for uploading image for new banner
     const [file, setFile] = useState(null);
     const [image, setImage] = useState(null);
+
+    // open/close dialog of add new banner and its inputs
     const [dialog, setDialog] = useState(false);
     const [form, setForm] = useState({
         "beginDate": "",
@@ -80,9 +102,11 @@ const Banners = () => {
         "bannerImageUrl": "https://sait-capstone.s3-us-west-2.amazonaws.com/dev_image.png"
     });
 
+    // data
     const [holidayBanners, setHolidayBanners] = useState([]);
     const [homeBanners, setHomeBanners] = useState([]);
 
+    // load data
     const loadHolidayBabers = () => {
         getAllWithAuth(`${url}/v2/admin/holiday_banner`, token)
         .then( json => {
@@ -91,6 +115,7 @@ const Banners = () => {
         })
     }
 
+    // load data
     const loadHomeBabers = () => {
         getAllWithAuth(`${url}/v2/admin/home_banner`, token)
         .then( json => {
@@ -99,6 +124,7 @@ const Banners = () => {
         })
     }
 
+    // handle add holiday banner
     const addBanner = () => {
         if ( file === null ) {
             setAlert(true);
@@ -119,6 +145,7 @@ const Banners = () => {
         }
     }
 
+    // handle close dialog
     const closeDialog = () => {
         setForm({
             "beginDate": "",
@@ -131,6 +158,7 @@ const Banners = () => {
         setDialog(false);
     }
 
+    // handle upload new image for banner
     const handleUploadImage = f => {
         const reader = new FileReader();
 
@@ -142,6 +170,7 @@ const Banners = () => {
         setFile(f);
     }
 
+    // load data
     useEffect( () => {
         setBackdrop(true);
         Promise.all([
@@ -278,7 +307,5 @@ const Banners = () => {
         </div>
     )
 }
-
-
 
 export default Banners;

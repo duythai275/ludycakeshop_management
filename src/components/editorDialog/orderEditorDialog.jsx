@@ -1,6 +1,10 @@
+// import React modules
 import React, { useEffect, useContext, useState } from 'react';
+
+// import React Redux
 import { connect } from 'react-redux';
 
+// import Material UI
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -16,13 +20,19 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Grid from '@material-ui/core/Grid';
 
+// import React contexts
 import AccessContext from '../../contexts/access.context';
 
+// import Redux action
 import { updateOrderStatus } from '../../redux/order/order.action';
+
+// import functions for requesting to server 
 import { getAllWithAuth, updating } from '../../utils/fetching';
 
+// import styles from material
 import { makeStyles } from '@material-ui/core/styles';
 
+// define styles
 const useStyles = makeStyles((theme) => ({
     list: {
         width: '100%',
@@ -42,21 +52,33 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+/**
+ * Animation for Component
+ */
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
+/**
+ * Editor dialog for Order
+ * @param {*} props of component
+ * @returns component
+ */
 const OrderEditorDialog = props => {
+    // use style
     const classes = useStyles();
 
+    // authentication
     const { url, token } = useContext(AccessContext);
 
+    // inputs - status
     const [activeStep, setActiveStep] = useState(
         (props.order.status === "pending") ? 0 : 
             (props.order.status === "confirmed") ? 1 : 
                 (props.order.status === "ready") ? 2 : 3
     );
 
+    // data
     const [order, setOrder] = useState({
         "id": props.order.id,
         "orderDate": props.order.orderDate,
@@ -69,6 +91,7 @@ const OrderEditorDialog = props => {
         "itemList": []
     });
 
+    // load data in first time
     useEffect(() => {
         getAllWithAuth(`${url}/admin/order/${props.order.id}`, token)
         .then(json => {
@@ -79,6 +102,7 @@ const OrderEditorDialog = props => {
         });
     }, [activeStep]);
 
+    // change status backward
     const changeStatusBack = () => {
         const obj = {
             "id": order.id,
@@ -99,6 +123,7 @@ const OrderEditorDialog = props => {
         });
     }
 
+    // change status forward
     const changeStatus = () => {
         const d = new Date();
         const currentDate = `${d.getFullYear()}-${((d.getMonth()+1)<10) ? `0${d.getMonth()+1}` : (d.getMonth()+1)}-${(d.getDate() < 10) ? `0${d.getDate()}` : d.getDate()}`;
@@ -203,6 +228,11 @@ const OrderEditorDialog = props => {
     )
 }
 
+/**
+ * To map Dispatch function of Redux to props of Row component 
+ * @param {*} dispatch function to pass Redux action to Redux reducer
+ * @returns objects of mapping
+ */
 const mapDispatchToProps = dispatch => ({
     updateOrder: order => dispatch(updateOrderStatus(order))
 });

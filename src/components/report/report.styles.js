@@ -1,5 +1,7 @@
+// import styles from material
 import { makeStyles } from '@material-ui/core/styles';
 
+// define styles
 export const useStyles = makeStyles((theme) => ({
     paper: {
         padding: theme.spacing(2),
@@ -8,14 +10,12 @@ export const useStyles = makeStyles((theme) => ({
         flexDirection: 'column'
     },
     listPaper: {
-        // padding: theme.spacing(2),
         display: 'flex',
         overflow: 'auto',
         flexDirection: 'column',
         height: 200
     },
     listPaper1: {
-        // padding: theme.spacing(2),
         display: 'flex',
         overflow: 'auto',
         flexDirection: 'column',
@@ -27,7 +27,6 @@ export const useStyles = makeStyles((theme) => ({
     },
     cardContent: {
         display: 'flex',
-        // overflow: 'auto',
         flexDirection: 'column',
         height: 108
     },

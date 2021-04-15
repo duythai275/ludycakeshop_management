@@ -1,3 +1,11 @@
+/**
+ * Column chart template
+ * @param {*} title title
+ * @param {*} categories categories of chart (not project)
+ * @param {*} series series of chart
+ * @param {*} dataType data type
+ * @returns chart object
+ */
 export const columnChart = (title, categories, series, dataType) => {
     return {
         chart: {
@@ -34,13 +42,20 @@ export const columnChart = (title, categories, series, dataType) => {
     }
 }
 
+/**
+ * Line chart template
+ * @param {*} title title
+ * @param {*} categories categories of chart (not project)
+ * @param {*} series series of chart
+ * @param {*} dataType data type
+ * @returns chart object
+ */
 export const lineChart = (title, categories, series, dataType) => {
     return {
         chart: {
             type: 'line'
         },
         title: {
-            // text: 'Solar Employment Growth by Sector, 2010-2016'
             text: title
         },
         yAxis: {
@@ -51,11 +66,6 @@ export const lineChart = (title, categories, series, dataType) => {
         xAxis: {
             categories: categories
         },
-        // legend: {
-        //     layout: 'vertical',
-        //     align: 'right',
-        //     verticalAlign: 'middle'
-        // },
         series: series,
         plotOptions: {
             line: {

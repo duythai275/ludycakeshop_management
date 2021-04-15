@@ -1,7 +1,7 @@
 // inmport action types
 import { WeightTypeActionTypes } from './weightType.type';
 
-// initiate store for weight type
+// initiate store for weight types
 const INITIAL_STATE = {
     weightTypes: []
 };

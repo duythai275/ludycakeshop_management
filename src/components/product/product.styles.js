@@ -1,19 +1,8 @@
+// import styles from material
 import { makeStyles } from '@material-ui/core/styles';
 
+// define styles
 export const useStyles = makeStyles((theme) => ({
-    // root: {
-    //     '& > *': {
-    //       margin: theme.spacing(1),
-    //     }
-    // },
-    // margin: {
-    //     margin: theme.spacing(1),
-    // }
-    // menu: {
-    //     width: '100%',
-    //     maxWidth: 360,
-    //     backgroundColor: theme.palette.background.paper,
-    // }
     header: {
         display: 'flex',
         justifyContent: 'space-between'
@@ -22,40 +11,22 @@ export const useStyles = makeStyles((theme) => ({
         width: '200px'
     },
     pager: {
-        // backgroundColor: theme.palette.background.paper,
-        // width: 500,
-        // position: 'relative',
-        // minHeight: 200,
         display: 'flex',
         justifyContent: 'flex-end',
     },
     table: {
-    //   background: '#F3F3F3'
     },
     fab1: {
-        // position: 'absolute',
         position: 'absolute',
-        // top: theme.spacing(1),
         bottom: theme.spacing(12),
         right: theme.spacing(5),
-        // float: "right"
-        // display: 'flex',
-        // justifyContent: 'flex-end',
     },
     fab: {
-        // position: 'absolute',
         position: 'absolute',
-        // top: theme.spacing(1),
         bottom: theme.spacing(3),
         right: theme.spacing(5),
-        // float: "right"
-        // display: 'flex',
-        // justifyContent: 'flex-end',
     },
     chip: {
-        // display: 'flex',
-        // justifyContent: 'center',
-        // flexWrap: 'wrap',
         '& > *': {
             margin: theme.spacing(0.5),
         }

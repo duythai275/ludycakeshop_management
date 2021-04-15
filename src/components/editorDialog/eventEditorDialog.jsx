@@ -1,7 +1,11 @@
+// import React modules
 import React, { useState, useContext, useEffect } from 'react';
+
+// import React Redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
+// import Material UI
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -21,36 +25,33 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import IconButton from '@material-ui/core/IconButton';
 import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Divider from '@material-ui/core/Divider';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
-
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
+// import React contexts
 import AccessContext from '../../contexts/access.context';
 
+// import functions for requesting to server 
 import { getAllWithAuth, adding, updating, deleting } from '../../utils/fetching';
+
+// import selector for Redux
 import { selectProducts } from '../../redux/product/product.selector';
 import  { selectCategories } from '../../redux/category/category.selector';
 
+// import styles from material
 import { makeStyles } from '@material-ui/core/styles';
 
+// define styles
 const useStyles = makeStyles((theme) => ({
     list: {
         width: '100%',
         position: 'relative',
         overflow: 'auto',
         maxHeight: 230,
-        // height: 300
     },
-    // paper: {
-    //     width: '100%',
-    //     height: 230,
-    //     overflow: 'auto'
-    // },
     tableHead: {
         fontWeight: 'bold'
     },
@@ -66,10 +67,18 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+/**
+ * Animation for Component
+ */
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
+/**
+ * function to format options in auto complete field
+ * @param {*} isoCode boolean
+ * @returns 
+ */
 const toFlag = (isoCode) => {
     return typeof String.fromCodePoint !== 'undefined'
         ? isoCode
@@ -78,9 +87,16 @@ const toFlag = (isoCode) => {
         : isoCode;
 }
 
+/**
+ * Editor dialog for Event
+ * @param {*} props of component
+ * @returns component
+ */
 const EventEditorDialog = props => {
+    // use style
     const classes = useStyles();
 
+    // inputs
     const [event, setEvent] = useState({
         "title": "",
         "start_date": "",
@@ -90,14 +106,18 @@ const EventEditorDialog = props => {
         "banner": "https://sait-capstone.s3-us-west-2.amazonaws.com/dev_image.png"
     });
 
+    // input for new discount
     const [product, setProduct] = useState(null);
     const [discountPrice, setDiscountPrice] = useState("");
 
+    // for image uploading
     const [file, setFile] = useState(null);
     const [image, setImage] = useState(null);
 
+    // authentication
     const { url, token } = useContext(AccessContext);
 
+    // handling update event
     const updateEvent = () => {
         props.handleBackdrop();
         updating(`${url}/admin/event`, token, {
@@ -150,6 +170,7 @@ const EventEditorDialog = props => {
         });
     }
 
+    // handling add event
     const addEvent = () => {
         props.handleBackdrop();
         adding(`${url}/admin/event`, token, {
@@ -190,11 +211,13 @@ const EventEditorDialog = props => {
         });
     }
 
+    // handle change inputs
     const handleChange = ( val, attr ) => {
         event[attr] = val;
         setEvent({...event});
     }
 
+    // handle add discount for event
     const handleAddDiscount = () => {
         if ( discountPrice !== "" && product !== null ) {
             event["itemList"].push({
@@ -211,6 +234,7 @@ const EventEditorDialog = props => {
         }
     }
     
+    // handle remove a discount from event
     const handleDeleteDiscount = deletedItem => {
         event["itemList"] = event["itemList"].filter( item => 
             deletedItem.product_id !== item.product_id || deletedItem.discount_price !== item.discount_price
@@ -220,6 +244,7 @@ const EventEditorDialog = props => {
         });
     }
 
+    // handle uploading image
     const handleUploadImage = f => {
         const reader = new FileReader();
 
@@ -231,6 +256,7 @@ const EventEditorDialog = props => {
         setFile(f);
     }
 
+    // handle closing dialog
     const closeDialog = () => {
         props.handleClose();
         if ( props.data.title !== "" ) {
@@ -253,6 +279,7 @@ const EventEditorDialog = props => {
         }
     }
 
+    // load data for first time
     useEffect(() => {
         if ( props.data.title !== "" ) {
             Promise.all([
@@ -371,7 +398,6 @@ const EventEditorDialog = props => {
                                     }
                                     <TableRow>
                                         <TableCell>
-                                            {/* <TextField label="Product Name" variant="outlined" fullWidth size="small" /> */}
                                             <Autocomplete
                                                 options={props.products}
                                                 classes={{
@@ -434,6 +460,11 @@ const EventEditorDialog = props => {
     )
 }
 
+/**
+ * To map Dispatch function of Redux to props of Row component 
+ * @param {*} dispatch function to pass Redux action to Redux reducer
+ * @returns objects of mapping
+ */
 const mapStateToProps = createStructuredSelector({
     products: selectProducts,
     categories: selectCategories

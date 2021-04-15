@@ -1,9 +1,16 @@
+// import React modules
 import React, { useState, useContext } from 'react';
+
+// import React Redux
 import { connect } from 'react-redux';
 
+// import Redux action
 import { fetchAllWeightTypes, editWeightType } from '../../redux/weightType/weightType.action';
+
+// import functions for requesting to server 
 import { adding, updating } from '../../utils/fetching';
 
+// import Material UI
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -12,21 +19,35 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import Button from '@material-ui/core/Button';
 
+// import React contexts
 import AccessContext from '../../contexts/access.context';
 import AlertContext from '../../contexts/alert.context';
 
+/**
+ * Animation for Component
+ */
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
+/**
+ * Editor dialog for Weight type
+ * @param {*} props of component
+ * @returns component
+ */
 const WeightTypeEditorDialog = (props) => {
+    // authentication
     const { url, token } = useContext(AccessContext);
+
+    // alert for any action
     const { handleAlert } = useContext(AlertContext);
 
+    // inputs
     const [weightType, setWeightType] = useState({
         "name": props.weightType.name
     });
 
+    // handle adding weight type
     const handleAddWeightType = () => {
         adding(`${url}/weighttype`, token, weightType)
         .then(result => {
@@ -39,6 +60,7 @@ const WeightTypeEditorDialog = (props) => {
         });
     }
 
+    // handle updating weight type
     const handleEditWeightType = () => {
         updating(`${url}/weighttype/${props.weightType.id}`, token, weightType)
         .then(result => {
@@ -51,11 +73,13 @@ const WeightTypeEditorDialog = (props) => {
         props.handleClose();
     }
 
+    // update inputs
     const updateValue = ( value ) => {
         weightType["name"] = value;
         setWeightType({...weightType});
     }
 
+    // handle close dialog
     const closeDialog = () => {
         props.handleClose();
         setWeightType({
@@ -99,6 +123,11 @@ const WeightTypeEditorDialog = (props) => {
     )
 }
 
+/**
+ * To map Dispatch function of Redux to props of Row component 
+ * @param {*} dispatch function to pass Redux action to Redux reducer
+ * @returns objects of mapping
+ */
 const mapDispatchToProps = dispatch => ({
     addWeightType: weightTypes => dispatch(fetchAllWeightTypes(weightTypes)),
     editWeightType: weightType => dispatch(editWeightType(weightType))

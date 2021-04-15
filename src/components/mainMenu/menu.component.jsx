@@ -1,7 +1,13 @@
+// import React modules
 import React, { useState, useContext } from 'react';
+
+// import React Router
 import { withRouter } from 'react-router-dom';
+
+// import node_module for style
 import clsx from 'clsx';
 
+// import Material UI
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
@@ -14,34 +20,39 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-// import BusinessIcon from '@material-ui/icons/Business';
 import CategoryIcon from '@material-ui/icons/Category';
 import SettingsIcon from '@material-ui/icons/Settings';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-// import ListIcon from '@material-ui/icons/List';
 import LocalMallIcon from '@material-ui/icons/LocalMall';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import PaymentIcon from '@material-ui/icons/Payment';
-// import GraphicEqIcon from '@material-ui/icons/GraphicEq';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import LoyaltyIcon from '@material-ui/icons/Loyalty';
 
+// import React contexts
 import DrawerContext from '../../contexts/drawer.contexts';
 import AccessContext from '../../contexts/access.context';
+
+// import styles for the component
 import { useStyles } from './menu.styles';
 
+/**
+ * Header Menu
+ * @returns component
+ */
 const BarMenu = () => {
+    // use style
     const classes = useStyles();
+
+    // open/close main menu
     const { open, toggleOpen } = useContext(DrawerContext);
 
     return (
     <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
         <Toolbar className={classes.toolbar}>
             <IconButton
-                // edge="start"
                 color="inherit"
-                // aria-label="open drawer"
                 onClick={() => toggleOpen()}
                 className={clsx( classes.menuButton, open && classes.menuButtonHidden)}
             >
@@ -52,9 +63,19 @@ const BarMenu = () => {
     </AppBar>
 )}
 
+/**
+ * Main Menu on Left
+ * @param {*} props of the component 
+ * @returns component
+ */
 const ListMenu = ({history}) => {
+    // use style
     const classes = useStyles();
+
+    // open/close main menu
     const { open, toggleOpen } = useContext(DrawerContext);
+    
+    // use context for handling login
     const { handleLogIn } = useContext(AccessContext);
 
     return (
@@ -147,8 +168,16 @@ const ListMenu = ({history}) => {
     </Drawer>
 )}
 
+/**
+ * Two Menus
+ * @param {*} props of component 
+ * @returns component
+ */
 const Menu = ({history}) => {
+    // state for open/close left menu
     const [open, setOpen] = useState(true);
+    
+    // handle open left menu
     const toggleOpen = () => setOpen(!open);
 
     return (

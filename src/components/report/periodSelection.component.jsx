@@ -1,5 +1,7 @@
+// import React modules
 import React from 'react';
 
+// import Material UI
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -14,23 +16,34 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Divider from '@material-ui/core/Divider';
 
+// import styles for the component
 import { useStyles } from './report.styles.js';
 
+/**
+ * Period Selection
+ * @param {*} props of component
+ * @returns component
+ */
 const PeriodSelection = props => {
+    // use style
     const classes = useStyles();
 
+    // for period name when matching with returning JSON
     const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     const weeks = ['W01','W02','W03','W04','W05','W06','W07','W08','W09','W10','W11','W12','W13','W14','W15','W16','W17','W18','W19','W20','W21','W22','W23','W24','W25','W26','W27','W28','W29','W30','W31','W32','W33','W34','W35','W36','W37','W38','W39','W40','W41','W42','W43','W44','W45','W46','W47','W48','W49','W50','W51','W52'];
     
+    // add period and sort (it sorts in report component)
     const checkPeriod = p => {
         (!props.period.includes(p)) ? props.changePeriod([...props.period,...[p]]) : props.changePeriod(props.period.filter(d => d !== p));
     }
 
+    // handle change period type
     const handlePeriodType = val => {
         props.changePeriodType(val);
         props.changePeriod([]);
     }
 
+    // handle change year
     const handleYear = val => {
         props.changeYear(val);
         props.changePeriod([]);

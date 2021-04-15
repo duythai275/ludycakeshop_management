@@ -1,5 +1,7 @@
+// import React modules
 import React, { useState, useContext } from 'react';
 
+// import Material UI
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
@@ -17,21 +19,38 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 
+// import React contexts
 import AccessContext from '../../contexts/access.context';
+
+// import functions for requesting to server 
 import { updating } from '../../utils/fetching';
 
+// import styles for the component
 import { useStyles } from './banner.styles.js';
 
+/**
+ * Animation for Component
+ */
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
+/**
+ * Home Banner of component
+ * @param {*} props of the component
+ * @returns component
+ */
 const HomeBanner = props => {
+    // use style
     const classes = useStyles();
+    
+    // authentication
     const { url, token } = useContext(AccessContext);
 
+    // open/close dialog
     const [dialog, setDialog] = useState(false);
 
+    // inputs
     const [form, setForm] = useState({
         "id": props.data.id, 
         "homeBannerId": 1,
@@ -39,9 +58,12 @@ const HomeBanner = props => {
         "description": props.data.description,
         "imageUrl": props.data.imageUrl
     });
+    
+    // for uploading image
     const [file, setFile] = useState(null);
     const [image, setImage] = useState(null);
 
+    // handling close dialog
     const closeDialog = () => {
         setForm({
             "id": props.data.id, 
@@ -55,6 +77,7 @@ const HomeBanner = props => {
         setDialog(false);
     }
 
+    // update banner
     const updateBanner = () => {
         props.openBackDrop();
         const o = ( file === null ) ? {
@@ -77,6 +100,7 @@ const HomeBanner = props => {
         });
     }
 
+    // handle upload image
     const handleUploadImage = f => {
         const reader = new FileReader();
 

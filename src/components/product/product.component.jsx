@@ -1,7 +1,11 @@
+// import React modules
 import React, { useState, useEffect } from 'react';
+
+// import React Redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
+// import Material UI
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -20,20 +24,26 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import SettingsIcon from '@material-ui/icons/Settings';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-// import MuiAlert from '@material-ui/lab/Alert';
 
-// import ProductDialog from '../productEditor/productDialog.component';
+// import row, editor and import/export dialog components
 import ProductEditorDialog from '../editorDialog/productEditorDialog';
 import ImportExportDialog from '../editorDialog/importExportDialog';
+import Row from './row.component';
 
+// import selector for Redux
 import { selectProducts } from '../../redux/product/product.selector';
 import  { selectCategories } from '../../redux/category/category.selector';
 
-import Row from './row.component';
-
+// import styles for the component
 import { useStyles } from './product.styles';
 
+/**
+ * Component of product management page
+ * @param {*} props of the component 
+ * @returns component
+ */
 const Products = ({products, categories}) => {
+    // use style
     const classes = useStyles();
 
     const [items, setItems] = useState([]);
@@ -45,12 +55,15 @@ const Products = ({products, categories}) => {
         category: ""
     });
 
+    // page
     const [page, setPage] = useState(0);
 
+    // handle paging
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };  
 
+    // handle searching
     const filterBy = (value, property) => {
         setPage(0);
         filter[property] = value;
@@ -59,6 +72,7 @@ const Products = ({products, categories}) => {
         });
     }
 
+    // load data for filter
     useEffect( () => {
 
         products.map( product => {
@@ -86,14 +100,12 @@ const Products = ({products, categories}) => {
                         </div>
                         <div className={classes.pager}>
                             <TablePagination
-                                rowsPerPageOptions={[]} // disable RowsPerPage
+                                rowsPerPageOptions={[]} 
                                 component="div"
                                 count={items.length}
                                 page={page}
                                 onChangePage={handleChangePage}
                                 rowsPerPage={10}
-                                // rowsPerPage={rowsPerPage}
-                                // onChangeRowsPerPage={handleChangeRowsPerPage}
                             />
                         </div>
                     </div>
@@ -118,7 +130,6 @@ const Products = ({products, categories}) => {
                                                 endAdornment: (
                                                     <InputAdornment position="end">
                                                         <IconButton
-                                                            // disabled={!this.state.searchText}
                                                             onClick={() => filterBy("","name")}
                                                         >
                                                             <ClearIcon fontSize="small" />
@@ -150,7 +161,6 @@ const Products = ({products, categories}) => {
                                                 endAdornment: (
                                                     <InputAdornment position="end">
                                                         <IconButton
-                                                            // disabled={!this.state.searchText}
                                                             onClick={() => filterBy("","brand")}
                                                         >
                                                             <ClearIcon fontSize="small" />
@@ -182,7 +192,6 @@ const Products = ({products, categories}) => {
                                                 endAdornment: (
                                                     <InputAdornment position="end">
                                                         <IconButton
-                                                            // disabled={!this.state.searchText}
                                                             onClick={() => filterBy("","category")}
                                                         >
                                                             <ClearIcon fontSize="small" />
@@ -218,11 +227,9 @@ const Products = ({products, categories}) => {
                     </div>
                     <Fab /* ref={outerRef} */ aria-label="add" className={classes.fab1} onClick={ () => setSyncDialog(true)}>
                         <ImportExportIcon />
-                        {/* <ProductDialog outerRef={outerRef} /> */}
                     </Fab>
                     <Fab /* ref={outerRef} */ color="primary" aria-label="add" className={classes.fab} onClick={ () => setDialog(true)}>
                         <AddIcon />
-                        {/* <ProductDialog outerRef={outerRef} /> */}
                     </Fab>
                     <ProductEditorDialog open={dialog} handleClose={ () => setDialog(false) } data={
                         {
@@ -237,6 +244,7 @@ const Products = ({products, categories}) => {
         </Grid>
 )}
 
+// map state to props of the component
 const mapStateToProps = createStructuredSelector({
     products: selectProducts,
     categories: selectCategories

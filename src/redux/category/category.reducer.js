@@ -1,10 +1,18 @@
+// inmport action types
 import { CategoryActionTypes } from './category.type';
 
+// initiate store for categories
 const INITIAL_STATE = {
     categories: []
 };
 
-const categoryReducer = ( state = INITIAL_STATE, action ) => {
+/**
+ * Manage states in store by actions
+ * @param {*} state initial state
+ * @param {*} action action object
+ * @returns updated state
+ */
+ const categoryReducer = ( state = INITIAL_STATE, action ) => {
     switch (action.type) {
         case CategoryActionTypes.FETCH_ALL_CATEGORIES:
             return {

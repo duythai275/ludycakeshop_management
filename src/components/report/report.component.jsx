@@ -1,5 +1,7 @@
+// import React modules
 import React, { useEffect, useState, useContext } from 'react';
 
+// import Material UI
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -7,26 +9,33 @@ import Alert from '@material-ui/lab/Alert';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+// import components for selections and data table
 import ReportSelection from './reportSelection.component';
 import PeriodSelection from './periodSelection.component';
 import DataSelection from './dataSelection.component';
-
 import DataTable from './dataTable.component';
 
 import AccessContext from '../../contexts/access.context';
 import { getAllWithAuth } from '../../utils/fetching';
 
+// import styles for the component
 import { useStyles } from './report.styles.js';
 
+// import HighChart
 import Highcharts from 'highcharts';
 import HighchartsExporting from 'highcharts/modules/exporting';
 import HighchartsReact from 'highcharts-react-official';
 import { columnChart, lineChart } from './charts';
 HighchartsExporting(Highcharts);
 
+/**
+ * Alert Notification when missing selections
+ * @param {*} props of the component
+ * @returns component
+ */
 const ErrorNotification = props => {
-    // const { alert, alertMsg, handleAlert } = useContext(AlertContext);
 
+    // handle close dialog
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -50,6 +59,15 @@ const ErrorNotification = props => {
     )
 }
 
+/**
+ * function to find value
+ * @param {*} json data
+ * @param {*} period period
+ * @param {*} id id
+ * @param {*} type type
+ * @param {*} periodType period type
+ * @returns value
+ */
 const findVal = (json, period, id, type, periodType) => {
     let res = 0;
     let paid_date = 0;
@@ -112,8 +130,16 @@ const findVal = (json, period, id, type, periodType) => {
     return res;
 }
 
+/**
+ * Report module
+ * @param {*} props of component
+ * @returns component
+ */
 const Reports = props => {
+    // use style
     const classes = useStyles();
+
+    // authentication
     const { url, token } = useContext(AccessContext);
 
     //Error Notification and Backdrop
@@ -143,6 +169,7 @@ const Reports = props => {
     // Data Table
     const [rows, setRows] = useState([]);
 
+    // generate report
     const update = () => {
 
         setBackdrop(true);
@@ -189,6 +216,7 @@ const Reports = props => {
         });
     }
 
+    // set period when it selected
     const handlePeriod = value => {
         // Sort period
         if ( periodType === "monthly" ) {
@@ -249,6 +277,7 @@ const Reports = props => {
         
     }
 
+    // handle dimension when it changed
     const handleDimension = () => {
         if (key === "data") { 
             setCategories(period);
@@ -259,6 +288,7 @@ const Reports = props => {
         }
     }
 
+    // load when loading first time
     useEffect( () => {
         handleDimension();
     }, [key,period,data])

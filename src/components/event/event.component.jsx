@@ -1,5 +1,7 @@
+// import React modules
 import React , { useState, useEffect, useContext } from 'react';
 
+// import Material UI
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -19,34 +21,51 @@ import IconButton from '@material-ui/core/IconButton';
 import ClearIcon from '@material-ui/icons/Clear';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
+// import row and editor components
 import Row from './row.component';
 import EventEditorDialog from '../editorDialog/eventEditorDialog';
 
+// import React contexts
 import AccessContext from '../../contexts/access.context';
 
+// import functions for requesting to server 
 import { getAllWithAuth } from '../../utils/fetching';
 
+// import styles for the component
 import { useStyles } from './event.styles';
 
-const Events = () => {
+/**
+ * Component of event management page
+ * @param {*} props of the component 
+ * @returns component
+ */
+ const Events = () => {
+    // use style
     const classes = useStyles();
-    const [backdrop, setBackdrop] = useState(false);
 
+    // state for backdrop and dialog
+    const [backdrop, setBackdrop] = useState(false);
+    const [dialog, setDialog] = useState(false); 
+
+    // authentication
     const { url, token } = useContext(AccessContext);
 
-    const [dialog, setDialog] = useState(false);   
-
+    // data
     const [events, setEvents] = useState([]);
     const [totalEvents, setTotalEvents] = useState(0);
+
+    // page
     const [page, setPage] = useState(0);
+
+    // filter
     const [filters, setFilters] = useState({
         name: "",
         startDate: "",
         endDate: ""
     });
 
+    // handle searching
     const filterBy = (value, property) => {
-        // setBackdrop(true);
         filters[property] = value;
         setPage(0);
         setFilters({
@@ -54,11 +73,12 @@ const Events = () => {
         });
     }
 
+    // handle paging
     const handleChangePage = (event, newPage) => {
-        // setBackdrop(true);
         setPage(newPage);
     };
 
+    // load data
     const loadEvents = () => {
         setBackdrop(true);
         let filter = "";
@@ -74,6 +94,7 @@ const Events = () => {
         });
     }
 
+    // load data for first time
     useEffect( () => {
         setBackdrop(true);
         let filter = "";

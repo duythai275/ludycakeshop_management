@@ -1,6 +1,10 @@
+// import React modules
 import React, { useContext } from 'react';
+
+// import React Redux
 import { connect } from 'react-redux';
 
+// import Material UI
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -11,25 +15,39 @@ import PublishIcon from '@material-ui/icons/Publish';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import CancelIcon from '@material-ui/icons/Cancel';
 
+// import Redux action
 import { fetchAllProducts } from '../../redux/product/product.action';
 
+// import React contexts
 import AccessContext from '../../contexts/access.context';
 
+// import functions to download and upload excel file
 import exporting from '../../utils/exporting';
 import importing from '../../utils/importing';
 
+/**
+ * Animation for Component
+ */
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
+/**
+ * Import/Export product
+ * @param {*} props of component
+ * @returns component
+ */
 const ImportExportDialog = props => {
+    // authentication
     const { url, token } = useContext(AccessContext);
 
+    // handle importing data
     const handleImporting = e => {
         importing(e.target, url, token, props.setProducts);
         props.handleClose();
     }
 
+    // handle download data
     const handleExporting = () => {
         exporting(url, token);
         props.handleClose();
@@ -75,11 +93,9 @@ const ImportExportDialog = props => {
                     Import
                 </Button>
             </label>
-
             <Button variant="contained" color="primary" startIcon={<GetAppIcon />} onClick={e => handleExporting()}>
                 Export
             </Button>
-
             <Button variant="contained" startIcon={<CancelIcon />} onClick={props.handleClose}>
                 Close
             </Button>
@@ -87,6 +103,11 @@ const ImportExportDialog = props => {
     </Dialog>
 )}
 
+/**
+ * To map Dispatch function of Redux to props of Row component 
+ * @param {*} dispatch function to pass Redux action to Redux reducer
+ * @returns objects of mapping
+ */
 const mapDispatchToProps = dispatch => ({
     setProducts: products => dispatch(fetchAllProducts(products))
 });

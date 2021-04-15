@@ -1,9 +1,17 @@
+// inmport action types
 import { ProductActionTypes } from './product.type';
 
+// initiate store for product
 const INITIAL_STATE = {
     products: []
 };
 
+/**
+ * Manage states in store by actions
+ * @param {*} state initial state
+ * @param {*} action action object
+ * @returns updated state
+ */
 const productReducer = ( state = INITIAL_STATE, action ) => {
     switch(action.type) {
         case ProductActionTypes.FETCH_ALL_PRODUCTS:

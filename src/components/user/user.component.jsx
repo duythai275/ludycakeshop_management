@@ -1,5 +1,7 @@
+// import React modules
 import React, { useState, useEffect, useContext } from 'react';
 
+// import Material UI
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -19,33 +21,50 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 
+// import row and editor dialog components
 import Row from './row.component';
 import RegisterDialog from '../editorDialog/registerDialog';
 
+// import React contexts
 import AccessContext from '../../contexts/access.context';
 
+// import functions for requesting to server 
 import { getAllWithAuth } from '../../utils/fetching';
+
+// import styles for the component
 import { useStyles } from './user.styles';
 
+/**
+ * Component of user management page
+ * @returns component
+ */
 const Users = () => {
+    // use style
     const classes = useStyles();
+
+    // state for backdrop and dialog
     const [backdrop, setBackdrop] = useState(false);
     const [dialog, setDialog] = useState(false);
 
+    // authentication
     const { url, token } = useContext(AccessContext);
 
+    // data
     const [users, setUsers] = useState([]);
     const [page, setPage] = useState(0);
 
+    // filter
     const [items, setItems] = useState([]);
     const [filter, setFilter] = useState({
         email: ""
     });
 
+    // handle paging
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
 
+    // handle searching
     const filterBy = (value, property) => {
         setPage(0);
         filter[property] = value;
@@ -59,6 +78,7 @@ const Users = () => {
         );
     }
 
+    // load data
     const loadUsers = () => {
         setBackdrop(true);
         getAllWithAuth(`${url}/admin/users/list`, token)
@@ -73,6 +93,7 @@ const Users = () => {
         });
     }
 
+    // load data for first time
     useEffect(() => {
         setBackdrop(true);
         getAllWithAuth(`${url}/admin/users/list`, token)
@@ -87,6 +108,7 @@ const Users = () => {
         });
     },[]);
 
+    // update user
     const updateUser = user => {
         setBackdrop(true);
         fetch(`${url}/admin/users/uuid?email=${user.email}`, {
@@ -118,6 +140,7 @@ const Users = () => {
         });
     }
 
+    // delete user
     const deleteUser = user => {
         setBackdrop(true);
         fetch(`${url}/admin/users/uuid?email=${user.email}`, {

@@ -1,5 +1,7 @@
+// import React modules
 import React, { useState, useContext } from 'react';
 
+// import Material UI
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -10,26 +12,39 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
+// import React contexts
 import AccessContext from '../../contexts/access.context';
 
+/**
+ * Animation for Component
+ */
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
+/**
+ * Dialog for registering new user
+ * @param {*} props of component
+ * @returns component
+ */
 const RegisterDialog = props => {
+    // inputs
     const [user, setUser] = useState({
         email: "",
         password: "",
         name: ""
     });
 
+    // for check validation
     const [err, setErr] = useState({
         email: false,
         name: false
     });
 
+    // authentication
     const { url, token } = useContext(AccessContext);
 
+    // handle checking validation for inputs
     const checkUser = ( key, value ) => {
         user[key] = value;
         setUser({...user});
@@ -45,6 +60,7 @@ const RegisterDialog = props => {
         }
     }
 
+    // handle close dialog
     const closeDialog = () => {
         setUser({
             email: "",
@@ -58,6 +74,7 @@ const RegisterDialog = props => {
         props.handleClose();
     }
 
+    // handle add new user
     const addUser = () => {
         props.handleBackdrop();
         closeDialog();

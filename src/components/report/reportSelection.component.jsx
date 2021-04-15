@@ -1,5 +1,7 @@
+// import React modules
 import React from 'react';
 
+// import Material UI
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
@@ -14,9 +16,16 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 
+// import styles for the component
 import { useStyles } from './report.styles.js';
 
+/**
+ * Report Selections
+ * @param {*} props of component
+ * @returns component
+ */
 const ReportSelection = props => {
+    // use style
     const classes = useStyles();
 
     return (

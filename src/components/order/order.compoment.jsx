@@ -1,7 +1,10 @@
+// import React modules
 import React, { useState, useEffect, useContext } from 'react';
-import { connect } from 'react-redux';
-// import { createStructuredSelector } from 'reselect';
 
+// import React Redux
+import { connect } from 'react-redux';
+
+// import Material UI
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -19,23 +22,41 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Fab from '@material-ui/core/Fab';
 import CachedIcon from '@material-ui/icons/Cached';
 
+// import row components
 import Row from './row.component';
 
+// import React contexts
 import AccessContext from '../../contexts/access.context';
 
+// import Redux action
 import { getOrders } from '../../redux/order/order.action';
+
+// import functions for requesting to server 
 import { getAllWithAuth } from '../../utils/fetching';
-// import { selectOrders } from '../../redux/order/order.selector';
+
+// import styles for the component
 import { useStyles } from './order.styles';
 
+/**
+ * Component of order management page
+ * @param {*} props of the component 
+ * @returns component
+ */
 const Orders = ({loadOrdersToStore}) => {
+    // use style
     const classes = useStyles();
 
+    // authentication
     const { url, token } = useContext(AccessContext);
 
+    // data
     const [orders, setOrders] = useState([]);
     const [totalOrders, setTotalOrders] = useState(0);
+
+    // paging
     const [page, setPage] = useState(0);
+
+    // filter
     const [filters, setFilters] = useState({
         name: "",
         email: "",
@@ -44,8 +65,8 @@ const Orders = ({loadOrdersToStore}) => {
         status: ""
     });
 
+    // handle searching
     const filterBy = (value, property) => {
-        // setBackdrop(true);
         filters[property] = value;
         setPage(0);
         setFilters({
@@ -53,13 +74,13 @@ const Orders = ({loadOrdersToStore}) => {
         });
     }
 
+    // handle paging
     const handleChangePage = (event, newPage) => {
-        // setBackdrop(true);
         setPage(newPage);
     };
 
+    // load data
     const loadOrders = () => {
-        // setBackdrop(true);
         let filter = "";
         if ( filters["name"] !== "" ) filter += `name=${filters["name"]}&`;
         if ( filters["email"] !== "" ) filter += `emai=${filters["email"]}&`;
@@ -81,6 +102,7 @@ const Orders = ({loadOrdersToStore}) => {
         
     }
 
+    // load data when component loads in first time
     useEffect( () => {
         let filter = "";
         if ( filters["name"] !== "" ) filter += `name=${filters["name"]}&`;
@@ -306,6 +328,11 @@ const Orders = ({loadOrdersToStore}) => {
     )
 }
 
+/**
+ * To map Dispatch function of Redux to props of Row component 
+ * @param {*} dispatch function to pass Redux action to Redux reducer
+ * @returns objects of mapping
+ */
 const mapDispatchToProps = dispatch => ({
     loadOrdersToStore: orders => dispatch(getOrders(orders))
 });

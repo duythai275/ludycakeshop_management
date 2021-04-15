@@ -1,5 +1,7 @@
+// import styles from material
 import { makeStyles } from '@material-ui/core/styles';
 
+// define styles
 export const useStyles = makeStyles((theme) => ({
     paper: {
         marginTop: theme.spacing(8),

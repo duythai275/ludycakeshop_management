@@ -1,11 +1,18 @@
+// import React modules
 import React, { useState, useEffect, useContext } from 'react';
+
+// import React Router
 import { Switch, Route } from 'react-router-dom';
+
+// import React Redux
 import { connect } from 'react-redux';
 
+// import Material UI
 import Container from '@material-ui/core/Container';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 
+// import management pages
 import Orders from '../order/order.compoment';
 import Products from '../product/product.component';
 import Categories from '../category/category.component';
@@ -16,20 +23,31 @@ import Menu from '../mainMenu/menu.component';
 import Users from '../user/user.component';
 import Events from '../event/event.component';
 
+// import React contexts
 import AccessContext from '../../contexts/access.context';
 import AlertContext from '../../contexts/alert.context';
 
+// import Redux action
 import { fetchAllCategories } from '../../redux/category/category.action';
 import { fetchAllProducts } from '../../redux/product/product.action';
 import { fetchAllWeightTypes } from '../../redux/weightType/weightType.action';
 import { getOrders } from '../../redux/order/order.action';
+
+// import functions for requesting to server 
 import { getAll, getAllWithAuth } from '../../utils/fetching';
 
+// import styles for the component
 import { useStyles } from './mainpage.styles';
 
+/**
+ * Component of Alert Notification
+ * @returns component
+ */
 const AlertNotification = () => {
+    // user alert contexts
     const { alert, alertMsg, handleAlert } = useContext(AlertContext);
 
+    // handle Close Notification
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -47,26 +65,28 @@ const AlertNotification = () => {
         open={alert}
         autoHideDuration={3000}
         onClose={handleClose}
-        // message={alertMsg}
-        // action={
-        //   <React.Fragment>
-        //     <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
-        //       <CloseIcon fontSize="small" />
-        //     </IconButton>
-        //   </React.Fragment>
-        // }
     >
         <Alert onClose={handleClose} severity="success" variant="filled">{alertMsg}</Alert>
     </Snackbar>
 )}
 
+/**
+ * Component of mainpage
+ * @param {*} props of the component 
+ * @returns component
+ */
 const Mainpage = ({ setOrders, setCategories, setProducts, setWeightType }) => {
+    // use style
     const classes = useStyles();
 
+    // authenticatio
     const { url, token } = useContext(AccessContext);
+    
+    // state use for Alert notification component
     const [alert, setAlert] = useState(false);
     const [alertMsg, setAlertMsg] = useState("");
 
+    // load data to Redux store in first time
     useEffect( () => {
         Promise.all([
             getAllWithAuth(`${url}/admin/order?all=true`, token),
@@ -82,6 +102,7 @@ const Mainpage = ({ setOrders, setCategories, setProducts, setWeightType }) => {
         })
     }, []);
 
+    // handle Alert
     const handleAlert = ( isOpen, msg ) => {
         setAlert(isOpen);
         setAlertMsg(msg);
@@ -112,6 +133,11 @@ const Mainpage = ({ setOrders, setCategories, setProducts, setWeightType }) => {
         </AlertContext.Provider>
 )}
 
+/**
+ * To map Dispatch function of Redux to props of Row component 
+ * @param {*} dispatch function to pass Redux action to Redux reducer
+ * @returns objects of mapping
+ */
 const mapDispatchToProps = dispatch => ({
     setCategories: categories => dispatch(fetchAllCategories(categories)),
     setProducts: products => dispatch(fetchAllProducts(products)),

@@ -1,7 +1,11 @@
+// import React modules
 import React, { useState } from 'react';
+
+// import React Redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
+// import Material UI
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -14,30 +18,30 @@ import TablePagination from '@material-ui/core/TablePagination';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 
+// import row and editor dialog components
 import Row from './row.component';
 import CategoryEditorDialog from '../editorDialog/categoryEditorDialog';
 
+// import selector for Redux
 import { selectCategories } from '../../redux/category/category.selector';
 
+// import styles for the component
 import { useStyles } from './category.styles';
-  
-// const StyledMenuItem = withStyles((theme) => ({
-//     root: {
-//       '&:focus': {
-//         backgroundColor: theme.palette.primary.main,
-//         '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
-//           color: theme.palette.common.white,
-//         },
-//       },
-//     },
-// }))(MenuItem);
 
-const Categories = ({categories}) => {
+/**
+ * Component of category management page
+ * @param {*} props of the component
+ * @returns component
+ */
+ const Categories = ({categories}) => {
+    // use style
     const classes = useStyles();
 
+    // state for paging and dialog
     const [page, setPage] = useState(0); 
     const [dialog, setDialog] = useState(false);   
 
+    // handle paging
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };  
@@ -54,14 +58,12 @@ const Categories = ({categories}) => {
                     </div>
                     <div className={classes.pager}>
                         <TablePagination
-                            rowsPerPageOptions={[]} // disable RowsPerPage
+                            rowsPerPageOptions={[]}
                             component="div"
                             count={categories.length}
                             page={page}
                             onChangePage={handleChangePage}
                             rowsPerPage={10}
-                            // rowsPerPage={rowsPerPage}
-                            // onChangeRowsPerPage={handleChangeRowsPerPage}
                         />
                     </div>
                 </div>
@@ -83,14 +85,12 @@ const Categories = ({categories}) => {
                 </Table>
                 <div className={classes.pager}>
                     <TablePagination
-                        rowsPerPageOptions={[]} // disable RowsPerPage
+                        rowsPerPageOptions={[]} 
                         component="div"
                         count={categories.length}
                         page={page}
                         onChangePage={handleChangePage}
                         rowsPerPage={10}
-                        // rowsPerPage={rowsPerPage}
-                        // onChangeRowsPerPage={handleChangeRowsPerPage}
                     />
                 </div>
                 <Fab color="primary" aria-label="add" className={classes.fab} onClick={ () => setDialog(true)}>
@@ -108,10 +108,7 @@ const Categories = ({categories}) => {
     </Grid>
 )}
 
-// const mapStateToProps = state => ({
-//     categories: state.category.categories
-// })
-
+// map state to props of the component
 const mapStateToProps = createStructuredSelector({
     categories: selectCategories
 })

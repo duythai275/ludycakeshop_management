@@ -1,4 +1,7 @@
+// import React modules
 import React , { useContext, useState } from 'react';
+
+// import Material UI
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -8,25 +11,37 @@ import Container from '@material-ui/core/Container';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Alert from '@material-ui/lab/Alert';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
 
+// import styles for the component
 import { useStyles } from './login.styles';
+
+// import image for Logo
 import logo from '../../assets/logo.jpg';
 
+// import React contexts
 import AccessContext from '../../contexts/access.context';
 
+/**
+ * component for Login page
+ * @returns component
+ */
 const Login = () => {
+  // use style
   const classes = useStyles();
+
+  // use Login function from React context
   const { handleLogIn } = useContext(AccessContext);
 
+  // state for inputs
   const [serverAddress, setServerAddress] = useState("https://hha-capstone.herokuapp.com/api");
   const [email, setEmail] = useState("boss@hha.com");
   const [password, setPassword] = useState("password");
   
+  // state for backdrop and error alert
   const [backdrop, setBackdrop] = useState(false);
   const [errMsg, setErrMsg] = useState(null);
 
+  // handle login
   const login = () => {
     setBackdrop(true);
     fetch(`${serverAddress}/admin/signin`, {

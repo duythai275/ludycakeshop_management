@@ -1,7 +1,11 @@
+// import React modules
 import React, { useState } from 'react';
+
+// import React Redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
+// import Material UI
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
@@ -20,16 +24,26 @@ import Divider from '@material-ui/core/Divider';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 
+// import selector for Redux
 import { selectProducts } from '../../redux/product/product.selector';
-import  { selectCategories } from '../../redux/category/category.selector';
+import { selectCategories } from '../../redux/category/category.selector';
 
+// import styles for the component
 import { useStyles } from './report.styles.js';
 
+/**
+ * Data Selection
+ * @param {*} props of component
+ * @returns component
+ */
 const DataSelection = props => {
+    // use style
     const classes = useStyles();
 
+    // for search data (category, product)
     const [search, setSearch] = useState("");
 
+    // re-load data list for selection
     const uploadList = value => {
         props.changeType(value);
         props.changeData([]);
@@ -160,6 +174,7 @@ const DataSelection = props => {
     )
 }
 
+// map state to props of the component
 const mapStateToProps = createStructuredSelector({
     products: selectProducts,
     categories: selectCategories
