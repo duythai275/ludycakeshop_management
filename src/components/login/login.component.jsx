@@ -44,6 +44,7 @@ const Login = () => {
   // handle login
   const login = () => {
     setBackdrop(true);
+    /*
     fetch(`${serverAddress}/admin/signin`, {
         method: 'POST',
         headers: {
@@ -65,18 +66,21 @@ const Login = () => {
         }
         
     });
+    */
+    handleLogIn("localhost", "OK");
+    setBackdrop(false);
   }
 
   return (
     <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
-            <Avatar alt="Hiephoa" src={logo} className={classes.avatar} />
+            {/* <Avatar alt="Hiephoa" src={logo} className={classes.avatar} /> */}
             <Typography component="h1" variant="h5">
-                Hiephoa Site's Management
+                Ludy's Cake Shop Management App
             </Typography>
             <div className={classes.form}>
-                <TextField
+                {/* <TextField
                     variant="outlined"
                     margin="normal"
                     required
@@ -87,7 +91,7 @@ const Login = () => {
                     autoFocus
                     value={serverAddress}
                     onChange={event => setServerAddress(event.target.value)}
-                />
+                /> */}
                 <TextField
                     variant="outlined"
                     margin="normal"

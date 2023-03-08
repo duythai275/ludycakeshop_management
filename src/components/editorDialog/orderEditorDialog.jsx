@@ -88,17 +88,18 @@ const OrderEditorDialog = props => {
         "email": props.order.email,
         "phone": props.order.phone,
         "orderName": props.order.orderName,
-        "itemList": []
+        // "itemList": []
+        "itemList": props.order.itemList
     });
 
     // load data in first time
     useEffect(() => {
         getAllWithAuth(`${url}/admin/order/${props.order.id}`, token)
         .then(json => {
-            order["itemList"] = json.itemList;
-            order["status"] = json.status;
-            order["paidDate"] = json.paidDate;
-            setOrder({...order});
+            // order["itemList"] = json.itemList;
+            // order["status"] = json.status;
+            // order["paidDate"] = json.paidDate;
+            // setOrder({...order});
         });
     }, [activeStep]);
 
@@ -115,12 +116,16 @@ const OrderEditorDialog = props => {
             "orderName": order.orderName
         };
 
-        updating(`${url}/admin/order`, token, obj)
-        .then(res => {
-            setActiveStep(1);
-            props.updateOrders();
-            props.updateOrder(obj);
-        });
+        // updating(`${url}/admin/order`, token, obj)
+        // .then(res => {
+        //     setActiveStep(1);
+        //     props.updateOrders();
+        //     props.updateOrder(obj);
+        // });
+
+        setActiveStep(1);
+        props.updateOrders();
+        props.updateOrder(obj);
     }
 
     // change status forward
@@ -140,13 +145,16 @@ const OrderEditorDialog = props => {
             "orderName": order.orderName
         };
 
-        updating(`${url}/admin/order`, token, obj)
-        .then(res => {
-            setActiveStep(activeStep + 1);
-            props.updateOrders();
-            props.updateOrder(obj);
-        });
+        // updating(`${url}/admin/order`, token, obj)
+        // .then(res => {
+        //     setActiveStep(activeStep + 1);
+        //     props.updateOrders();
+        //     props.updateOrder(obj);
+        // });
         
+        setActiveStep(activeStep + 1);
+        props.updateOrders();
+        props.updateOrder(obj);
     }
 
     return (

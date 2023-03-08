@@ -88,18 +88,18 @@ const Mainpage = ({ setOrders, setCategories, setProducts, setWeightType }) => {
 
     // load data to Redux store in first time
     useEffect( () => {
-        Promise.all([
-            getAllWithAuth(`${url}/admin/order?all=true`, token),
-            getAll(`${url}/categories`),
-            getAllWithAuth(`${url}/admin/product`, token),
-            getAll(`${url}/weighttype`)
-        ])
-        .then( arr => {
-            setOrders(arr[0].content);
-            setCategories(arr[1]);
-            setProducts(arr[2]);
-            setWeightType(arr[3]);
-        })
+        // Promise.all([
+        //     getAllWithAuth(`${url}/admin/order?all=true`, token),
+        //     getAll(`${url}/categories`),
+        //     getAllWithAuth(`${url}/admin/product`, token),
+        //     getAll(`${url}/weighttype`)
+        // ])
+        // .then( arr => {
+        //     setOrders(arr[0].content);
+        //     setCategories(arr[1]);
+        //     setProducts(arr[2]);
+        //     setWeightType(arr[3]);
+        // })
     }, []);
 
     // handle Alert

@@ -3,6 +3,7 @@ import React, { useState, useEffect, useContext } from 'react';
 
 // import React Redux
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
 // import Material UI
 import Grid from '@material-ui/core/Grid';
@@ -34,6 +35,8 @@ import { getOrders } from '../../redux/order/order.action';
 // import functions for requesting to server 
 import { getAllWithAuth } from '../../utils/fetching';
 
+import { selectOrders } from '../../redux/order/order.selector';
+
 // import styles for the component
 import { useStyles } from './order.styles';
 
@@ -42,7 +45,7 @@ import { useStyles } from './order.styles';
  * @param {*} props of the component 
  * @returns component
  */
-const Orders = ({loadOrdersToStore}) => {
+const Orders = ({storedOrders,loadOrdersToStore}) => {
     // use style
     const classes = useStyles();
 
@@ -105,24 +108,27 @@ const Orders = ({loadOrdersToStore}) => {
     // load data when component loads in first time
     useEffect( () => {
         let filter = "";
-        if ( filters["name"] !== "" ) filter += `name=${filters["name"]}&`;
-        if ( filters["email"] !== "" ) filter += `emai=${filters["email"]}&`;
-        if ( filters["phone"] !== "" ) filter += `phon=${filters["phone"]}&`;
-        if ( filters["orderDate"] !== "" ) filter += `orde=${filters["orderDate"]}:${filters["orderDate"]}&`;
-        if ( filters["status"] !== "" ) filter += `stat=${filters["status"]}&`;
+        // if ( filters["name"] !== "" ) filter += `name=${filters["name"]}&`;
+        // if ( filters["email"] !== "" ) filter += `emai=${filters["email"]}&`;
+        // if ( filters["phone"] !== "" ) filter += `phon=${filters["phone"]}&`;
+        // if ( filters["orderDate"] !== "" ) filter += `orde=${filters["orderDate"]}:${filters["orderDate"]}&`;
+        // if ( filters["status"] !== "" ) filter += `stat=${filters["status"]}&`;
 
-        getAllWithAuth(`${url}/admin/order?${filter}page=${(page + 1)}`, token)
-        .then(json => {
-            setTotalOrders(json.totalElements);
-            setOrders(json.content);
-            // setBackdrop(false);
-        });
+        // getAllWithAuth(`${url}/admin/order?${filter}page=${(page + 1)}`, token)
+        // .then(json => {
+        //     setTotalOrders(json.totalElements);
+        //     setOrders(json.content);
+        //     // setBackdrop(false);
+        // });
 
-        getAllWithAuth(`${url}/admin/order?all=true`, token)
-        .then(json => {
-            loadOrdersToStore(json.content);
-        });
-    }, [page,filters]);
+        // getAllWithAuth(`${url}/admin/order?all=true`, token)
+        // .then(json => {
+        //     loadOrdersToStore(json.content);
+        // });
+
+        setOrders(storedOrders);
+    // }, [page,filters]);
+    }, [page,filters,storedOrders]);
 
     return (
         <div>
@@ -337,4 +343,9 @@ const mapDispatchToProps = dispatch => ({
     loadOrdersToStore: orders => dispatch(getOrders(orders))
 });
 
-export default connect(null, mapDispatchToProps)(Orders);
+// map state to props of the component
+const mapStateToProps = createStructuredSelector({
+    storedOrders: selectOrders
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Orders);

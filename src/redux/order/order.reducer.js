@@ -3,7 +3,83 @@ import { OrderActionTypes } from './order.type';
 
 // initiate store for orders
 const INITIAL_STATE = {
-    orders: []
+    orders: [
+        {
+            id: 1,
+            orderName: "Antonio Test",
+            phone: "403-123-4567",
+            orderDate: "2023-04-30",
+            email: "antonio@nait.ca",
+            address: "123 ABC, Edmonton",
+            note: "",
+            priceSum: 24.9,
+            status: "pending",
+            itemList: [{
+                order_items_id: 1,
+                product_name: "cake 1",
+                quantity: 1,
+                total: 12.45
+            },
+            {
+                order_items_id: 2,
+                product_name: "cake 12",
+                quantity: 1,
+                total: 12.45
+            }]
+        },
+        {
+            id: 2,
+            orderName: "Antonio NAIT",
+            phone: "403-123-4567",
+            orderDate: "2023-04-30",
+            email: "antonio@nait.ca",
+            address: "123 ABC, Edmonton",
+            note: "",
+            priceSum: 330,
+            status: "confirmed",
+            itemList: [{
+                order_items_id: 1,
+                product_name: "cake 1",
+                quantity: 2,
+                total: 300
+            }]
+        },
+        {
+            id: 3,
+            orderName: "Antonio ClubBaist",
+            phone: "403-123-4567",
+            orderDate: "2023-04-30",
+            email: "antonio@nait.ca",
+            address: "123 ABC, Edmonton",
+            note: "",
+            priceSum: 330,
+            status: "ready",
+            itemList: [{
+                order_items_id: 1,
+                product_name: "cake 1",
+                quantity: 2,
+                total: 300
+            }]
+        },
+        {
+            id: 4,
+            orderName: "Antonio Demo",
+            phone: "403-123-4567",
+            orderDate: "2023-04-30",
+            email: "antonio@nait.ca",
+            address: "123 ABC, Edmonton",
+            note: "",
+            priceSum: 330,
+            status: "paid",
+            paidDate: "2023-05-01",
+            itemList: [{
+                order_items_id: 1,
+                product_name: "cake 1",
+                quantity: 2,
+                total: 300
+            }]
+        }
+    ]
 }
 
 /**

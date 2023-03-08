@@ -58,7 +58,7 @@ const BarMenu = () => {
             >
                 <MenuIcon />
             </IconButton>
-            <Typography component="h1" variant="h6" color="inherit" className={classes.title}>Hiephoa Site's Management</Typography>
+            <Typography component="h1" variant="h6" color="inherit" className={classes.title}>Ludy Site's Management</Typography>
         </Toolbar>
     </AppBar>
 )}
@@ -100,15 +100,15 @@ const ListMenu = ({history}) => {
                     </ListItemIcon>
                     <ListItemText primary="Orders" />
                 </ListItem>
-                <ListItem button onClick={() => history.push("/events")}>
+                {/* <ListItem button onClick={() => history.push("/events")}>
                     <ListItemIcon>
                         <LoyaltyIcon />
                     </ListItemIcon>
                     <ListItemText primary="Events" />
-                </ListItem>
+                </ListItem> */}
             </div>
         </List>
-        <Divider />
+        {/* <Divider />
         <List>
             <div>
                 <ListItem button onClick={() => history.push("/products")}>
@@ -153,7 +153,7 @@ const ListMenu = ({history}) => {
                     <ListItemText primary="Banner" />
                 </ListItem>
             </div>
-        </List>
+        </List> */}
         <Divider />
         <List>
             <div>
