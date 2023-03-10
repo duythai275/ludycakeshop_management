@@ -75,7 +75,12 @@ const Login = () => {
     <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
-            {/* <Avatar alt="Hiephoa" src={logo} className={classes.avatar} /> */}
+            <Avatar 
+                alt="Hiephoa" 
+                src={logo} 
+                className={classes.avatar} 
+                sx={{ width: 240, height: 240 }}
+            />
             <Typography component="h1" variant="h5">
                 Ludy's Cake Shop Management App
             </Typography>

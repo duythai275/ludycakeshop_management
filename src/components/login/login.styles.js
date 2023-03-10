@@ -17,8 +17,8 @@ export const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(3, 0, 2),
     },
     avatar: {
-        width: theme.spacing(7),
-        height: theme.spacing(7),
+        width: theme.spacing(28),
+        height: theme.spacing(28),
     },
     backdrop: {
         zIndex: theme.zIndex.drawer + 1,
