@@ -100,60 +100,8 @@ const ListMenu = ({history}) => {
                     </ListItemIcon>
                     <ListItemText primary="Orders" />
                 </ListItem>
-                {/* <ListItem button onClick={() => history.push("/events")}>
-                    <ListItemIcon>
-                        <LoyaltyIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Events" />
-                </ListItem> */}
             </div>
         </List>
-        {/* <Divider />
-        <List>
-            <div>
-                <ListItem button onClick={() => history.push("/products")}>
-                    <ListItemIcon>
-                        <LocalMallIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Products" />
-                </ListItem>
-                <ListItem button onClick={() => history.push(`/categories`)}>
-                    <ListItemIcon>
-                        <LibraryBooksIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Categories" />
-                </ListItem>
-                <ListItem button onClick={() => history.push(`/weightTypes`)}>
-                    <ListItemIcon>
-                        <CategoryIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Weight Types" />
-                </ListItem>
-            </div>
-        </List>
-        <Divider />
-        <List>
-            <div>
-                <ListItem button onClick={() => history.push("/reports")}>
-                    <ListItemIcon>
-                        <BarChartIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Report" />
-                </ListItem>
-                <ListItem button onClick={() => history.push("/users")}>
-                    <ListItemIcon>
-                        <SupervisorAccountIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Users" />
-                </ListItem>
-                <ListItem button onClick={() => history.push("/banners")}>
-                    <ListItemIcon>
-                        <SettingsIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Banner" />
-                </ListItem>
-            </div>
-        </List> */}
         <Divider />
         <List>
             <div>
