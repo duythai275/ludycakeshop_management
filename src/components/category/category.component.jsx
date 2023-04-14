@@ -70,8 +70,9 @@ import { useStyles } from './category.styles';
                 <Table className={classes.table}>
                     <TableHead>
                         <TableRow>
-                            <TableCell className={classes.tableHead}>Name</TableCell>
                             <TableCell className={classes.tableHead}>Id</TableCell>
+                            <TableCell className={classes.tableHead}>Name</TableCell>
+                            <TableCell className={classes.tableHead}>Image</TableCell>
                             <TableCell align='right'></TableCell>
                         </TableRow>
                     </TableHead>

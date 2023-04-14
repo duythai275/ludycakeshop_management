@@ -74,9 +74,8 @@ const Row = (props) => {
     return (
     <TableRow hover ref={outerRef}>
         <TableCell>{props.product.name}</TableCell>
-        <TableCell>{props.product.brand}</TableCell>
         <TableCell className={classes.chip}>
-            <Chip size="small" label={props.categories.find( cate => cate.id === props.product.category).name} />
+            <Chip size="small" label={props.categories.find( cate => cate.id === props.product.category.id).name} />
         </TableCell>
         <TableCell>{props.product.price}</TableCell>
         <TableCell align='center'>

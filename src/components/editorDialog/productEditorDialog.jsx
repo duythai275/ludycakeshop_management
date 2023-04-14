@@ -10,7 +10,6 @@ import { editProduct, fetchAllProducts } from '../../redux/product/product.actio
 
 // import selector for Redux
 import { selectCategories } from '../../redux/category/category.selector';
-import { selectWeightTypes } from '../../redux/weightType/weightType.selector';
 
 // import React contexts
 import AccessContext from '../../contexts/access.context';
@@ -100,7 +99,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
  * @param {*} props of component 
  * @returns component
  */
-const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes, editProduct, addProduct }) => {
+const ProductEditorDialog = ({ open, handleClose, data, categories, editProduct, addProduct }) => {
     // use styke
     const classes = useStyles();
 
@@ -118,7 +117,6 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes,
         "category": data.category,
         "quantity": data.quantity,
         "weightValue": data.weightValue,
-        "weightType": data.weightType,
         "image": data.image,
 
     });
@@ -147,7 +145,6 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes,
             formData.append("category", ((typeof product.category) === "object") ? ("" + product.category.id) : ("" + product.category));
             formData.append("quantity", product.quantity + "");
             formData.append("weightValue", product.weightValue + "");
-            formData.append("weightType", product.weightType + "");
             if ( file !== null ) {
                 formData.append("image_file", file, file.name);
             } 
@@ -175,7 +172,6 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes,
                     "category": data.category,
                     "quantity": data.quantity,
                     "weightValue": data.weightValue,
-                    "weightType": data.weightType,
                     "image": data.image,
             
                 });
@@ -192,7 +188,6 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes,
             formData1.append("category", ((typeof product.category) === "object") ? ("" + product.category.id) : ("" + product.category));
             formData1.append("quantity", product.quantity + "");
             formData1.append("weightValue", product.weightValue + "");
-            formData1.append("weightType", product.weightType + "");
             if ( file !== null ) {
                 formData1.append("image_file", file, file.name);
             } 
@@ -230,7 +225,6 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes,
             "category": data.category,
             "quantity": data.quantity,
             "weightValue": data.weightValue,
-            "weightType": data.weightType,
             "image": data.image,
         });
     }
@@ -290,19 +284,10 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes,
                     <Grid item xs={9}>
                         <Paper className={classes.paper}>
                             <Grid container spacing={3}>
-                                <Grid item xs={6}>
+                                <Grid item xs={8}>
                                     <TextField label="Name" fullWidth value={product.name} onChange={event => updateValue(event.target.value, "name")}/>
                                 </Grid>
-                                <Grid item xs={6}>
-                                    <TextField label="Brand" fullWidth value={product.brand} onChange={event => updateValue(event.target.value, "brand")}/>
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField label="Description" multiline rows={4} fullWidth value={product.description} onChange={event => updateValue(event.target.value, "description")} />
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <TextField label="Price" fullWidth value={product.price} onChange={event => updateValue(event.target.value, "price")} />
-                                </Grid>
-                                <Grid item xs={6}>
+                                <Grid item xs={4}>
                                     <FormControl className={classes.formControl}>
                                         <InputLabel>Category</InputLabel>
                                         <Select label="Category" value={((typeof product.category) === "object") ? product.category.id : product.category} onChange={event => updateValue(event.target.value, "category")} >
@@ -314,27 +299,20 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes,
                                     </FormControl>
                                 </Grid>
                                 <Grid item xs={12}>
+                                    <TextField label="Description" multiline rows={4} fullWidth value={product.description} onChange={event => updateValue(event.target.value, "description")} />
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <TextField label="Price" fullWidth value={product.price} onChange={event => updateValue(event.target.value, "price")} />
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <TextField label="Quantity" fullWidth value={product.quantity} onChange={event => updateValue(event.target.value, "quantity")} />
+                                </Grid>
+                                <Grid item xs={12}>
                                     <FormControl>
                                         <FormControlLabel 
                                             control={<Checkbox checked={product.active} color="primary" onChange={ () => updateValue(!product.active,"active") } />}
                                             label="Active"
                                         />
-                                    </FormControl>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <TextField label="Quantity" fullWidth value={product.quantity} onChange={event => updateValue(event.target.value, "quantity")} />
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <TextField label="Weight Value" fullWidth value={product.weightValue} onChange={event => updateValue(event.target.value, "weightValue")} />
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <FormControl className={classes.formControl}>
-                                        <InputLabel>Weight Type</InputLabel>
-                                        <Select label="Weight Type" value={(product.weightType === undefined ) ? "" : product.weightType} onChange={event => updateValue(event.target.value, "weightType")}>
-                                            {
-                                                weightTypes.map( weightType => <MenuItem key={weightType.id} value={weightType.id}>{weightType.name}</MenuItem> )
-                                            }
-                                        </Select>
                                     </FormControl>
                                 </Grid>
                             </Grid>
@@ -348,8 +326,7 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, weightTypes,
 
 // map state to props of the component
 const mapStateToProps = createStructuredSelector({
-    categories: selectCategories,
-    weightTypes: selectWeightTypes
+    categories: selectCategories
 });
 
 /**

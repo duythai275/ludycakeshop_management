@@ -3,6 +3,7 @@ import React, { useEffect, useContext, useState } from 'react';
 
 // import React Redux
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
 // import Material UI
 import Dialog from '@material-ui/core/Dialog';
@@ -15,9 +16,21 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import Paper from '@material-ui/core/Paper';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import IconButton from '@material-ui/core/IconButton';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+// import List from '@material-ui/core/List';
+// import ListItem from '@material-ui/core/ListItem';
+// import ListItemText from '@material-ui/core/ListItemText';
 import Grid from '@material-ui/core/Grid';
 
 // import React contexts
@@ -25,6 +38,10 @@ import AccessContext from '../../contexts/access.context';
 
 // import Redux action
 import { updateOrderStatus } from '../../redux/order/order.action';
+
+// import selector for Redux
+import { selectProducts } from '../../redux/product/product.selector';
+import  { selectCategories } from '../../redux/category/category.selector';
 
 // import functions for requesting to server 
 import { getAllWithAuth, updating } from '../../utils/fetching';
@@ -49,6 +66,19 @@ const useStyles = makeStyles((theme) => ({
     },
     title: {
         marginTop: theme.spacing(2),
+    },
+    container: {
+        maxHeight: 250,
+    },
+    tableHead: {
+        fontWeight: 'bold'
+    },
+    option: {
+        fontSize: 15,
+        '& > span': {
+            marginRight: 10,
+            fontSize: 18,
+        }
     }
 }));
 
@@ -58,6 +88,14 @@ const useStyles = makeStyles((theme) => ({
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
+
+const toFlag = (isoCode) => {
+    return typeof String.fromCodePoint !== 'undefined'
+        ? isoCode
+            .toUpperCase()
+            .replace(/./g, (char) => String.fromCodePoint(char.charCodeAt(0) + 127397))
+        : isoCode;
+}
 
 /**
  * Editor dialog for Order
@@ -91,6 +129,7 @@ const OrderEditorDialog = props => {
         // "itemList": []
         "itemList": props.order.itemList
     });
+    const [product, setProduct] = useState(null);
 
     // load data in first time
     useEffect(() => {
@@ -160,7 +199,7 @@ const OrderEditorDialog = props => {
     return (
     <Dialog
         fullWidth={true}
-        maxWidth={'sm'}
+        maxWidth={'lg'}
         open={props.open}
         onClose={props.handleClose}
         TransitionComponent={Transition}
@@ -178,8 +217,8 @@ const OrderEditorDialog = props => {
                         )
                     }
                     </Stepper>
-                    <Typography variant="h6" gutterBottom>Order Summary</Typography>
-                    <List disablePadding className={classes.list}>
+                    <Typography variant="h6" gutterBottom>Order Items</Typography>
+                    {/* <List disablePadding className={classes.list}>
                     {
                         order.itemList.map( item => 
                             <ListItem className={classes.listItem} key={item.order_items_id}>
@@ -194,10 +233,97 @@ const OrderEditorDialog = props => {
                                 ${order.priceSum}
                             </Typography>
                         </ListItem>
-                    </List>
+                    </List> */}
                     <Grid container spacing={2}>
-                        <Grid item xs={12} sm={4}></Grid>
-                        <Grid item xs={12} sm={8}>
+                        <Grid item xs={12}>
+                            <br/>
+                            <TableContainer component={Paper} className={classes.container}>
+                                <Table stickyHeader size="small">
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell className={classes.tableHead} width={"50%"}>Product Name</TableCell>
+                                            <TableCell className={classes.tableHead}>Quantity</TableCell>
+                                            <TableCell className={classes.tableHead}>Total</TableCell>
+                                            <TableCell></TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {
+                                            order.itemList.map( item => <TableRow>
+                                                <TableCell>{item.product_name}</TableCell>
+                                                <TableCell>{item.quantity}</TableCell>
+                                                <TableCell>{item.total}</TableCell>
+                                                <TableCell>
+                                                    <IconButton size="small" 
+                                                        // onClick={e => handleDeleteDiscount(item)}
+                                                    >
+                                                        <HighlightOffIcon />
+                                                    </IconButton>
+                                                </TableCell>
+                                            </TableRow>)
+                                        }
+                                        <TableRow>
+                                            <TableCell>
+                                                <Autocomplete
+                                                    options={props.products}
+                                                    classes={{
+                                                        option: classes.option,
+                                                    }}
+                                                    autoHighlight
+                                                    getOptionLabel={option => option.name}
+                                                    renderOption={option => (
+                                                        <React.Fragment>
+                                                            <span>{toFlag(props.categories.find(category => category.id === option.category).name)}</span>
+                                                            {option.name}
+                                                        </React.Fragment>
+                                                    )}
+                                                    renderInput={params => (
+                                                        <TextField 
+                                                            {...params}
+                                                            label="Choose a product" 
+                                                            variant="outlined" size="small" fullWidth
+                                                            inputProps={{
+                                                                ...params.inputProps,
+                                                                autoComplete: 'new-password', // disable autocomplete and autofill
+                                                            }}
+                                                        />
+                                                    )}
+                                                    value={product}
+                                                    // onChange={(e, selectedProduct) => setProduct(selectedProduct)}
+                                                />
+                                            </TableCell>
+                                            <TableCell>
+                                                <TextField 
+                                                    label="Quantity" variant="outlined" fullWidth size="small" 
+                                                    // disabled={true} 
+                                                    // value={(product !== null) ? product.price : ""}
+                                                    value={""}
+                                                />
+                                            </TableCell>
+                                            <TableCell>
+                                                <TextField label="Total" variant="outlined" fullWidth size="small" 
+                                                    value={""} 
+                                                    // onChange={e => setDiscountPrice(e.target.value)}
+                                                    // onChange={e => setDiscountPrice(e.target.value)}
+                                                />
+                                            </TableCell>
+                                            <TableCell>
+                                                <IconButton size="small" 
+                                                    // onClick={e => handleAddDiscount()}
+                                                >
+                                                    <AddCircleIcon />
+                                                </IconButton>
+                                            </TableCell>
+                                        </TableRow>
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                            <br/>
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={8}></Grid>
+                        <Grid item xs={12} sm={4}>
                             <Typography variant="h6" gutterBottom className={classes.title}>
                                 Order Details
                             </Typography>
@@ -245,4 +371,9 @@ const mapDispatchToProps = dispatch => ({
     updateOrder: order => dispatch(updateOrderStatus(order))
 });
 
-export default connect(null, mapDispatchToProps)(OrderEditorDialog);
+const mapStateToProps = createStructuredSelector({
+    products: selectProducts,
+    categories: selectCategories
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(OrderEditorDialog);

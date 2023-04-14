@@ -14,7 +14,6 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-import ImportExportIcon from '@material-ui/icons/ImportExport';
 import TablePagination from '@material-ui/core/TablePagination';
 import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
@@ -27,7 +26,6 @@ import Paper from '@material-ui/core/Paper';
 
 // import row, editor and import/export dialog components
 import ProductEditorDialog from '../editorDialog/productEditorDialog';
-import ImportExportDialog from '../editorDialog/importExportDialog';
 import Row from './row.component';
 
 // import selector for Redux
@@ -51,7 +49,6 @@ const Products = ({products, categories}) => {
     const [syncDialog, setSyncDialog] = useState(false);
     const [filter, setFilter] = useState({
         name: "",
-        brand: "",
         category: ""
     });
 
@@ -74,18 +71,10 @@ const Products = ({products, categories}) => {
 
     // load data for filter
     useEffect( () => {
-
-        products.map( product => {
-            if ( product.brand === null ) product.brand = "";
-            return product;
-        });
-
         setItems(products.filter( item => 
             item["name"].toUpperCase().includes(filter.name.toUpperCase()) 
-            && item["brand"].toUpperCase().includes(filter.brand.toUpperCase())
-            && categories.find(cate => cate.id === item["category"]).name.toUpperCase().includes(filter.category.toUpperCase())
+            && categories.find(cate => cate.id === item["category"].id).name.toUpperCase().includes(filter.category.toUpperCase())
         ));
-
     }, [products, categories, filter] );
 
     return (
@@ -144,38 +133,7 @@ const Products = ({products, categories}) => {
                                     />
                                 </TableCell>
                                 <TableCell className={classes.tableHead}>
-                                    Brand <br/>
-                                    <TextField 
-                                        autoFocus={false}
-                                        placeholder="Search by Brand" 
-                                        variant="standard"
-                                        onChange={event => filterBy(event.target.value,"brand")}
-                                        value={filter.brand}
-                                        InputProps={
-                                            {
-                                                startAdornment: (
-                                                    <InputAdornment position="start">
-                                                            <SearchIcon fontSize="small" />
-                                                    </InputAdornment>
-                                                ),
-                                                endAdornment: (
-                                                    <InputAdornment position="end">
-                                                        <IconButton
-                                                            onClick={() => filterBy("","brand")}
-                                                        >
-                                                            <ClearIcon fontSize="small" />
-                                                        </IconButton>
-                                                    </InputAdornment>
-                                                ),
-                                                inputProps: {
-                                                    "aria-label": "Search",
-                                                }
-                                            }
-                                        }
-                                    />
-                                </TableCell>
-                                <TableCell className={classes.tableHead}>
-                                    Categories <br/>
+                                    Category <br/>
                                     <TextField 
                                         autoFocus={false}
                                         placeholder="Search by Category" 
@@ -225,9 +183,6 @@ const Products = ({products, categories}) => {
                             rowsPerPage={10}
                         />
                     </div>
-                    <Fab /* ref={outerRef} */ aria-label="add" className={classes.fab1} onClick={ () => setSyncDialog(true)}>
-                        <ImportExportIcon />
-                    </Fab>
                     <Fab /* ref={outerRef} */ color="primary" aria-label="add" className={classes.fab} onClick={ () => setDialog(true)}>
                         <AddIcon />
                     </Fab>
@@ -235,10 +190,9 @@ const Products = ({products, categories}) => {
                         {
                             name: "New Product",
                             categories: [],
-                            image: "https://sait-capstone.s3-us-west-2.amazonaws.com/dev_image.png"
+                            image: ""
                         }
                     }/>
-                    <ImportExportDialog open={syncDialog} handleClose={ () => setSyncDialog(false) } />
                 </Paper>
             </Grid>
         </Grid>

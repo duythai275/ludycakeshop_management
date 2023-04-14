@@ -58,8 +58,9 @@ const Row = (props) => {
     
     return (
         <TableRow  hover ref={outerRef}>
-            <TableCell>{props.category.name}</TableCell>
             <TableCell>{ (props.category.hasOwnProperty("id")) ? props.category.id : "" }</TableCell>
+            <TableCell>{props.category.name}</TableCell>
+            <TableCell>{props.category.image}</TableCell>
             <TableCell align='right'><IconButton size="small" onClick={ event => setAnchorEl(event.currentTarget)}><MoreVertIcon size="small" /></IconButton></TableCell>
             <ContextMenu outerRef={outerRef} onEditClick={handleEdit} onDeleteClick={handleDelete} />
             <StyledMenu anchorEl={anchorEl} handleEdit={handleEdit} handleDelete={handleDelete} handleClose={() => setAnchorEl(null)} />

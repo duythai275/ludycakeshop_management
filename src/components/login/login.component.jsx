@@ -33,7 +33,7 @@ const Login = () => {
   const { handleLogIn } = useContext(AccessContext);
 
   // state for inputs
-  const [serverAddress, setServerAddress] = useState("https://hha-capstone.herokuapp.com/api");
+  const [serverAddress, setServerAddress] = useState("https://dev1.baist.ca/Projects/LudysCakeShop/api");
   const [email, setEmail] = useState("boss@hha.com");
   const [password, setPassword] = useState("password");
   
@@ -85,7 +85,7 @@ const Login = () => {
                 Ludy's Cake Shop Management App
             </Typography>
             <div className={classes.form}>
-                {/* <TextField
+                <TextField
                     variant="outlined"
                     margin="normal"
                     required
@@ -96,7 +96,7 @@ const Login = () => {
                     autoFocus
                     value={serverAddress}
                     onChange={event => setServerAddress(event.target.value)}
-                /> */}
+                />
                 <TextField
                     variant="outlined"
                     margin="normal"

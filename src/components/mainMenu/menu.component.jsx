@@ -20,15 +20,10 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import CategoryIcon from '@material-ui/icons/Category';
-import SettingsIcon from '@material-ui/icons/Settings';
-import BarChartIcon from '@material-ui/icons/BarChart';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import LocalMallIcon from '@material-ui/icons/LocalMall';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import PaymentIcon from '@material-ui/icons/Payment';
-import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
-import LoyaltyIcon from '@material-ui/icons/Loyalty';
 
 // import React contexts
 import DrawerContext from '../../contexts/drawer.contexts';
@@ -100,15 +95,9 @@ const ListMenu = ({history}) => {
                     </ListItemIcon>
                     <ListItemText primary="Orders" />
                 </ListItem>
-                {/* <ListItem button onClick={() => history.push("/events")}>
-                    <ListItemIcon>
-                        <LoyaltyIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Events" />
-                </ListItem> */}
             </div>
         </List>
-        {/* <Divider />
+        <Divider />
         <List>
             <div>
                 <ListItem button onClick={() => history.push("/products")}>
@@ -123,37 +112,8 @@ const ListMenu = ({history}) => {
                     </ListItemIcon>
                     <ListItemText primary="Categories" />
                 </ListItem>
-                <ListItem button onClick={() => history.push(`/weightTypes`)}>
-                    <ListItemIcon>
-                        <CategoryIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Weight Types" />
-                </ListItem>
             </div>
         </List>
-        <Divider />
-        <List>
-            <div>
-                <ListItem button onClick={() => history.push("/reports")}>
-                    <ListItemIcon>
-                        <BarChartIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Report" />
-                </ListItem>
-                <ListItem button onClick={() => history.push("/users")}>
-                    <ListItemIcon>
-                        <SupervisorAccountIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Users" />
-                </ListItem>
-                <ListItem button onClick={() => history.push("/banners")}>
-                    <ListItemIcon>
-                        <SettingsIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Banner" />
-                </ListItem>
-            </div>
-        </List> */}
         <Divider />
         <List>
             <div>

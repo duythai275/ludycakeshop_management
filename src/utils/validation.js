@@ -55,7 +55,6 @@ export const checkProduct = obj => {
         var productCategory = obj.category;
         var productQuantity = obj.quantity;
         var productWeightValue = obj.weightValue;
-        var productWeightType = obj.weightType;
 
         if (!typeof productName === 'string' || !productName instanceof String) {
             valid = false;
@@ -94,10 +93,6 @@ export const checkProduct = obj => {
         }
     
         else if (!Number.isNaN(productWeightValue)) {
-            valid = false;
-        }
-    
-        else if (!Number.isNaN(productWeightType)) {
             valid = false;
         }
     

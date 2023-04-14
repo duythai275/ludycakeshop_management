@@ -16,12 +16,7 @@ import Alert from '@material-ui/lab/Alert';
 import Orders from '../order/order.compoment';
 import Products from '../product/product.component';
 import Categories from '../category/category.component';
-import WeightTypes from '../weightType/weightType.component';
-import Banners from '../banner/banner.component';
-import Reports from '../report/report.component';
 import Menu from '../mainMenu/menu.component';
-import Users from '../user/user.component';
-import Events from '../event/event.component';
 
 // import React contexts
 import AccessContext from '../../contexts/access.context';
@@ -30,7 +25,6 @@ import AlertContext from '../../contexts/alert.context';
 // import Redux action
 import { fetchAllCategories } from '../../redux/category/category.action';
 import { fetchAllProducts } from '../../redux/product/product.action';
-import { fetchAllWeightTypes } from '../../redux/weightType/weightType.action';
 import { getOrders } from '../../redux/order/order.action';
 
 // import functions for requesting to server 
@@ -75,7 +69,7 @@ const AlertNotification = () => {
  * @param {*} props of the component 
  * @returns component
  */
-const Mainpage = ({ setOrders, setCategories, setProducts, setWeightType }) => {
+const Mainpage = ({ setOrders, setCategories, setProducts }) => {
     // use style
     const classes = useStyles();
 
@@ -92,13 +86,11 @@ const Mainpage = ({ setOrders, setCategories, setProducts, setWeightType }) => {
         //     getAllWithAuth(`${url}/admin/order?all=true`, token),
         //     getAll(`${url}/categories`),
         //     getAllWithAuth(`${url}/admin/product`, token),
-        //     getAll(`${url}/weighttype`)
         // ])
         // .then( arr => {
         //     setOrders(arr[0].content);
         //     setCategories(arr[1]);
         //     setProducts(arr[2]);
-        //     setWeightType(arr[3]);
         // })
     }, []);
 
@@ -118,13 +110,8 @@ const Mainpage = ({ setOrders, setCategories, setProducts, setWeightType }) => {
                     <Container /*maxWidth="1g"*/ className={classes.container}>
                         <Switch>
                             <Route exact path="/orders" component={Orders} />
-                            <Route exact path="/events" component={Events} />
                             <Route exact path="/products" component={Products} />
                             <Route exact path="/categories" component={Categories} />
-                            <Route exact path="/weightTypes" component={WeightTypes} />
-                            <Route exact path="/reports" component={Reports} />
-                            <Route exact path="/users" component={Users} />
-                            <Route exact path="/banners" component={Banners} />
                         </Switch>
                     </Container>
                 </main>
@@ -141,7 +128,6 @@ const Mainpage = ({ setOrders, setCategories, setProducts, setWeightType }) => {
 const mapDispatchToProps = dispatch => ({
     setCategories: categories => dispatch(fetchAllCategories(categories)),
     setProducts: products => dispatch(fetchAllProducts(products)),
-    setWeightType: weightTypes => dispatch(fetchAllWeightTypes(weightTypes)),
     setOrders: orders => dispatch(getOrders(orders))
 });
 
