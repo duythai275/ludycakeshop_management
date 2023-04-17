@@ -20,6 +20,8 @@ import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
 import ClearIcon from '@material-ui/icons/Clear';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import SettingsIcon from '@material-ui/icons/Settings';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -44,6 +46,7 @@ const Products = ({products, categories}) => {
     // use style
     const classes = useStyles();
 
+    const [backdrop, setBackdrop] = useState(false);
     const [items, setItems] = useState([]);
     const [dialog, setDialog] = useState(false);
     const [syncDialog, setSyncDialog] = useState(false);
@@ -78,6 +81,7 @@ const Products = ({products, categories}) => {
     }, [products, categories, filter] );
 
     return (
+    <>
         <Grid container spacing={2}>
             <Grid item xs={12}>
                 <Paper className={classes.paper}>
@@ -101,7 +105,7 @@ const Products = ({products, categories}) => {
                     <Table className={classes.table}>
                         <TableHead>
                             <TableRow>
-                                <TableCell className={classes.tableHead}>
+                                <TableCell className={classes.tableHead} width={"45%"}>
                                     Name <br/>
                                     <TextField 
                                         autoFocus={false}
@@ -132,7 +136,7 @@ const Products = ({products, categories}) => {
                                         }
                                     />
                                 </TableCell>
-                                <TableCell className={classes.tableHead}>
+                                <TableCell className={classes.tableHead} width={"25%"}>
                                     Category <br/>
                                     <TextField 
                                         autoFocus={false}
@@ -163,13 +167,14 @@ const Products = ({products, categories}) => {
                                         }
                                     />
                                 </TableCell>
-                                <TableCell className={classes.tableHead}>Price</TableCell>
+                                <TableCell className={classes.tableHead} width={"15%"}>Price</TableCell>
+                                <TableCell className={classes.tableHead} width={"15%"}>Quantity</TableCell>
                                 <TableCell align='center'><SettingsIcon /></TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                         {
-                            items.slice(page * 10, page * 10 + 10).map( product => <Row key={product.id} product={product} /> )
+                            items.slice(page * 10, page * 10 + 10).map( product => <Row key={product.id} product={product} handleBackdrop={setBackdrop} /> )
                         }
                         </TableBody>
                     </Table>
@@ -189,13 +194,19 @@ const Products = ({products, categories}) => {
                     <ProductEditorDialog open={dialog} handleClose={ () => setDialog(false) } data={
                         {
                             name: "New Product",
-                            categories: [],
-                            image: ""
+                            category: { id: 0 },
+                            active: false
                         }
-                    }/>
+                    }
+                        handleBackdrop={setBackdrop}
+                    />
                 </Paper>
             </Grid>
         </Grid>
+        <Backdrop className={classes.backdrop} open={backdrop}>
+            <CircularProgress color="inherit" />
+        </Backdrop>
+    </>
 )}
 
 // map state to props of the component

@@ -25,13 +25,14 @@ export const getAllWithAuth = (url, token) => fetch(url, {
  * @param {*} token Authentication
  * @returns result of DELETE method
  */
-export const deleting = (url, token) => fetch(url, {
+// export const deleting = (url, token) => fetch(url, {
+export const deleting = (url) => fetch(url, {
     'method': 'DELETE',
     'headers': {
-        'Authorization': 'Bearer ' + token,
+        // 'Authorization': 'Bearer ' + token,
         'Content-Type': 'application/json'
     }
-}).then( res => res.json());
+});
 
 /**
  * Create a new object through API
@@ -40,14 +41,15 @@ export const deleting = (url, token) => fetch(url, {
  * @param {*} data a new object
  * @returns result of POST method
  */
-export const adding = (url, token, data) => fetch(url, {
+// export const adding = (url, token, data) => fetch(url, {
+export const adding = (url, data) => fetch(url, {
     'method': 'POST',
     'headers': {
-        'Authorization': 'Bearer ' + token,
+    //     'Authorization': 'Bearer ' + token,
         'Content-Type': 'application/json'
     },
     'body': JSON.stringify(data)
-}).then( res => res.json());
+});
 
 /**
  * Update an object through API
@@ -56,11 +58,12 @@ export const adding = (url, token, data) => fetch(url, {
  * @param {*} data the updated object
  * @returns result of PUT method
  */
-export const updating = (url, token, data) => fetch(url, {
+// export const updating = (url, token, data) => fetch(url, {
+export const updating = (url, data) => fetch(url, {
     'method': 'PUT',
     'headers': {
-        'Authorization': 'Bearer ' + token,
+    //     'Authorization': 'Bearer ' + token,
         'Content-Type': 'application/json'
     },
     'body': JSON.stringify(data)
-}).then( res => res.json());
+});

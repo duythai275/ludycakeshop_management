@@ -63,7 +63,7 @@ const Row = (props) => {
     const handleDelete = () => {
         setAnchorEl(null);
 
-        deleting(`${url}/admin/product?id=${props.product.id}`, token)
+        deleting(`${url}/products/${props.product.id}`, token)
         .then( res => {
             props.deleteProduct(props.product);
             handleAlert(true, "Deleted Successfully!");
@@ -78,12 +78,13 @@ const Row = (props) => {
             <Chip size="small" label={props.categories.find( cate => cate.id === props.product.category.id).name} />
         </TableCell>
         <TableCell>{props.product.price}</TableCell>
+        <TableCell>{props.product.quantity}</TableCell>
         <TableCell align='center'>
             <IconButton size="small" onClick={ event => setAnchorEl(event.currentTarget)}><MoreVertIcon size="small" /></IconButton>
         </TableCell>
         <ContextMenu outerRef={outerRef} onEditClick={handleEdit} onDeleteClick={handleDelete} />
         <StyledMenu anchorEl={anchorEl} handleEdit={handleEdit} handleDelete={handleDelete} handleClose={() => setAnchorEl(null)} />
-        <ProductEditorDialog open={dialog} handleClose={() => setDialog(false)} data={props.product}/>
+        <ProductEditorDialog open={dialog} handleClose={() => setDialog(false)} data={props.product} handleBackdrop={props.handleBackdrop}/>
     </TableRow>
 )}
 

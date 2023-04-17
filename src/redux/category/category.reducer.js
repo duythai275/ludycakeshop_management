@@ -3,30 +3,7 @@ import { CategoryActionTypes } from './category.type';
 
 // initiate store for categories
 const INITIAL_STATE = {
-    categories: [{
-        id: 1,
-        name: "Cakes Rolls",
-        description: "",
-        image: ""
-    },
-    {
-        id: 2,
-        name: "Yema Cakes",
-        description: "",
-        image: ""
-    },
-    {
-        id: 3,
-        name: "Empanada",
-        description: "",
-        image: ""
-    },
-    {
-        id: 4,
-        name: "Breads",
-        description: "",
-        image: ""
-    }]
+    categories: []
 };
 
 /**

@@ -19,6 +19,8 @@ import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
 import ClearIcon from '@material-ui/icons/Clear';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Fab from '@material-ui/core/Fab';
 import CachedIcon from '@material-ui/icons/Cached';
@@ -33,7 +35,7 @@ import AccessContext from '../../contexts/access.context';
 import { getOrders } from '../../redux/order/order.action';
 
 // import functions for requesting to server 
-import { getAllWithAuth } from '../../utils/fetching';
+import { getAll } from '../../utils/fetching';
 
 import { selectOrders } from '../../redux/order/order.selector';
 
@@ -52,6 +54,8 @@ const Orders = ({storedOrders,loadOrdersToStore}) => {
     // authentication
     const { url, token } = useContext(AccessContext);
 
+    const [backdrop, setBackdrop] = useState(false);
+
     // data
     const [orders, setOrders] = useState([]);
     const [totalOrders, setTotalOrders] = useState(0);
@@ -61,11 +65,11 @@ const Orders = ({storedOrders,loadOrdersToStore}) => {
 
     // filter
     const [filters, setFilters] = useState({
-        name: "",
-        email: "",
-        phone: "",
+        customerName: "",
+        customerEmail: "",
+        customerContactNumber: "",
         orderDate: "",
-        status: ""
+        orderStatus: ""
     });
 
     // handle searching
@@ -84,50 +88,26 @@ const Orders = ({storedOrders,loadOrdersToStore}) => {
 
     // load data
     const loadOrders = () => {
-        let filter = "";
-        if ( filters["name"] !== "" ) filter += `name=${filters["name"]}&`;
-        if ( filters["email"] !== "" ) filter += `emai=${filters["email"]}&`;
-        if ( filters["phone"] !== "" ) filter += `phon=${filters["phone"]}&`;
-        if ( filters["orderDate"] !== "" ) filter += `orde=${filters["orderDate"]}:${filters["orderDate"]}&`;
-        if ( filters["status"] !== "" ) filter += `stat=${filters["status"]}&`;
-
-        getAllWithAuth(`${url}/admin/order?${filter}page=${(page + 1)}`, token)
-        .then(json => {
-            setTotalOrders(json.totalElements);
-            setOrders(json.content);
-            // setBackdrop(false);
+        setBackdrop(true);
+        getAll(`${url}/orders`).then( res => {
+            loadOrdersToStore(res);
+            setBackdrop(false);
         });
-
-        getAllWithAuth(`${url}/admin/order?all=true`, token)
-        .then(json => {
-            loadOrdersToStore(json.content);
-        });
-        
     }
+
+    useEffect(() => {
+        setTotalOrders(orders.length);
+    }, [orders])
 
     // load data when component loads in first time
     useEffect( () => {
-        let filter = "";
-        // if ( filters["name"] !== "" ) filter += `name=${filters["name"]}&`;
-        // if ( filters["email"] !== "" ) filter += `emai=${filters["email"]}&`;
-        // if ( filters["phone"] !== "" ) filter += `phon=${filters["phone"]}&`;
-        // if ( filters["orderDate"] !== "" ) filter += `orde=${filters["orderDate"]}:${filters["orderDate"]}&`;
-        // if ( filters["status"] !== "" ) filter += `stat=${filters["status"]}&`;
-
-        // getAllWithAuth(`${url}/admin/order?${filter}page=${(page + 1)}`, token)
-        // .then(json => {
-        //     setTotalOrders(json.totalElements);
-        //     setOrders(json.content);
-        //     // setBackdrop(false);
-        // });
-
-        // getAllWithAuth(`${url}/admin/order?all=true`, token)
-        // .then(json => {
-        //     loadOrdersToStore(json.content);
-        // });
-
-        setOrders(storedOrders);
-    // }, [page,filters]);
+        setOrders(storedOrders.filter( o => 
+            o.orderDate.toUpperCase().includes(filters.orderDate.toUpperCase())
+            && o.customerName.toUpperCase().includes(filters.customerName.toUpperCase())
+            && o.customerEmail.toUpperCase().includes(filters.customerEmail.toUpperCase())
+            && o.customerContactNumber.toUpperCase().includes(filters.customerContactNumber.toUpperCase())
+            && o.orderStatus.toUpperCase().includes(filters.orderStatus.toUpperCase())
+        ));
     }, [page,filters,storedOrders]);
 
     return (
@@ -190,7 +170,7 @@ const Orders = ({storedOrders,loadOrdersToStore}) => {
                                         <TextField 
                                             placeholder="Search by Name" 
                                             variant="standard"
-                                            onChange={event => filterBy(event.target.value,"name")}
+                                            onChange={event => filterBy(event.target.value,"customerName")}
                                             value={filters.name}
                                             InputProps = {
                                                 {
@@ -202,7 +182,7 @@ const Orders = ({storedOrders,loadOrdersToStore}) => {
                                                     endAdornment: (
                                                         <InputAdornment position="end">
                                                             <IconButton
-                                                                onClick={() => filterBy("","name")}
+                                                                onClick={() => filterBy("","customerName")}
                                                             >
                                                                 <ClearIcon fontSize="small" />
                                                             </IconButton>
@@ -220,7 +200,7 @@ const Orders = ({storedOrders,loadOrdersToStore}) => {
                                         <TextField 
                                             placeholder="Search by Email" 
                                             variant="standard"
-                                            onChange={event => filterBy(event.target.value,"email")}
+                                            onChange={event => filterBy(event.target.value,"customerEmail")}
                                             value={filters.email}
                                             InputProps = {
                                                 {
@@ -232,7 +212,7 @@ const Orders = ({storedOrders,loadOrdersToStore}) => {
                                                     endAdornment: (
                                                         <InputAdornment position="end">
                                                             <IconButton
-                                                                onClick={() => filterBy("","email")}
+                                                                onClick={() => filterBy("","customerEmail")}
                                                             >
                                                                 <ClearIcon fontSize="small" />
                                                             </IconButton>
@@ -250,7 +230,7 @@ const Orders = ({storedOrders,loadOrdersToStore}) => {
                                         <TextField 
                                             placeholder="Search by Phone Number" 
                                             variant="standard"
-                                            onChange={event => filterBy(event.target.value,"phone")}
+                                            onChange={event => filterBy(event.target.value,"customerContactNumber")}
                                             value={filters.phone}
                                             InputProps = {
                                                 {
@@ -262,7 +242,7 @@ const Orders = ({storedOrders,loadOrdersToStore}) => {
                                                     endAdornment: (
                                                         <InputAdornment position="end">
                                                             <IconButton
-                                                                onClick={() => filterBy("","phone")}
+                                                                onClick={() => filterBy("","customerContactNumber")}
                                                             >
                                                                 <ClearIcon fontSize="small" />
                                                             </IconButton>
@@ -280,7 +260,7 @@ const Orders = ({storedOrders,loadOrdersToStore}) => {
                                         <TextField 
                                             placeholder="Search by Status" 
                                             variant="standard"
-                                            onChange={event => filterBy(event.target.value,"status")}
+                                            onChange={event => filterBy(event.target.value,"orderStatus")}
                                             value={filters.status}
                                             InputProps = {
                                                 {
@@ -292,7 +272,7 @@ const Orders = ({storedOrders,loadOrdersToStore}) => {
                                                     endAdornment: (
                                                         <InputAdornment position="end">
                                                             <IconButton
-                                                                onClick={() => filterBy("","status")}
+                                                                onClick={() => filterBy("","orderStatus")}
                                                             >
                                                                 <ClearIcon fontSize="small" />
                                                             </IconButton>
@@ -310,7 +290,7 @@ const Orders = ({storedOrders,loadOrdersToStore}) => {
                             </TableHead>
                             <TableBody>
                                 {
-                                    orders.map( order => <Row key={order.id} order={order} updateOrders={loadOrders}/>)
+                                    orders.slice(page * 10, page * 10 + 10).map( order => <Row key={order.orderID} order={order} updateOrders={loadOrders}/>)
                                 }
                             </TableBody>
                         </Table>
@@ -330,6 +310,9 @@ const Orders = ({storedOrders,loadOrdersToStore}) => {
                     </Paper>
                 </Grid>
             </Grid>
+            <Backdrop className={classes.backdrop} open={backdrop}>
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </div>
     )
 }

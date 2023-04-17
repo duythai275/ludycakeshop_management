@@ -42,6 +42,9 @@ import CardActions from '@material-ui/core/CardActions';
 import CardMedia from '@material-ui/core/CardMedia';
 import Divider from '@material-ui/core/Divider';
 
+// import functions for requesting to server 
+import { adding, updating, getAll } from '../../utils/fetching';
+
 // define styles
 const useStyles = makeStyles((theme) => ({
     appBar: {
@@ -99,24 +102,18 @@ const Transition = React.forwardRef(function Transition(props, ref) {
  * @param {*} props of component 
  * @returns component
  */
-const ProductEditorDialog = ({ open, handleClose, data, categories, editProduct, addProduct }) => {
+const ProductEditorDialog = ({ open, handleClose, data, categories, editProduct, addProduct, handleBackdrop }) => {
     // use styke
     const classes = useStyles();
-
-    // for image uploading
-    const [file, setFile] = useState(null);
-    const [image, setImage] = useState(null);
 
     // inputs
     const [product, setProduct] = useState({
         "name": data.name,
         "description": data.description,
-        "brand": data.brand,
         "price": data.price,
         "active": data.active,
-        "category": data.category,
+        "category": { id: data.category.id },
         "quantity": data.quantity,
-        "weightValue": data.weightValue,
         "image": data.image,
 
     });
@@ -129,86 +126,78 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, editProduct,
 
     // update inputs
     const updateValue = ( value, attr ) => {
-        product[attr] = value;
+        if ( attr === "category" ) {
+            product[attr] = {
+                id: value
+            }
+        }
+        else {
+            product[attr] = value;
+        }
+        
         setProduct({...product});
     }
 
     // handle add and update product
     const handleProduct = () => {
+        handleBackdrop(true);
         if ( data.name === "New Product" ) {
-            let formData = new FormData();
-            formData.append("name", product.name);
-            formData.append("description", product.description);
-            formData.append("brand", product.brand);
-            formData.append("price", product.price + "");
-            formData.append("active", product.active + "");
-            formData.append("category", ((typeof product.category) === "object") ? ("" + product.category.id) : ("" + product.category));
-            formData.append("quantity", product.quantity + "");
-            formData.append("weightValue", product.weightValue + "");
-            if ( file !== null ) {
-                formData.append("image_file", file, file.name);
-            } 
-            else {
-                formData.append("image_file", new Blob(), "/path/to/file");
-            }
-                
-            fetch(`${url}/admin/product`, {
-                'method': 'POST',
-                'headers': {
-                    'Authorization': 'Bearer ' + token,
-                    // 'Content-Type': 'application/json'
-                },
-                'body': formData
-            }).then( res => res.json())
+            adding(`${url}/products`, {
+                productName: product.name,
+                categoryID: product.category.id,
+                unitPrice: product.price,
+                quantityAvailable: product.quantity,
+                productDescription: product.description,
+                discontinued: product.active,
+                productImage: product.image
+            })
             .then(result => {
-                addProduct(result);
-                handleAlert(true, "Added Successfully!");
-                setProduct({
-                    "name": data.name,
-                    "description": data.description,
-                    "brand": data.brand,
-                    "price": data.price,
-                    "active": data.active,
-                    "category": data.category,
-                    "quantity": data.quantity,
-                    "weightValue": data.weightValue,
-                    "image": data.image,
-            
+                getAll(`${url}/products`).then( arr => {
+                    addProduct(arr.map( product => ({
+                        id: product.productID,
+                        name: product.productName,
+                        category: {
+                            id: product.categoryID
+                        },
+                        price: parseFloat(product.unitPrice),
+                        quantity: parseInt(product.quantityAvailable),
+                        description: product.productDescription,
+                        active: product.discontinued,
+                        image: product.productImage
+                    }) ));
+                    handleAlert(true, "Added Successfully!");
+                    setProduct({
+                        name: "New Product",
+                        category: { id: 0 },
+                        active: false
+                    });
+                    handleBackdrop(false);
                 });
             });
-
         } else {
-            let formData1 = new FormData();
-            formData1.append("id", data.id + "");
-            formData1.append("name", product.name);
-            formData1.append("description", product.description);
-            formData1.append("brand", product.brand);
-            formData1.append("price", product.price + "");
-            formData1.append("active", product.active + "");
-            formData1.append("category", ((typeof product.category) === "object") ? ("" + product.category.id) : ("" + product.category));
-            formData1.append("quantity", product.quantity + "");
-            formData1.append("weightValue", product.weightValue + "");
-            if ( file !== null ) {
-                formData1.append("image_file", file, file.name);
-            } 
-            else {
-                formData1.append("image_file", new Blob(), "/path/to/file");
-            }
-
-            fetch(`${url}/admin/product`, {
-                'method': 'PUT',
-                'headers': {
-                    'Authorization': 'Bearer ' + token,
-                    // 'Content-Type': 'application/json'
-                },
-                'body': formData1
-            }).then( res => res.json())
+            updating(`${url}/products/${data.id}`, {
+                productName: product.name,
+                categoryID: product.category.id,
+                unitPrice: product.price,
+                quantityAvailable: product.quantity,
+                productDescription: product.description,
+                discontinued: product.active,
+                productImage: product.image
+            })
             .then(result => {
-                editProduct(product);
-                handleAlert(true, "Edited Successfully!");
+                editProduct({
+                    id: data.id,
+                    name: product.name,
+                    category: { id: product.category.id },
+                    price: parseFloat(product.price),
+                    quantity: parseInt(product.quantity),
+                    description: product.description,
+                    active: product.active,
+                    image: product.image
+                })
+                handleAlert(true, "Editted Successfully!");
+                handleBackdrop(false);
             });
-
-
         }
         handleClose();
     }
@@ -217,28 +206,31 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, editProduct,
     const closeDialog = () => {
         handleClose();
         setProduct({
-            "name": data.name,
-            "description": data.description,
-            "brand": data.brand,
-            "price": data.price,
-            "active": data.active,
-            "category": data.category,
-            "quantity": data.quantity,
-            "weightValue": data.weightValue,
-            "image": data.image,
+            name: data.name,
+            description: data.description,
+            brand: data.brand,
+            price: data.price,
+            active: data.active,
+            category: data.category.id,
+            quantity: data.quantity,
+            weightValue: data.weightValue,
+            image: data.image
         });
     }
 
     // handle uploading image
-    const handleUploadImage = f => {
+    const handleUploadImage = e => {
+        const file = e.target.files[0];
         const reader = new FileReader();
 
         reader.onload = e => {
-            setImage(e.target.result);
-        };
+            setProduct({
+                ...product,
+                image: e.target.result.split("base64,")[1]
+            });
+        }
 
-        reader.readAsDataURL(f);
-        setFile(f);
+        reader.readAsDataURL(file);
     }
 
     return (
@@ -263,7 +255,8 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, editProduct,
                             <CardMedia 
                                 component="img"
                                 height="310"
-                                image={(image === null) ? product.image : image}
+                                // image={(image === null) ? product.image : image}
+                                src={(product.image === null) ? null : `data:image;base64,${product.image}`}
                             /><Divider />
                             <CardActions>
                                 <label htmlFor="upload-image" style={{display:"inline-block", width: "100%"}}>
@@ -272,7 +265,7 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, editProduct,
                                         accept="image/png, image/jpeg"
                                         id="upload-image"
                                         type="file"
-                                        onChange={e => handleUploadImage(e.target.files[0])}
+                                        onChange={handleUploadImage}
                                     />
                                     <Button startIcon={<PhotoCamera />} fullWidth variant="text" color="primary" size="small" component="span">
                                         Upload Image
@@ -290,7 +283,7 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, editProduct,
                                 <Grid item xs={4}>
                                     <FormControl className={classes.formControl}>
                                         <InputLabel>Category</InputLabel>
-                                        <Select label="Category" value={((typeof product.category) === "object") ? product.category.id : product.category} onChange={event => updateValue(event.target.value, "category")} >
+                                        <Select label="Category" value={product.category.id} onChange={event => updateValue(event.target.value, "category")} >
                                             { 
                                                 categories.map( cate => <MenuItem key={cate.id} value={cate.id}>{cate.name}</MenuItem> )
                                             }
@@ -310,7 +303,7 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, editProduct,
                                 <Grid item xs={12}>
                                     <FormControl>
                                         <FormControlLabel 
-                                            control={<Checkbox checked={product.active} color="primary" onChange={ () => updateValue(!product.active,"active") } />}
+                                            control={<Checkbox checked={!product.active} color="primary" onChange={ () => updateValue(!product.active,"active") } />}
                                             label="Active"
                                         />
                                     </FormControl>

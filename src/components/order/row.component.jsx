@@ -51,7 +51,7 @@ import { deleting } from '../../utils/fetching';
 
     // Delete order
     const handleDelete = () => {
-        deleting(`${url}/admin/order?id=${props.order.id}`,token)
+        deleting(`${url}/orders/${props.order.orderID}`)
         .then(res => {
             props.updateOrders();
             handleAlert(true, "Deleted Successfully!");
@@ -62,14 +62,14 @@ import { deleting } from '../../utils/fetching';
     return (
         <TableRow hover ref={outerRef}>
             <TableCell>{props.order.orderDate}</TableCell>
-            <TableCell>{props.order.orderName}</TableCell>
-            <TableCell>{props.order.email}</TableCell>
-            <TableCell>{props.order.phone}</TableCell>
+            <TableCell>{props.order.customerName}</TableCell>
+            <TableCell>{props.order.customerEmail}</TableCell>
+            <TableCell>{props.order.customerContactNumber}</TableCell>
             <TableCell>
                 { 
-                    (props.order.status === "pending") ? <Chip label={"Pending"} disabled /> : 
-                        (props.order.status === "confirmed") ? <Chip label={"Confirmed"} color="primary" /> :
-                            (props.order.status === "ready") ? <Chip label={"Ready"} /> : <Chip label={"Paid"} color="secondary" />
+                    (props.order.orderStatus === "pending") ? <Chip label={"Pending"} disabled /> : 
+                        (props.order.orderStatus === "confirmed") ? <Chip label={"Confirmed"} color="primary" /> :
+                            (props.order.orderStatus === "ready") ? <Chip label={"Ready"} /> : <Chip label={"Paid"} color="secondary" />
                 }
             </TableCell>
             <TableCell align='center'><IconButton size="small" onClick={ event => setAnchorEl(event.currentTarget)}><MoreVertIcon size="small" /></IconButton></TableCell>

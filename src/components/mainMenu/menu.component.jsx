@@ -21,6 +21,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import LocalMallIcon from '@material-ui/icons/LocalMall';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import PaymentIcon from '@material-ui/icons/Payment';
@@ -111,6 +112,19 @@ const ListMenu = ({history}) => {
                         <LibraryBooksIcon />
                     </ListItemIcon>
                     <ListItemText primary="Categories" />
+                </ListItem>
+            </div>
+        </List>
+        <Divider />
+        <List>
+            <div>
+                <ListItem button 
+                    onClick={() => history.push("/customers")}
+                >
+                    <ListItemIcon>
+                        <AccountBoxIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Customers" />
                 </ListItem>
             </div>
         </List>

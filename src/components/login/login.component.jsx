@@ -33,8 +33,8 @@ const Login = () => {
   const { handleLogIn } = useContext(AccessContext);
 
   // state for inputs
-  const [serverAddress, setServerAddress] = useState("https://dev1.baist.ca/Projects/LudysCakeShop/api");
-  const [email, setEmail] = useState("boss@hha.com");
+  const [serverAddress, setServerAddress] = useState("https://dev1.baist.ca/students/hluong10/api");
+  const [email, setEmail] = useState("boss@ludycakeshop.com");
   const [password, setPassword] = useState("password");
   
   // state for backdrop and error alert
@@ -67,7 +67,7 @@ const Login = () => {
         
     });
     */
-    handleLogIn("localhost", "OK");
+    handleLogIn(serverAddress, "OK");
     setBackdrop(false);
   }
 

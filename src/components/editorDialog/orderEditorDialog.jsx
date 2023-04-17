@@ -3,7 +3,6 @@ import React, { useEffect, useContext, useState } from 'react';
 
 // import React Redux
 import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
 
 // import Material UI
 import Dialog from '@material-ui/core/Dialog';
@@ -16,21 +15,9 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import IconButton from '@material-ui/core/IconButton';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-// import List from '@material-ui/core/List';
-// import ListItem from '@material-ui/core/ListItem';
-// import ListItemText from '@material-ui/core/ListItemText';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 import Grid from '@material-ui/core/Grid';
 
 // import React contexts
@@ -39,12 +26,8 @@ import AccessContext from '../../contexts/access.context';
 // import Redux action
 import { updateOrderStatus } from '../../redux/order/order.action';
 
-// import selector for Redux
-import { selectProducts } from '../../redux/product/product.selector';
-import  { selectCategories } from '../../redux/category/category.selector';
-
 // import functions for requesting to server 
-import { getAllWithAuth, updating } from '../../utils/fetching';
+import { getAll, updating } from '../../utils/fetching';
 
 // import styles from material
 import { makeStyles } from '@material-ui/core/styles';
@@ -59,26 +42,13 @@ const useStyles = makeStyles((theme) => ({
         // height: 300
     },
     listItem: {
-        padding: theme.spacing(1, 0),
+        padding: theme.spacing(0.1, 0),
     },
     total: {
         fontWeight: 700,
     },
     title: {
         marginTop: theme.spacing(2),
-    },
-    container: {
-        maxHeight: 250,
-    },
-    tableHead: {
-        fontWeight: 'bold'
-    },
-    option: {
-        fontSize: 15,
-        '& > span': {
-            marginRight: 10,
-            fontSize: 18,
-        }
     }
 }));
 
@@ -88,14 +58,6 @@ const useStyles = makeStyles((theme) => ({
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
-
-const toFlag = (isoCode) => {
-    return typeof String.fromCodePoint !== 'undefined'
-        ? isoCode
-            .toUpperCase()
-            .replace(/./g, (char) => String.fromCodePoint(char.charCodeAt(0) + 127397))
-        : isoCode;
-}
 
 /**
  * Editor dialog for Order
@@ -111,95 +73,59 @@ const OrderEditorDialog = props => {
 
     // inputs - status
     const [activeStep, setActiveStep] = useState(
-        (props.order.status === "pending") ? 0 : 
-            (props.order.status === "confirmed") ? 1 : 
-                (props.order.status === "ready") ? 2 : 3
+        (props.order.orderStatus === "pending") ? 0 : 
+            (props.order.orderStatus === "confirmed") ? 1 : 
+                (props.order.orderStatus === "ready") ? 2 : 3
     );
 
     // data
-    const [order, setOrder] = useState({
-        "id": props.order.id,
-        "orderDate": props.order.orderDate,
-        "paidDate": props.order.paidDate,
-        "priceSum": props.order.priceSum,
-        "status": props.order.status,
-        "email": props.order.email,
-        "phone": props.order.phone,
-        "orderName": props.order.orderName,
-        // "itemList": []
-        "itemList": props.order.itemList
-    });
-    const [product, setProduct] = useState(null);
+    const [order, setOrder] = useState(props.order);
 
     // load data in first time
-    useEffect(() => {
-        getAllWithAuth(`${url}/admin/order/${props.order.id}`, token)
-        .then(json => {
-            // order["itemList"] = json.itemList;
-            // order["status"] = json.status;
-            // order["paidDate"] = json.paidDate;
-            // setOrder({...order});
-        });
-    }, [activeStep]);
+    // useEffect(() => {
+    //     getAll(`${url}/orders/${props.order.id}`)
+    //     .then(json => {
+    //         order["itemList"] = json.itemList;
+    //         order["status"] = json.status;
+    //         order["paidDate"] = json.paidDate;
+    //         setOrder({...order});
+    //     });
+    // }, [activeStep]);
 
     // change status backward
     const changeStatusBack = () => {
         const obj = {
-            "id": order.id,
-            "orderDate": order.orderDate,
-            "paidDate": order.paidDate,
-            "priceSum": order.priceSum,
-            "status": "confirmed",
-            "email": order.email,
-            "phone": order.phone,
-            "orderName": order.orderName
+            ...order,
+            orderStatus: "confirmed"
         };
 
-        // updating(`${url}/admin/order`, token, obj)
-        // .then(res => {
-        //     setActiveStep(1);
-        //     props.updateOrders();
-        //     props.updateOrder(obj);
-        // });
-
-        setActiveStep(1);
-        props.updateOrders();
-        props.updateOrder(obj);
+        updating(`${url}/orders/${order.orderID}`, obj)
+        .then(res => {
+            setActiveStep(1);
+            props.updateOrders();
+            props.updateOrder(obj);
+        });
     }
 
     // change status forward
     const changeStatus = () => {
-        const d = new Date();
-        const currentDate = `${d.getFullYear()}-${((d.getMonth()+1)<10) ? `0${d.getMonth()+1}` : (d.getMonth()+1)}-${(d.getDate() < 10) ? `0${d.getDate()}` : d.getDate()}`;
-        console.log(currentDate);
-        
         const obj = {
-            "id": order.id,
-            "orderDate": order.orderDate,
-            "paidDate": (activeStep === 2) ? currentDate : order.paidDate,
-            "priceSum": order.priceSum,
-            "status": (activeStep === 0) ? "confirmed" : (activeStep === 1) ? "ready" : "paid",
-            "email": order.email,
-            "phone": order.phone,
-            "orderName": order.orderName
+            ...order,
+            orderStatus: (activeStep === 0) ? "confirmed" : (activeStep === 1) ? "ready" : "paid"
         };
 
-        // updating(`${url}/admin/order`, token, obj)
-        // .then(res => {
-        //     setActiveStep(activeStep + 1);
-        //     props.updateOrders();
-        //     props.updateOrder(obj);
-        // });
-        
-        setActiveStep(activeStep + 1);
-        props.updateOrders();
-        props.updateOrder(obj);
+        updating(`${url}/orders/${order.orderID}`, obj)
+        .then(res => {
+            setActiveStep(activeStep + 1);
+            props.updateOrders();
+            props.updateOrder(obj);
+        });
     }
 
     return (
     <Dialog
         fullWidth={true}
-        maxWidth={'lg'}
+        maxWidth={'md'}
         open={props.open}
         onClose={props.handleClose}
         TransitionComponent={Transition}
@@ -217,130 +143,55 @@ const OrderEditorDialog = props => {
                         )
                     }
                     </Stepper>
-                    <Typography variant="h6" gutterBottom>Order Items</Typography>
-                    {/* <List disablePadding className={classes.list}>
-                    {
-                        order.itemList.map( item => 
-                            <ListItem className={classes.listItem} key={item.order_items_id}>
-                                <ListItemText primary={item.product_name} secondary={"Qty: " + item.quantity} />
-                                <Typography variant="body2">${item.total}</Typography>
-                            </ListItem>
-                        )
-                    }
-                        <ListItem className={classes.listItem}>
-                            <ListItemText primary="Total" />
-                            <Typography variant="subtitle1" className={classes.total}>
-                                ${order.priceSum}
-                            </Typography>
-                        </ListItem>
-                    </List> */}
+                    <Typography variant="h6" gutterBottom>Order Summary</Typography>
+                    <List disablePadding className={classes.list}>
+                        {
+                            order.orderItems.map( item => 
+                                <ListItem className={classes.listItem} key={`${item.orderID}-${item.product.productID}`}>
+                                    <ListItemText primary={item.product.productName} secondary={"Qty: " + item.itemQuantity} />
+                                    <Typography variant="body2">${item.itemTotal}</Typography>
+                                </ListItem>
+                            )
+                        }
+                    </List>
                     <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <br/>
-                            <TableContainer component={Paper} className={classes.container}>
-                                <Table stickyHeader size="small">
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell className={classes.tableHead} width={"50%"}>Product Name</TableCell>
-                                            <TableCell className={classes.tableHead}>Quantity</TableCell>
-                                            <TableCell className={classes.tableHead}>Total</TableCell>
-                                            <TableCell></TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {
-                                            order.itemList.map( item => <TableRow>
-                                                <TableCell>{item.product_name}</TableCell>
-                                                <TableCell>{item.quantity}</TableCell>
-                                                <TableCell>{item.total}</TableCell>
-                                                <TableCell>
-                                                    <IconButton size="small" 
-                                                        // onClick={e => handleDeleteDiscount(item)}
-                                                    >
-                                                        <HighlightOffIcon />
-                                                    </IconButton>
-                                                </TableCell>
-                                            </TableRow>)
-                                        }
-                                        <TableRow>
-                                            <TableCell>
-                                                <Autocomplete
-                                                    options={props.products}
-                                                    classes={{
-                                                        option: classes.option,
-                                                    }}
-                                                    autoHighlight
-                                                    getOptionLabel={option => option.name}
-                                                    renderOption={option => (
-                                                        <React.Fragment>
-                                                            <span>{toFlag(props.categories.find(category => category.id === option.category).name)}</span>
-                                                            {option.name}
-                                                        </React.Fragment>
-                                                    )}
-                                                    renderInput={params => (
-                                                        <TextField 
-                                                            {...params}
-                                                            label="Choose a product" 
-                                                            variant="outlined" size="small" fullWidth
-                                                            inputProps={{
-                                                                ...params.inputProps,
-                                                                autoComplete: 'new-password', // disable autocomplete and autofill
-                                                            }}
-                                                        />
-                                                    )}
-                                                    value={product}
-                                                    // onChange={(e, selectedProduct) => setProduct(selectedProduct)}
-                                                />
-                                            </TableCell>
-                                            <TableCell>
-                                                <TextField 
-                                                    label="Quantity" variant="outlined" fullWidth size="small" 
-                                                    // disabled={true} 
-                                                    // value={(product !== null) ? product.price : ""}
-                                                    value={""}
-                                                />
-                                            </TableCell>
-                                            <TableCell>
-                                                <TextField label="Total" variant="outlined" fullWidth size="small" 
-                                                    value={""} 
-                                                    // onChange={e => setDiscountPrice(e.target.value)}
-                                                    // onChange={e => setDiscountPrice(e.target.value)}
-                                                />
-                                            </TableCell>
-                                            <TableCell>
-                                                <IconButton size="small" 
-                                                    // onClick={e => handleAddDiscount()}
-                                                >
-                                                    <AddCircleIcon />
-                                                </IconButton>
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                            <br/>
+                        <Grid item xs={12} sm={8}></Grid>
+                        <Grid item xs={12} sm={4}>
+                            <List disablePadding className={classes.list}>
+                                <ListItem className={classes.listItem}>
+                                    <ListItemText primary="Subtotal" />
+                                    <Typography variant="subtitle1" className={classes.total}>
+                                        ${order.subtotal}
+                                    </Typography>
+                                </ListItem>
+                                <ListItem className={classes.listItem}>
+                                    <ListItemText primary="GST" />
+                                    <Typography variant="subtitle1" className={classes.total}>
+                                        ${order.gst}
+                                    </Typography>
+                                </ListItem>
+                                <ListItem className={classes.listItem}>
+                                    <ListItemText primary="Total" />
+                                    <Typography variant="subtitle1" className={classes.total}>
+                                        ${order.total}
+                                    </Typography>
+                                </ListItem>
+                            </List>
                         </Grid>
-                    </Grid>
-                    <Grid container spacing={2}>
                         <Grid item xs={12} sm={8}></Grid>
                         <Grid item xs={12} sm={4}>
                             <Typography variant="h6" gutterBottom className={classes.title}>
                                 Order Details
                             </Typography>
                             <Grid container>
+                                <Grid item xs={6}>Address:</Grid>
+                                <Grid item xs={6} align="right">{order.customerAddress}</Grid>
                                 <Grid item xs={6}>Email:</Grid>
-                                <Grid item xs={6} align="right">{order.email}</Grid>
+                                <Grid item xs={6} align="right">{order.customerEmail}</Grid>
                                 <Grid item xs={6}>Phone:</Grid>
-                                <Grid item xs={6} align="right">{order.phone}</Grid>
+                                <Grid item xs={6} align="right">{order.customerContactNumber}</Grid>
                                 <Grid item xs={6}>Ordered Date:</Grid>
                                 <Grid item xs={6} align="right">{order.orderDate}</Grid>
-                                {
-                                    ( order.status === "paid" ) ? <Grid item xs={6}>Paid Date:</Grid> : ""
-                                }
-                                {
-                                    ( order.status === "paid" ) ? <Grid item xs={6} align="right">{order.paidDate}</Grid> : ""
-                                }
-                                
                             </Grid>
                         </Grid>
                     </Grid>
@@ -371,9 +222,4 @@ const mapDispatchToProps = dispatch => ({
     updateOrder: order => dispatch(updateOrderStatus(order))
 });
 
-const mapStateToProps = createStructuredSelector({
-    products: selectProducts,
-    categories: selectCategories
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(OrderEditorDialog);
+export default connect(null, mapDispatchToProps)(OrderEditorDialog);

@@ -1,5 +1,5 @@
 // import React modules
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // import React Redux
 import { connect } from 'react-redux';
@@ -44,7 +44,7 @@ import { useStyles } from './category.styles';
     // handle paging
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
-    };  
+    };
 
     return (
     <Grid container spacing={2}>
@@ -72,14 +72,13 @@ import { useStyles } from './category.styles';
                         <TableRow>
                             <TableCell className={classes.tableHead}>Id</TableCell>
                             <TableCell className={classes.tableHead}>Name</TableCell>
-                            <TableCell className={classes.tableHead}>Image</TableCell>
                             <TableCell align='right'></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                     {
                         categories.slice(page * 10, page * 10 + 10).map( category => 
-                            <Row key={category.id} category={category} />
+                            <Row key={category.id} category={category}/>
                         )
                     }
                     </TableBody>
@@ -99,7 +98,8 @@ import { useStyles } from './category.styles';
                 </Fab>
                 <CategoryEditorDialog 
                     data={{
-                        name: ""
+                        name: "",
+                        image: null
                     }} 
                     open={dialog} 
                     handleClose={() => setDialog(false)} 

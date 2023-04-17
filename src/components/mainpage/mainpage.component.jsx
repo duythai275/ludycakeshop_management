@@ -11,11 +11,14 @@ import { connect } from 'react-redux';
 import Container from '@material-ui/core/Container';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 // import management pages
 import Orders from '../order/order.compoment';
 import Products from '../product/product.component';
 import Categories from '../category/category.component';
+import Customers from '../customer/customer.component';
 import Menu from '../mainMenu/menu.component';
 
 // import React contexts
@@ -75,23 +78,42 @@ const Mainpage = ({ setOrders, setCategories, setProducts }) => {
 
     // authenticatio
     const { url, token } = useContext(AccessContext);
-    
+
+    const [backdrop, setBackdrop] = useState(false);
+
     // state use for Alert notification component
     const [alert, setAlert] = useState(false);
     const [alertMsg, setAlertMsg] = useState("");
 
     // load data to Redux store in first time
     useEffect( () => {
-        // Promise.all([
-        //     getAllWithAuth(`${url}/admin/order?all=true`, token),
-        //     getAll(`${url}/categories`),
-        //     getAllWithAuth(`${url}/admin/product`, token),
-        // ])
-        // .then( arr => {
-        //     setOrders(arr[0].content);
-        //     setCategories(arr[1]);
-        //     setProducts(arr[2]);
-        // })
+        setBackdrop(true);
+        Promise.all([
+            getAll(`${url}/orders`),
+            getAll(`${url}/categories`),
+            getAll(`${url}/products`),
+        ])
+        .then( arr => {
+            setOrders(arr[0]);
+            setCategories(arr[1].map( cate => ({
+                id: cate.categoryID,
+                name: cate.categoryName,
+                image: cate.categoryImage
+            }) ));
+            setProducts(arr[2].map( product => ({
+                id: product.productID,
+                name: product.productName,
+                category: {
+                    id: product.categoryID
+                },
+                price: product.unitPrice,
+                quantity: product.quantityAvailable,
+                description: product.productDescription,
+                active: product.discontinued,
+                image: product.productImage
+            }) ));
+            setBackdrop(false);
+        })
     }, []);
 
     // handle Alert
@@ -99,7 +121,6 @@ const Mainpage = ({ setOrders, setCategories, setProducts }) => {
         setAlert(isOpen);
         setAlertMsg(msg);
     }
-    
 
     return (
         <AlertContext.Provider value={{ alert, alertMsg, handleAlert }}>
@@ -112,9 +133,13 @@ const Mainpage = ({ setOrders, setCategories, setProducts }) => {
                             <Route exact path="/orders" component={Orders} />
                             <Route exact path="/products" component={Products} />
                             <Route exact path="/categories" component={Categories} />
+                            <Route exact path="/customers" component={Customers} />
                         </Switch>
                     </Container>
                 </main>
+                <Backdrop className={classes.backdrop} open={backdrop}>
+                    <CircularProgress color="inherit" />
+                </Backdrop>
             </div>
             <AlertNotification />
         </AlertContext.Provider>
