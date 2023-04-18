@@ -26,6 +26,7 @@ import { selectCategories } from '../../redux/category/category.selector';
 
 // import Redux action
 import { deleteProduct } from '../../redux/product/product.action';
+import { selectOrders } from '../../redux/order/order.selector';
 
 // import functions for requesting to server 
 import { deleting } from '../../utils/fetching';
@@ -62,13 +63,20 @@ const Row = (props) => {
     // Delete product
     const handleDelete = () => {
         setAnchorEl(null);
-
-        deleting(`${url}/products/${props.product.id}`, token)
-        .then( res => {
-            props.deleteProduct(props.product);
-            handleAlert(true, "Deleted Successfully!");
-        });
         
+        if ( 
+            props.storedOrders.reduce( (acc,cur) => [...acc, ...cur.orderItems] , [])
+            .filter( ({product}) => product.productID === props.product.id ).length > 0
+        ) {
+            handleAlert(true, "Error!!! The product is being used.");
+        }
+        else {
+            deleting(`${url}/products/${props.product.id}`, token)
+            .then( res => {
+                props.deleteProduct(props.product);
+                handleAlert(true, "Deleted Successfully!");
+            });
+        }
     }
 
     return (
@@ -99,7 +107,8 @@ const mapDispatchToProps = dispatch => ({
 
 // map state to props of the component
 const mapStateToProps = createStructuredSelector({
-    categories: selectCategories
+    categories: selectCategories,
+    storedOrders: selectOrders
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Row);

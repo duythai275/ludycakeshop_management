@@ -165,13 +165,13 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, editProduct,
                         active: product.discontinued,
                         image: product.productImage
                     }) ));
+                    handleBackdrop(false);
                     handleAlert(true, "Added Successfully!");
                     setProduct({
                         name: "New Product",
                         category: { id: 0 },
                         active: false
                     });
-                    handleBackdrop(false);
                 });
             });
         } else {
@@ -194,9 +194,9 @@ const ProductEditorDialog = ({ open, handleClose, data, categories, editProduct,
                     description: product.description,
                     active: product.active,
                     image: product.image
-                })
-                handleAlert(true, "Editted Successfully!");
+                });
                 handleBackdrop(false);
+                handleAlert(true, "Editted Successfully!");
             });
         }
         handleClose();

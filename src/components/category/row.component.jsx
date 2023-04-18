@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 
 // import React Redux
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
 // import Material UI
 import TableCell from '@material-ui/core/TableCell';
@@ -21,6 +22,8 @@ import AlertContext from '../../contexts/alert.context';
 
 // import Redux action
 import { deleteCategory } from '../../redux/category/category.action';
+// import selector for Redux
+import { selectProducts } from '../../redux/product/product.selector';
 
 // import functions for requesting to server 
 import { deleting } from '../../utils/fetching';
@@ -49,11 +52,17 @@ const Row = (props) => {
     const handleDelete = () => {
         setAnchorEl(null);
 
-        deleting(`${url}/categories/${props.category.id}`,token)
-        .then(result => {
-            props.deleteCategory(props.category);
-            handleAlert(true, "Deleted Successfully!");
-        });
+        if ( props.products.filter( ({category}) => category.id === props.category.id ).length > 0 ) {
+            handleAlert(true, "Error!!! The category is being used.");
+        }
+        else {
+            deleting(`${url}/categories/${props.category.id}`)
+            .then(result => {
+                props.deleteCategory(props.category);
+                handleAlert(true, "Deleted Successfully!");
+            });
+        }
+        
     }
     
     return (
@@ -78,4 +87,9 @@ const Row = (props) => {
     deleteCategory: category => dispatch(deleteCategory(category))
 });
 
-export default connect(null,mapDispatchToProps)(Row);
+// map state to props of the component
+const mapStateToProps = createStructuredSelector({
+    products: selectProducts
+});
+
+export default connect(mapStateToProps,mapDispatchToProps)(Row);

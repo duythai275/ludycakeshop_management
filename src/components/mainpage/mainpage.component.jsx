@@ -63,7 +63,12 @@ const AlertNotification = () => {
         autoHideDuration={3000}
         onClose={handleClose}
     >
+    {
+        (alertMsg.substring(0,5) == "Error" ) ?
+        <Alert onClose={handleClose} severity="error" variant="filled">{alertMsg}</Alert>
+        :
         <Alert onClose={handleClose} severity="success" variant="filled">{alertMsg}</Alert>
+    }
     </Snackbar>
 )}
 

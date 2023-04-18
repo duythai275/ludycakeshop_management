@@ -290,7 +290,7 @@ const Orders = ({storedOrders,loadOrdersToStore}) => {
                             </TableHead>
                             <TableBody>
                                 {
-                                    orders.slice(page * 10, page * 10 + 10).map( order => <Row key={order.orderID} order={order} updateOrders={loadOrders}/>)
+                                    orders.slice(page * 10, page * 10 + 10).map( order => <Row key={order.orderID} order={order} />)
                                 }
                             </TableBody>
                         </Table>

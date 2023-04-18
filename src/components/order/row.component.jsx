@@ -53,9 +53,8 @@ import { deleting } from '../../utils/fetching';
     const handleDelete = () => {
         deleting(`${url}/orders/${props.order.orderID}`)
         .then(res => {
-            props.updateOrders();
-            handleAlert(true, "Deleted Successfully!");
             props.deleteOrder(props.order);
+            handleAlert(true, "Deleted Successfully!");
         });
     }
 
@@ -75,7 +74,7 @@ import { deleting } from '../../utils/fetching';
             <TableCell align='center'><IconButton size="small" onClick={ event => setAnchorEl(event.currentTarget)}><MoreVertIcon size="small" /></IconButton></TableCell>
             <ContextMenu outerRef={outerRef} onEditClick={handleEdit} onDeleteClick={handleDelete} />
             <StyledMenu anchorEl={anchorEl} handleEdit={handleEdit} handleDelete={handleDelete} handleClose={() => setAnchorEl(null)} />
-            <OrderEditorDialog open={dialog} handleClose={() => setDialog(false)} order={props.order} updateOrders={props.updateOrders}/>
+            <OrderEditorDialog open={dialog} handleClose={() => setDialog(false)} order={props.order} />
         </TableRow>
     )
 }

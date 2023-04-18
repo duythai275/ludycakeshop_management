@@ -46,19 +46,46 @@ import { useStyles } from './category.styles';
         setPage(newPage);
     };
 
-    return (
-    <Grid container spacing={2}>
-        <Grid item xs={12}>
-            <Paper className={classes.paper}>
-                <div className={classes.header}>
-                    <div className={classes.title}>
-                        <Typography component="h2" variant="h6" color="primary" gutterBottom>
-                            Categories
-                        </Typography>
+    return (<>
+        <Grid container spacing={2}>
+            <Grid item xs={12}>
+                <Paper className={classes.paper}>
+                    <div className={classes.header}>
+                        <div className={classes.title}>
+                            <Typography component="h2" variant="h6" color="primary" gutterBottom>
+                                Categories
+                            </Typography>
+                        </div>
+                        <div className={classes.pager}>
+                            <TablePagination
+                                rowsPerPageOptions={[]}
+                                component="div"
+                                count={categories.length}
+                                page={page}
+                                onChangePage={handleChangePage}
+                                rowsPerPage={10}
+                            />
+                        </div>
                     </div>
+                    <Table className={classes.table}>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell className={classes.tableHead}>Id</TableCell>
+                                <TableCell className={classes.tableHead}>Name</TableCell>
+                                <TableCell align='right'></TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                        {
+                            categories.slice(page * 10, page * 10 + 10).map( category => 
+                                <Row key={category.id} category={category}/>
+                            )
+                        }
+                        </TableBody>
+                    </Table>
                     <div className={classes.pager}>
                         <TablePagination
-                            rowsPerPageOptions={[]}
+                            rowsPerPageOptions={[]} 
                             component="div"
                             count={categories.length}
                             page={page}
@@ -66,47 +93,21 @@ import { useStyles } from './category.styles';
                             rowsPerPage={10}
                         />
                     </div>
-                </div>
-                <Table className={classes.table}>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell className={classes.tableHead}>Id</TableCell>
-                            <TableCell className={classes.tableHead}>Name</TableCell>
-                            <TableCell align='right'></TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                    {
-                        categories.slice(page * 10, page * 10 + 10).map( category => 
-                            <Row key={category.id} category={category}/>
-                        )
-                    }
-                    </TableBody>
-                </Table>
-                <div className={classes.pager}>
-                    <TablePagination
-                        rowsPerPageOptions={[]} 
-                        component="div"
-                        count={categories.length}
-                        page={page}
-                        onChangePage={handleChangePage}
-                        rowsPerPage={10}
+                    <Fab color="primary" aria-label="add" className={classes.fab} onClick={ () => setDialog(true)}>
+                        <AddIcon />
+                    </Fab>
+                    <CategoryEditorDialog 
+                        data={{
+                            name: "",
+                            image: null
+                        }} 
+                        open={dialog} 
+                        handleClose={() => setDialog(false)} 
                     />
-                </div>
-                <Fab color="primary" aria-label="add" className={classes.fab} onClick={ () => setDialog(true)}>
-                    <AddIcon />
-                </Fab>
-                <CategoryEditorDialog 
-                    data={{
-                        name: "",
-                        image: null
-                    }} 
-                    open={dialog} 
-                    handleClose={() => setDialog(false)} 
-                />
-            </Paper>
+                </Paper>
+            </Grid>
         </Grid>
-    </Grid>
+    </>
 )}
 
 // map state to props of the component

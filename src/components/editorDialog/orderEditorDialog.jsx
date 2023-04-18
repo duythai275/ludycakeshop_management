@@ -19,6 +19,8 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Grid from '@material-ui/core/Grid';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 // import React contexts
 import AccessContext from '../../contexts/access.context';
@@ -49,6 +51,10 @@ const useStyles = makeStyles((theme) => ({
     },
     title: {
         marginTop: theme.spacing(2),
+    },
+    backdrop: {
+        zIndex: theme.zIndex.drawer + 1,
+        color: '#fff',
     }
 }));
 
@@ -70,6 +76,7 @@ const OrderEditorDialog = props => {
 
     // authentication
     const { url, token } = useContext(AccessContext);
+    const [backdrop, setBackdrop] = useState(false);
 
     // inputs - status
     const [activeStep, setActiveStep] = useState(
@@ -81,19 +88,9 @@ const OrderEditorDialog = props => {
     // data
     const [order, setOrder] = useState(props.order);
 
-    // load data in first time
-    // useEffect(() => {
-    //     getAll(`${url}/orders/${props.order.id}`)
-    //     .then(json => {
-    //         order["itemList"] = json.itemList;
-    //         order["status"] = json.status;
-    //         order["paidDate"] = json.paidDate;
-    //         setOrder({...order});
-    //     });
-    // }, [activeStep]);
-
     // change status backward
     const changeStatusBack = () => {
+        setBackdrop(true);
         const obj = {
             ...order,
             orderStatus: "confirmed"
@@ -102,13 +99,14 @@ const OrderEditorDialog = props => {
         updating(`${url}/orders/${order.orderID}`, obj)
         .then(res => {
             setActiveStep(1);
-            props.updateOrders();
             props.updateOrder(obj);
+            setBackdrop(false);
         });
     }
 
     // change status forward
     const changeStatus = () => {
+        setBackdrop(true);
         const obj = {
             ...order,
             orderStatus: (activeStep === 0) ? "confirmed" : (activeStep === 1) ? "ready" : "paid"
@@ -117,99 +115,104 @@ const OrderEditorDialog = props => {
         updating(`${url}/orders/${order.orderID}`, obj)
         .then(res => {
             setActiveStep(activeStep + 1);
-            props.updateOrders();
             props.updateOrder(obj);
+            setBackdrop(false);
         });
     }
 
     return (
-    <Dialog
-        fullWidth={true}
-        maxWidth={'md'}
-        open={props.open}
-        onClose={props.handleClose}
-        TransitionComponent={Transition}
-    >
-        <DialogTitle><Typography component="h1" variant="h4" align="center">{props.order.orderName}</Typography></DialogTitle>
-        <DialogContent>
-            <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    <Stepper activeStep={activeStep} alternativeLabel>
-                    {
-                        ["Waiting for customer's confirmation","Being prepared","Be ready for picking up","Finished"].map( label => 
-                            <Step key={label}>
-                                <StepLabel>{label}</StepLabel>
-                            </Step>
-                        )
-                    }
-                    </Stepper>
-                    <Typography variant="h6" gutterBottom>Order Summary</Typography>
-                    <List disablePadding className={classes.list}>
+    <>
+        <Dialog
+            fullWidth={true}
+            maxWidth={'md'}
+            open={props.open}
+            onClose={props.handleClose}
+            TransitionComponent={Transition}
+        >
+            <DialogTitle><Typography component="h1" variant="h4" align="center">{props.order.orderName}</Typography></DialogTitle>
+            <DialogContent>
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <Stepper activeStep={activeStep} alternativeLabel>
                         {
-                            order.orderItems.map( item => 
-                                <ListItem className={classes.listItem} key={`${item.orderID}-${item.product.productID}`}>
-                                    <ListItemText primary={item.product.productName} secondary={"Qty: " + item.itemQuantity} />
-                                    <Typography variant="body2">${item.itemTotal}</Typography>
-                                </ListItem>
+                            ["Waiting for customer's confirmation","Being prepared","Be ready for picking up","Finished"].map( label => 
+                                <Step key={label}>
+                                    <StepLabel>{label}</StepLabel>
+                                </Step>
                             )
                         }
-                    </List>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} sm={8}></Grid>
-                        <Grid item xs={12} sm={4}>
-                            <List disablePadding className={classes.list}>
-                                <ListItem className={classes.listItem}>
-                                    <ListItemText primary="Subtotal" />
-                                    <Typography variant="subtitle1" className={classes.total}>
-                                        ${order.subtotal}
-                                    </Typography>
-                                </ListItem>
-                                <ListItem className={classes.listItem}>
-                                    <ListItemText primary="GST" />
-                                    <Typography variant="subtitle1" className={classes.total}>
-                                        ${order.gst}
-                                    </Typography>
-                                </ListItem>
-                                <ListItem className={classes.listItem}>
-                                    <ListItemText primary="Total" />
-                                    <Typography variant="subtitle1" className={classes.total}>
-                                        ${order.total}
-                                    </Typography>
-                                </ListItem>
-                            </List>
-                        </Grid>
-                        <Grid item xs={12} sm={8}></Grid>
-                        <Grid item xs={12} sm={4}>
-                            <Typography variant="h6" gutterBottom className={classes.title}>
-                                Order Details
-                            </Typography>
-                            <Grid container>
-                                <Grid item xs={6}>Address:</Grid>
-                                <Grid item xs={6} align="right">{order.customerAddress}</Grid>
-                                <Grid item xs={6}>Email:</Grid>
-                                <Grid item xs={6} align="right">{order.customerEmail}</Grid>
-                                <Grid item xs={6}>Phone:</Grid>
-                                <Grid item xs={6} align="right">{order.customerContactNumber}</Grid>
-                                <Grid item xs={6}>Ordered Date:</Grid>
-                                <Grid item xs={6} align="right">{order.orderDate}</Grid>
+                        </Stepper>
+                        <Typography variant="h6" gutterBottom>Order Summary</Typography>
+                        <List disablePadding className={classes.list}>
+                            {
+                                order.orderItems.map( item => 
+                                    <ListItem className={classes.listItem} key={`${item.orderID}-${item.product.productID}`}>
+                                        <ListItemText primary={item.product.productName} secondary={"Qty: " + item.itemQuantity} />
+                                        <Typography variant="body2">${item.itemTotal}</Typography>
+                                    </ListItem>
+                                )
+                            }
+                        </List>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={8}></Grid>
+                            <Grid item xs={12} sm={4}>
+                                <List disablePadding className={classes.list}>
+                                    <ListItem className={classes.listItem}>
+                                        <ListItemText primary="Subtotal" />
+                                        <Typography variant="subtitle1" className={classes.total}>
+                                            ${order.subtotal}
+                                        </Typography>
+                                    </ListItem>
+                                    <ListItem className={classes.listItem}>
+                                        <ListItemText primary="GST" />
+                                        <Typography variant="subtitle1" className={classes.total}>
+                                            ${order.gst}
+                                        </Typography>
+                                    </ListItem>
+                                    <ListItem className={classes.listItem}>
+                                        <ListItemText primary="Total" />
+                                        <Typography variant="subtitle1" className={classes.total}>
+                                            ${order.total}
+                                        </Typography>
+                                    </ListItem>
+                                </List>
+                            </Grid>
+                            <Grid item xs={12} sm={8}></Grid>
+                            <Grid item xs={12} sm={4}>
+                                <Typography variant="h6" gutterBottom className={classes.title}>
+                                    Order Details
+                                </Typography>
+                                <Grid container>
+                                    <Grid item xs={6}>Address:</Grid>
+                                    <Grid item xs={6} align="right">{order.customerAddress}</Grid>
+                                    <Grid item xs={6}>Email:</Grid>
+                                    <Grid item xs={6} align="right">{order.customerEmail}</Grid>
+                                    <Grid item xs={6}>Phone:</Grid>
+                                    <Grid item xs={6} align="right">{order.customerContactNumber}</Grid>
+                                    <Grid item xs={6}>Ordered Date:</Grid>
+                                    <Grid item xs={6} align="right">{order.orderDate}</Grid>
+                                </Grid>
                             </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
-            </Grid>
-        </DialogContent>
-        <DialogActions>
-            <Button disabled={activeStep !== 2} onClick={changeStatusBack}>
-                Back
-            </Button>
-            <Button variant="contained" color="primary" disabled={activeStep === 3} onClick={changeStatus}>
-                Next
-            </Button>
-            <Button variant="contained" onClick={props.handleClose}>
-                Close
-            </Button>
-        </DialogActions>
-    </Dialog>
+            </DialogContent>
+            <DialogActions>
+                <Button disabled={activeStep !== 2} onClick={changeStatusBack}>
+                    Back
+                </Button>
+                <Button variant="contained" color="primary" disabled={activeStep === 3} onClick={changeStatus}>
+                    Next
+                </Button>
+                <Button variant="contained" onClick={props.handleClose}>
+                    Close
+                </Button>
+            </DialogActions>
+        </Dialog>
+        <Backdrop className={classes.backdrop} open={backdrop}>
+            <CircularProgress color="inherit" />
+        </Backdrop>
+    </>
     )
 }
 
